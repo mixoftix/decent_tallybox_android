@@ -181,15 +181,24 @@ public class MainActivity_History_Detail extends AppCompatActivity {
         String the_pqc_cipher = "";
         String the_pqc_psk = "";
 
-        String is_pqc_serial = MainActivity.app_pqc_serial;
-        String is_pqc_pk = MainActivity.app_pqc_pk;
         String is_pqc = MainActivity.setting_safeguard_pqc;
 
         Access_log.log_it("i","shahin","is_pqc: " + is_pqc);
-        the_log_str = "PQC - Status: " + is_pqc + "d" + "\n\r\n\r";
+        the_log_str = "PQC - Status: " + is_pqc + "d" + "\n";
 
-        if (is_pqc.equals("enable"))
+        Access_log.log_it("i","shahin","333 - app_pqc_serial: " + MainActivity.app_pqc_serial);
+        Access_log.log_it("i","shahin","333 - app_pqc_pk: " + MainActivity.app_pqc_pk);
+
+        if (is_pqc.equals("enable") && MainActivity.app_pqc_serial.equals("-"))
         {
+            Access_log.log_it("i","shahin","app_pqc_serial: not found! procedure bypassed.. (" + MainActivity.app_pqc_serial + ")");
+            the_log_str += "PQC - Serial: not found! procedure bypassed..\n\r\n\r";
+        }
+        if (is_pqc.equals("enable") && !MainActivity.app_pqc_serial.equals("-"))
+        {
+            Access_log.log_it("i","shahin","app_pqc_serial: " + MainActivity.app_pqc_serial);
+            the_log_str += "PQC - Serial: " + MainActivity.app_pqc_serial + "\n\r\n\r";
+
             // initial pqc connection
             pqc_mlkem.pqc_psk_pk();
 
@@ -248,7 +257,7 @@ public class MainActivity_History_Detail extends AppCompatActivity {
             textview_history_log.setVisibility(View.VISIBLE);
         }
 
-        if (is_pqc.equals("enable"))
+        if (is_pqc.equals("enable") && !MainActivity.app_pqc_serial.equals("-"))
         {
             the_log_str += "Response - Encrypted: " + "\n\r" + result_history_by_tally_hash + "\n\r\n\r";
 

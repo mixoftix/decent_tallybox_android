@@ -1,16 +1,26 @@
 package net.mixoftix.tallybox;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.mixoftix.tallybox.databinding.ActivityMainSettingBinding;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity_Setting extends AppCompatActivity {
 
@@ -27,6 +37,8 @@ public class MainActivity_Setting extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbarHome);
 
+        // In your Activity
+        LinearLayout layoutSettings = findViewById(R.id.layout_settings);
         RadioGroupConnection = findViewById(R.id.RadioGroupConnection);
         RadioGroupPQC = findViewById(R.id.RadioGroupPQC);
 
@@ -76,8 +88,112 @@ public class MainActivity_Setting extends AppCompatActivity {
             }
         });
 
-    }
+        // Dynamic TextViews:
+        for (int i = 0; i < MainActivity.spinner_options.length; i++) {
 
+            String graphName = MainActivity.spinner_options[i];
+            String serial = MainActivity.spinner_options_pqc_serial[i];
+
+            addDynamicTextView(layoutSettings,
+                                graphName,
+                                serial,
+                                (textView, graph, pqcSerial) -> // Correct lambda
+                                {
+                                    // config internet connection
+                                    String server_url_query =
+                                            "app_name=" + URLEncoder.encode(MainActivity.app_name)
+                                                    + "&app_version=" + URLEncoder.encode(MainActivity.app_version);
+
+                                    String my_server_url = MainActivity.setting_network_protocol + "://";
+
+                                    for (int j = 0; j < MainActivity.spinner_options.length; j++)
+                                    {
+                                        if (MainActivity.spinner_options[j].equals(graph))
+                                        {
+                                            my_server_url += MainActivity.spinner_options_value[j] + "/";
+                                        }
+                                    }
+
+                                    String result = net.mixoftix.tallybox.MainActivity.browse_url(my_server_url + "dmz.asmx/app_pqc_pk?" + server_url_query);
+                                    Access_log.log_it("i","shahin",MainActivity.server_url + " - result: " + result);
+
+                                    if (result.equals("no_record") || result.equals("Failed"))
+                                    {
+                                        for (int j = 0; j < MainActivity.spinner_options.length; j++)
+                                        {
+                                            if (MainActivity.spinner_options[j].equals(graph))
+                                            {
+                                                Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, "", "write");
+                                                Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, "", "write");
+
+                                                MainActivity.spinner_options_pqc_serial[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + j);
+                                                MainActivity.spinner_options_pqc_pk[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + j);
+
+                                                Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + j + "]: " + MainActivity.spinner_options_pqc_serial[j]);
+                                                Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ j + "]: " + MainActivity.spinner_options_pqc_pk[j]);
+                                            }
+                                        }
+
+                                        // set the text
+                                        textView.setText(graph + "\nserial: " + result);
+                                    }
+                                    else
+                                    {
+                                        // interpret server's CSV data
+                                        String[] split_output;
+                                        split_output = result.split("\\^");
+
+                                        String pqc_serial = split_output[0];
+                                        String pqc_sha256 = split_output[1];
+                                        String pqc_pk = split_output[2];
+
+                                        //if (pqc_serial.equals(pqcSerial))
+                                        //{
+                                        //    // set the text
+                                        //    textView.setText(graph + "\nserial: " + pqc_serial + " - fresh");
+                                        //}
+                                        //else
+                                        {
+                                            // make the local privacy
+                                            String local_pqc_sha256 = null;
+                                            try {
+                                                local_pqc_sha256 = hash_functions.Hash_SHA_256(pqc_pk);
+                                            } catch (NoSuchAlgorithmException e) {
+                                                throw new RuntimeException(e);
+                                            } catch (UnsupportedEncodingException e) {
+                                                throw new RuntimeException(e);
+                                            }
+
+                                            Access_log.log_it("i","shahin","333 - pqc_sha256: " + pqc_sha256);
+                                            Access_log.log_it("i","shahin","333 - local_pqc_sha256: " + local_pqc_sha256);
+
+                                            if (local_pqc_sha256.equals(pqc_sha256))
+                                            {
+                                                for (int j = 0; j < MainActivity.spinner_options.length; j++)
+                                                {
+                                                    if (MainActivity.spinner_options[j].equals(graph))
+                                                    {
+                                                        Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, pqc_serial, "write");
+                                                        Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, pqc_pk, "write");
+
+                                                        MainActivity.spinner_options_pqc_serial[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + j);
+                                                        MainActivity.spinner_options_pqc_pk[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + j);
+
+                                                        Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + j + "]: " + MainActivity.spinner_options_pqc_serial[j]);
+                                                        Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ j + "]: " + MainActivity.spinner_options_pqc_pk[j]);
+                                                    }
+                                                }
+                                            }
+
+                                            // set the text
+                                            textView.setText(graph + "\nserial: " + pqc_serial + " - updated");
+                                        }
+                                    }
+                                }
+                                );
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,5 +222,52 @@ public class MainActivity_Setting extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void addDynamicTextView(LinearLayout parent,
+                                    String graph_name,
+                                    String pqc_serial,
+                                    OnItemClickListener listener) {
+
+        TextView textView = new TextView(this);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.bottomMargin = dpToPx(10);
+        textView.setLayoutParams(params);
+
+        textView.setText(graph_name  + "\nserial: " +  pqc_serial);
+        textView.setTextSize(17);
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+
+        textView.setBackgroundResource(R.drawable.frame_white);
+
+        int padding = dpToPx(10);
+        textView.setPadding(padding, padding, padding, padding);
+
+        Drawable refreshIcon = ContextCompat.getDrawable(this, R.drawable.baseline_refresh_24);
+        if (refreshIcon != null) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(null, null, refreshIcon, null);
+        }
+        textView.setCompoundDrawablePadding(dpToPx(4));
+
+        // Click Listener
+        textView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onClick(textView, graph_name, pqc_serial);
+            }
+        });
+
+        parent.addView(textView);
+    }
+
+    private interface OnItemClickListener {
+        void onClick(TextView textView, String graphName, String pqcSerial);
+    }
+
+    private int dpToPx(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
+    }
 
 }

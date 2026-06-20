@@ -92,10 +92,15 @@ public class MainActivity extends AppCompatActivity {
             "192.168.88.111:711",
             "192.168.88.111:721"
     };
+    public static final String[] spinner_options_tokens = {
+            "USD,TLH,IRR",
+            "2ZR",
+            "2ZR,USD"
+    };
     public static String[] spinner_options_pqc_serial = new String[3];
     public static String[] spinner_options_pqc_pk = new String[3];
-    public static String graph_domain_in = ""; // ""gpp_mars.mixoftix.net";
-    public static String graph_address_in = ""; //  "192.168.88.111:701";
+    public static String graph_domain_in = spinner_options[0]; // ""gpp_mars.mixoftix.net";
+    public static String graph_address_in = spinner_options_value[0]; //  "192.168.88.111:701";
 
 
     // variables - general
@@ -322,12 +327,7 @@ public class MainActivity extends AppCompatActivity {
         setting_connection(setting_network_protocol);
 
         // set PQC protocol in the first run
-        app_pqc_serial = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial");
-        app_pqc_pk = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk");
         setting_safeguard_pqc = Access_file.access_file_func_read(getApplicationContext(), "setting_safeguard_pqc");
-
-        Access_log.log_it("i","shahin","333 - app_pqc_serial: " + app_pqc_serial);
-        Access_log.log_it("i","shahin","333 - app_pqc_pk: " + app_pqc_pk);
         Access_log.log_it("i","shahin","333 - setting_safeguard_pqc: " + setting_safeguard_pqc);
 
         if (setting_safeguard_pqc.equals("-"))
@@ -336,6 +336,22 @@ public class MainActivity extends AppCompatActivity {
             setting_safeguard_pqc = Access_file.access_file_func_read(getApplicationContext(), "setting_safeguard_pqc");
         }
 
+        for (int i = 0; i < spinner_options.length; i++) {
+
+            spinner_options_pqc_serial[i] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + i);
+            spinner_options_pqc_pk[i] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + i);
+
+            Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + i + "]: " + spinner_options_pqc_serial[i]);
+            Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ i + "]: " + spinner_options_pqc_pk[i]);
+
+            if (spinner_options[i].equals(graph_domain_in)) {
+                app_pqc_serial = spinner_options_pqc_serial[i];
+                app_pqc_pk = spinner_options_pqc_pk[i];
+
+                Access_log.log_it("i","shahin","333 - app_pqc_serial: " + app_pqc_serial);
+                Access_log.log_it("i","shahin","333 - app_pqc_pk: " + app_pqc_pk);
+            }
+        }
 
         //endregion
 

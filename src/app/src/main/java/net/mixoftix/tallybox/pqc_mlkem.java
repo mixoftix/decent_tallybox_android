@@ -651,6 +651,8 @@ public class pqc_mlkem {
         Access_log.log_it("w", "shahin", "Client (Java):");
 
         byte[] pk = Base64.getDecoder().decode(MainActivity.app_pqc_pk);
+        Access_log.log_it("w", "shahin", "Client (Java): Base64.getDecoder().decode(MainActivity.app_pqc_pk)");
+
         EncapsulationResult encResult = encapsulate(pk);
         Ciphertext ct = encResult.ct;
         String cipher_base64 = bytesToBase64(ct.compressed);

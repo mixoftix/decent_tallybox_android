@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="top"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Menu Toolbar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_home"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- Layout Setting -->
+        <!-- Network -->
+        <TextView
+            android:id="@+id/textview_connection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:padding="10dp"
+            android:text="Network Protocol:"
+            android:textSize="17sp"
+            />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center|top"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/frame_white"
+            >
+
+            <!-- Connection -->
+            <!-- Connection RadioGroup -->
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/RadioGroupConnection">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/connection_http"
+                    android:text="http"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:id="@+id/connection_https"
+                    android:text="https"/>
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <!-- Safeguard -->
+        <TextView
+            android:id="@+id/textview_pqc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:padding="10dp"
+            android:text="Safeguard by PQC:"
+            android:textSize="17sp"
+            />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center|top"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/frame_white"
+            >
+
+            <!-- Safeguard -->
+            <!-- Safeguard RadioGroup -->
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/RadioGroupPQC">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:id="@+id/pqc_disable"
+                    android:text="disable"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pqc_enable"
+                    android:text="enable"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textview_pqc_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="*Note: TallyBox has integrated ML-KEM, a cutting-edge Post-Quantum Cryptography (PQC) algorithm, into this app to evaluate its effectiveness. This feature protects sensitive transaction data by preventing Man-in-the-Middle (MITM) attacks and receipt fraud."
+                android:textStyle="italic"
+                android:textSize="13sp"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

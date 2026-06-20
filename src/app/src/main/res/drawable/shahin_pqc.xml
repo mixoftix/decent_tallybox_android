@@ -1,0 +1,14 @@
+<vector android:height="24dp" android:tint="?attr/colorSurface"
+    android:viewportHeight="24" android:viewportWidth="24"
+    android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!-- Letter P -->
+    <path android:fillColor="@android:color/black" android:pathData="M5,9H7V15H5V9zM7,9H9V11H7V9zM7,11H9V13H7V11z"/>
+
+    <!-- Letter Q -->
+    <path android:fillColor="@android:color/black" android:pathData="M10,9H12V15H10V9zM12,9H14V11H12V9zM12,11H14V13H12V11zM12,13H14V15H12V13zM13,14H15V15H13V14z"/>
+
+    <!-- Letter C -->
+    <path android:fillColor="@android:color/black" android:pathData="M16,9H18V11H16V9zM16,11H18V13H16V11zM16,13H18V15H16V13zM18,9H20V15H18V9z"/>
+</vector>

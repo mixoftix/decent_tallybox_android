@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="top"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        android:padding="16dp"
+        >
+
+        <!-- Menu Toolbar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_homeqr"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- Layout Send -->
+        <!-- Graph Info -->
+        <TextView
+            android:id="@+id/textview_graph_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:padding="0dp"
+            android:text="---"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            android:layout_marginBottom="10dp"
+            />
+
+        <!-- Wallet Target EditText -->
+        <EditText
+            android:id="@+id/editTextWalletTo"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="To Wallet"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_account_balance_24"
+            android:inputType="text" />
+
+        <!-- Currency -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="6dp"
+            >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Coin:"
+            android:textSize="16sp"
+            android:paddingEnd="5dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/dropdown_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:background="@drawable/frame_white"
+
+            >
+
+            <ImageView
+                android:id="@+id/dropdown_icon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/baseline_fingerprint_24"
+                android:gravity="center_vertical"
+                />
+
+            <TextView
+                android:id="@+id/dropdown_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="null"
+                android:textSize="16sp"
+                android:paddingStart="5dp"
+                />
+
+
+        </LinearLayout>
+        </LinearLayout>
+
+        <!-- Currency RadioGroup -->
+        <!--
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/RadioGroupCurrency">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:id="@+id/currency_null"
+                android:text="null"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/currency_2zr"
+                android:text="2ZR"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/currency_2pn"
+                android:text="2PN"/>
+
+        </RadioGroup>
+        -->
+
+        <!-- Amount EditText -->
+        <EditText
+            android:id="@+id/editTextAmount"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="Amount"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_dialpad_24"
+            android:inputType="text" />
+
+
+        <CheckBox
+            android:id="@+id/checkbox_extra_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|right"
+            android:padding="10dp"
+            android:text="Extra Info"
+            android:textSize="17sp"
+            android:checked="false"
+            />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/layout_of_extra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center|top"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/frame_white"
+            android:visibility="gone"
+            >
+
+        <!-- To Graph EditText -->
+        <EditText
+            android:id="@+id/editTextGraphDomainTo"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="To Graph"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_hub_24"
+            android:inputType="text" />
+
+        <!-- Order EditText -->
+        <EditText
+            android:id="@+id/editTextOrder"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="Order ID (optional)"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_shopping_cart_24"
+            android:inputType="text" />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/checkbox_offline_sign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|right"
+            android:padding="10dp"
+            android:text="Offline Sign"
+            android:textSize="17sp"
+            android:checked="false"
+            />
+
+        <!-- Transaction Buttons -->
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <!-- Sign Button -->
+            <Button
+                android:id="@+id/buttonSign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:drawablePadding="2dp"
+                android:drawableRight="@drawable/baseline_edit_note_24"
+                android:text="Sign">
+            </Button>
+
+            <!-- Broadcast Button -->
+            <Button
+                android:id="@+id/buttonBroadcast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:drawablePadding="2dp"
+                android:drawableRight="@drawable/baseline_cloud_upload_24"
+                android:enabled="false"
+                android:text="Broadcast">
+            </Button>
+
+        </LinearLayout>
+
+        <!-- Broadcast Info -->
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:indeterminate="false"
+            android:progress="0"
+            />
+
+        <TextView
+            android:id="@+id/textview_broadcast_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:text="---"
+            android:textSize="17sp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/frame_white"
+            android:visibility="gone"
+            />
+
+        <!-- Layout Send -->
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/layout_send_offline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="top|center"
+            android:visibility="gone"
+            >
+
+        <!-- Wallet-QR ImageView -->
+        <ImageView
+            android:id="@+id/ImageView_SendQR"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="5dp"
+            android:gravity="top|center"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="qr_code"
+            android:visibility="gone"
+            />
+
+        <!-- Broadcast Result -->
+        <TextView
+            android:id="@+id/textview_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="top"
+            android:padding="10dp"
+            android:text="---"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_content_copy_24"
+            android:textSize="17sp"
+            android:background="@drawable/frame_white"
+            android:visibility="gone"
+            />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

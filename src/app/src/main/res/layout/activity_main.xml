@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center|top"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+<!-- Menu Toolbar -->
+<com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+</com.google.android.material.appbar.AppBarLayout>
+
+<!-- Graph Info -->
+<!-- In Graph TextView -->
+<TextView
+    android:id="@+id/textview_graph_in"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:padding="10dp"
+    android:text="---"
+    android:drawablePadding="2dp"
+    android:drawableRight="@drawable/baseline_hub_24"
+    android:textSize="17sp"
+    android:background="@drawable/frame_white"
+    />
+
+<!-- Action Buttons -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+        <!-- Receive Button -->
+        <Button
+            android:id="@+id/buttonReceive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_download_24"
+            android:text="Receive">
+        </Button>
+
+        <!-- Send Button -->
+        <Button
+            android:id="@+id/buttonSend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_upload_24"
+            android:text="Send">
+        </Button>
+
+</LinearLayout>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_main_whatsup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:visibility="gone"
+    >
+
+<!-- Update Result -->
+<TextView
+    android:id="@+id/textview_main_whatsup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center|bottom"
+    android:padding="10dp"
+    android:background="@drawable/frame_white"
+    android:text="message: app is up-to-date.."
+    android:textSize="17sp"
+    />
+
+</LinearLayout>
+
+<!-- Coins Layout -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_main_list_of_coins"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/frame_white"
+    >
+
+<!-- Balance Result -->
+<TextView
+    android:id="@+id/textview_balance_wallet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right|bottom"
+    android:padding="10dp"
+    android:text="Last update: "
+    android:textSize="13sp"
+    />
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginBottom="10dp"
+    android:background="?attr/colorControlNormal" />
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeContainer"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_main_advertise"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:visibility="gone"
+    >
+
+        <!-- Update Result -->
+        <TextView
+            android:id="@+id/textview_main_advertise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|bottom"
+            android:padding="10dp"
+            android:background="@drawable/frame_white"
+            android:text="advertise: www.x.com"
+            android:textSize="17sp"
+            />
+
+</LinearLayout>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_main_test"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:visibility="gone"
+    >
+
+        <!-- Update Result -->
+        <TextView
+            android:id="@+id/textview_main_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|bottom"
+            android:padding="10dp"
+            android:background="@drawable/frame_white"
+            android:text="PQC"
+            android:textSize="17sp"
+            />
+
+</LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="top"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Menu Toolbar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_home"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- Layout Private Key -->
+        <TextView
+            android:id="@+id/textview_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:padding="10dp"
+            android:text="Local password:"
+            android:textSize="17sp"
+            />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center|top"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:background="@drawable/frame_white"
+            >
+
+            <!-- Password1 EditText -->
+            <EditText
+                android:id="@+id/editTextPassword1"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:padding="10dp"
+                android:hint="Password"
+                android:drawablePadding="2dp"
+                android:drawableRight="@drawable/baseline_key_24"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <!-- Generate-QR Button -->
+        <Button
+            android:id="@+id/buttonPasswordCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_lock_open_24"
+            android:text="Expose Private Key">
+        </Button>
+
+        <!-- QC Info -->
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/layout_main_qc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            >
+            <!-- Update Result -->
+            <TextView
+                android:id="@+id/textview_main_qc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|bottom"
+                android:padding="10dp"
+                android:background="@drawable/frame_white"
+                android:text="QC"
+                android:textSize="17sp"
+                />
+
+        </LinearLayout>
+
+        <!-- Wallet Info -->
+        <TextView
+            android:id="@+id/textview_privatekey_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="start"
+            android:padding="10dp"
+            android:text="My private key:"
+            android:textSize="17sp"
+            />
+
+        <!-- Privatekey TextView -->
+        <TextView
+            android:id="@+id/textview_privatekey"
+            android:gravity="center|top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:padding="10dp"
+            android:text="---"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:background="@drawable/frame_white"
+            />
+
+        <!-- Access Info -->
+        <TextView
+            android:id="@+id/textview_privatekey_attempt_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="start"
+            android:padding="10dp"
+            android:text="Last access:"
+            android:textSize="17sp"
+            />
+
+        <!-- Privatekey attempt TextView -->
+        <TextView
+            android:id="@+id/textview_privatekey_attempt"
+            android:gravity="center|top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:padding="10dp"
+            android:text="---"
+            android:textStyle="italic"
+            android:textSize="15sp"
+            android:background="@drawable/frame_white"
+            />
+
+    </LinearLayout>
+
+</ScrollView>

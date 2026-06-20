@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="top"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Menu Toolbar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_home"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- Layout History -->
+        <!-- Graph Info -->
+        <TextView
+            android:id="@+id/textview_graph_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:padding="0dp"
+            android:text="---"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            android:visibility="visible"
+            />
+
+        <!-- Network Info -->
+        <TextView
+            android:id="@+id/textview_network"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:padding="0dp"
+            android:text="---"
+            android:textSize="20sp"
+            android:visibility="visible"
+            />
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:indeterminate="false"
+            android:progress="0"
+            />
+
+        <!-- Transaction Info -->
+        <TextView
+            android:id="@+id/textview_history_hash_tnxid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="top|start"
+            android:padding="0dp"
+            android:text="---"
+            android:textSize="17sp"
+            android:visibility="gone"
+            />
+
+        <!-- Order Info -->
+        <TextView
+            android:id="@+id/textview_history_hash_orderid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:padding="0dp"
+            android:text="---"
+            android:textSize="17sp"
+            android:visibility="gone"
+            />
+
+        <!-- Channel Info -->
+        <TextView
+            android:id="@+id/textview_history_hash_channel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:padding="0dp"
+            android:text="---"
+            android:textSize="17sp"
+            android:visibility="gone"
+            />
+
+        <!-- Dynamic View -->
+        <LinearLayout
+            android:id="@+id/interactive_views"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            />
+
+        <!-- Channel Monitor -->
+        <TextView
+            android:id="@+id/textview_history_log_monitor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:padding="0dp"
+            android:text="---"
+            android:textSize="17sp"
+            android:visibility="gone"
+            />
+
+        <!-- Channel Info -->
+        <TextView
+            android:id="@+id/textview_history_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:padding="10dp"
+            android:background="@drawable/frame_white"
+            android:text="---"
+            android:textSize="13sp"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
+
+</ScrollView>

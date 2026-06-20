@@ -181,7 +181,10 @@ public class MainActivity_History_Detail extends AppCompatActivity {
         String the_pqc_cipher = "";
         String the_pqc_psk = "";
 
+        String is_pqc_serial = MainActivity.app_pqc_serial;
+        String is_pqc_pk = MainActivity.app_pqc_pk;
         String is_pqc = MainActivity.setting_safeguard_pqc;
+
         Access_log.log_it("i","shahin","is_pqc: " + is_pqc);
         the_log_str = "PQC - Status: " + is_pqc + "d" + "\n\r\n\r";
 
@@ -190,7 +193,7 @@ public class MainActivity_History_Detail extends AppCompatActivity {
             // initial pqc connection
             pqc_mlkem.pqc_psk_pk();
 
-            pqc_cipher_serial = MainActivity.app_pqc_psk_serial;
+            pqc_cipher_serial = MainActivity.app_pqc_serial;
             the_pqc_cipher = MainActivity.app_pqc_psk_cipher;
             the_pqc_psk = MainActivity.app_pqc_psk;
 

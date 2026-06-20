@@ -24,6 +24,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity_KYC"
+            android:exported="false"
+            android:label="TallyBox / KYC" />
+        <activity
             android:name=".MainActivity_Setting"
             android:exported="false"
             android:label="TallyBox / Setting" />

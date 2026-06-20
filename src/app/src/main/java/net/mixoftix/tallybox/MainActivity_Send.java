@@ -1,5 +1,7 @@
 package net.mixoftix.tallybox;
 
+import static net.mixoftix.tallybox.MainActivity.spinner_options;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ListPopupWindow;
 import androidx.core.text.HtmlCompat;
@@ -25,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +55,7 @@ public class MainActivity_Send extends AppCompatActivity {
     //private RadioButton radioCurrency;
     //private RadioGroup RadioGroupCurrency;
 
+    private Spinner dropdownSpinner_GraphDomainTo;
     private ImageView dropdownIcon;
     private TextView dropdownText;
     private ListPopupWindow popupWindow;
@@ -79,7 +83,21 @@ public class MainActivity_Send extends AppCompatActivity {
         setSupportActionBar(binding.toolbarHomeqr);
 
         textview_graph_in = findViewById(R.id.textview_graph_in);
-        editTextGraphDomainTo = findViewById(R.id.editTextGraphDomainTo);
+        //editTextGraphDomainTo = findViewById(R.id.editTextGraphDomainTo);
+
+        // BGN: spinner of graph_in
+        dropdownSpinner_GraphDomainTo = findViewById(R.id.dropdownSpinner_GraphDomainTo);
+        // String[] spinner_options = {"tehran.dag.tejaratbank.ir", "tabriz.dag.tejaratbank.ir", "shiraz.dag.tejaratbank.ir"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                R.layout.items_activity_spinner,  // Custom layout
+                spinner_options
+        );
+        adapter.setDropDownViewResource(R.layout.items_activity_spinner); // Same layout for dropdown
+        dropdownSpinner_GraphDomainTo.setAdapter(adapter);
+        // END: spinner of graph_in
+
         editTextWalletTo = findViewById(R.id.editTextWalletTo);
         //RadioGroupCurrency = findViewById(R.id.RadioGroupCurrency);
         editTextOrder = findViewById(R.id.editTextOrder);
@@ -225,7 +243,7 @@ public class MainActivity_Send extends AppCompatActivity {
 
                 // Retrieve order data
                 String str_graph_domain_from = MainActivity.graph_domain_in;
-                String str_graph_domain_to = editTextGraphDomainTo.getText().toString();
+                String str_graph_domain_to = dropdownSpinner_GraphDomainTo.getSelectedItem().toString(); //editTextGraphDomainTo.getText().toString();
                 String str_wallet_from = net.mixoftix.tallybox.MainActivity.wallet_address;
                 String str_wallet_to = editTextWalletTo.getText().toString();
                 String str_amount = editTextAmount.getText().toString();
@@ -246,7 +264,8 @@ public class MainActivity_Send extends AppCompatActivity {
 
                 if (str_graph_domain_to == null || str_graph_domain_to.isEmpty())
                 {
-                    editTextGraphDomainTo.requestFocus();
+                    //editTextGraphDomainTo.requestFocus();
+                    dropdownSpinner_GraphDomainTo.requestFocus();
                     Toast.makeText(MainActivity_Send.this, "invalid graph domain..", Toast.LENGTH_SHORT).show();
                 }
                 else if (str_wallet_to == null || str_wallet_to.isEmpty())
@@ -468,8 +487,19 @@ public class MainActivity_Send extends AppCompatActivity {
         }
 
         textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + ")");
-        editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
-
+        //editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
+        // Find the index of the target domain
+        int targetIndex = -1;
+        for (int i = 0; i < spinner_options.length; i++) {
+            if (spinner_options[i].equals(MainActivity.graph_domain_in)) {
+                targetIndex = i;
+                break;
+            }
+        }
+        // Set the selection if found
+        if (targetIndex != -1) {
+            dropdownSpinner_GraphDomainTo.setSelection(targetIndex);
+        }
         //endregion
 
     }
@@ -566,7 +596,20 @@ public class MainActivity_Send extends AppCompatActivity {
         textviewSend.setVisibility(View.GONE);
 
         if (tally_parcel.startsWith("box")) {
-            editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
+            //editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
+            // Find the index of the target domain
+            int targetIndex = -1;
+            for (int i = 0; i < spinner_options.length; i++) {
+                if (spinner_options[i].equals(MainActivity.graph_domain_in)) {
+                    targetIndex = i;
+                    break;
+                }
+            }
+            // Set the selection if found
+            if (targetIndex != -1) {
+                dropdownSpinner_GraphDomainTo.setSelection(targetIndex);
+            }
+
             editTextWalletTo.setText(tally_parcel);
 
             new Handler(Looper.getMainLooper()).post(() -> {
@@ -616,7 +659,20 @@ public class MainActivity_Send extends AppCompatActivity {
                 }
             }
 
-            editTextGraphDomainTo.setText(graph_domain_to);
+            //editTextGraphDomainTo.setText(graph_domain_to);
+            // Find the index of the target domain
+            int targetIndex = -1;
+            for (int i = 0; i < spinner_options.length; i++) {
+                if (spinner_options[i].equals(graph_domain_to)) {
+                    targetIndex = i;
+                    break;
+                }
+            }
+            // Set the selection if found
+            if (targetIndex != -1) {
+                dropdownSpinner_GraphDomainTo.setSelection(targetIndex);
+            }
+
             editTextWalletTo.setText(wallet_to);
             editTextOrder.setText(order_id);
             editTextAmount.setText(order_amount);
@@ -643,7 +699,20 @@ public class MainActivity_Send extends AppCompatActivity {
         }
         else
         {
-            editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
+            //editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
+            // Find the index of the target domain
+            int targetIndex = -1;
+            for (int i = 0; i < spinner_options.length; i++) {
+                if (spinner_options[i].equals(MainActivity.graph_domain_in)) {
+                    targetIndex = i;
+                    break;
+                }
+            }
+            // Set the selection if found
+            if (targetIndex != -1) {
+                dropdownSpinner_GraphDomainTo.setSelection(targetIndex);
+            }
+
             Toast.makeText(MainActivity_Send.this, "invalid tally-parcel..", Toast.LENGTH_SHORT).show();
         }
     }

@@ -1,0 +1,13 @@
+<!-- res/layout/spinner_item.xml -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/spinnerText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
+    android:padding="10dp"
+    android:textSize="17sp"
+    android:drawableRight="@drawable/baseline_hub_24"
+    android:background="@drawable/frame_white"
+    android:drawablePadding="2dp"
+    />

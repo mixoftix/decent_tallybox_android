@@ -16,6 +16,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_kyc"
+        android:orderInCategory="100"
+        android:title="KYC"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_setting"
         android:orderInCategory="100"
         android:title="Setting"

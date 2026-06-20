@@ -22,9 +22,12 @@ import net.mixoftix.tallybox.databinding.ActivityMainBinding;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.UnsupportedEncodingException;
@@ -63,21 +66,36 @@ public class MainActivity extends AppCompatActivity {
 
     // constants
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.3";
-    public static String app_pqc_psk_serial ="1471158003";
-    public static final String app_pqc_pk = "KUgADIsFT2omeh/vcMQnwrzDwGkiNe9DVD3FTkuUKVGXCJbdKjKhasVMvcKe1h3Wek+3ACbowyNJvJUlcYZiGgZjr9jcgnWg8W9F7ijsFRkJXkqgcdrCNTg7DcSIawuI39v7obIOdCsIoFngUxTHelMH9uenMhKNU7u2rFoUwfI+E+SOjsLUIMUmXrRbN7IiBQ4s6qTlNK363mBn9jS1RJhEcNDK88JDLXyZI/Ehmhtvr0Z5V4Pz9H4Fejhqi6tsWmJ9z6rzuSC29g9Lp0ox/IYc9c6y2HOjkmyA5cErnYR6o5kiGKBtawA7CbLRVIn9GoW+g/bAYdf1YsSNqBQgJgApNcHE90KthkjxsysDUKnwMBUh/AizlKqJF9vvja/kSTXEsccdAJByczVjMsoAFi4OZGb21w5Kz3QyOfbe1Papv7lYM12Wx7upCX3qm9mlhd4L0Zj+1wn9/M50mUt8+19CJ5U46NjGk3eq8RIyFAWakGR8/aSqqQ28PoYnZ5RPyF+gLoZG2BBtK4rPpLwQJQqZ6RcTS8BfsH43x2NDKZc0AXSr054WLWDeMtQQNp6zO7bMOHaAc5z9BYuwltBZ/bXPt0ADXPWaKNDarzsAo/281ruUnzOlf0x/8KkW6Dd6mwkZM4R0S28RZ68yAnw31JhWonXRdkQQsFgm8EQVV4tHZGHy5IQgudnEyVRLYJmCWmcpyvdEUhP5NdA6bZDriFwXG6htzv5L/I1lo7Ma542mWc/zbC6Cnhp0258vh6/M7w2/T1W7YBBH82lMNFA+38hSPG9ugOAUHiZdFFkNW8nvUdM6IYcTOuA6vDRmyEohEcEiQjlGRy5TuxWfVGsWyt6djFzRHINDylJJEBAGSJw1iLbNzfE1YS9f7Ymcy2zf";
+    public static final String app_version = "2.932";
+
+    // variables - PQC
+    public static String app_pqc_serial ="";
+    public static String app_pqc_pk = "";
     public static String app_pqc_psk ="";
     public static String app_pqc_psk_cipher ="";
 
     // variables - settings
     public static String setting_network_protocol = "";
     public static String setting_safeguard_pqc = "";
+    public static String setting_graph_domain_in = "";
 
-
-    // variables - general
+    // variables - graphs
     public static final String file_name_path = "net_mixoftix_tallybox";
-    public static final String graph_domain_in = "gpp_mars.mixoftix.net";
     public static final boolean log_is_enable = true;
+    public static final String[] spinner_options = {
+            "gpp_mars.mixoftix.net",
+            "gpp_venus.mixoftix.net",
+            "gpp_pluto.mixoftix.net"
+    };
+    public static final String[] spinner_options_value = {
+            "192.168.88.111:701",
+            "192.168.88.111:711",
+            "192.168.88.111:721"
+    };
+    public static String[] spinner_options_pqc_serial = new String[3];
+    public static String[] spinner_options_pqc_pk = new String[3];
+    public static String graph_domain_in = ""; // ""gpp_mars.mixoftix.net";
+    public static String graph_address_in = ""; //  "192.168.88.111:701";
 
 
     // variables - general
@@ -86,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
     public static String aes_of_privateKey_d_b58 = null;
     public static String publicKey_x_HEX = "";
     public static String publicKey_y_HEX = "";
-
 
     // variables - connection
     public static String server_url = "";
@@ -98,16 +115,18 @@ public class MainActivity extends AppCompatActivity {
     public static String server_file_order_history_detail = "";
     public static String server_url_tally_hash_history = "";
     public static String server_file_tally_hash_history = "";
-
+    public static String server_url_kyc_accept = "";
+    public static String server_file_kyc_request = "";
+    public static String server_file_kyc_accept = "";
 
     // layouts
     private Button buttonSend, buttonReceive;
     private TextView textview_main_test, textview_main_advertise, textview_main_whatsup,
-                     textview_graph_in, textview_balance_2zr, textview_balance_2pn,
                      textview_balance_wallet;
     private LinearLayout layout_main_whatsup, layout_main_advertise, layout_main_test;
 
 
+    private Spinner dropdownSpinner;
     private RecyclerView recyclerView;
     private MyAdapter adapter;
     private List<ItemData> dataList;
@@ -192,25 +211,23 @@ public class MainActivity extends AppCompatActivity {
         textview_main_whatsup = findViewById(R.id.textview_main_whatsup);
         textview_main_advertise = findViewById(R.id.textview_main_advertise);
 
-        textview_graph_in = findViewById(R.id.textview_graph_in);
         textview_balance_wallet  = findViewById(R.id.textview_balance_wallet);
         textview_main_test  = findViewById(R.id.textview_main_test);
 
+        // BGN: spinner of graph_in
+        dropdownSpinner = findViewById(R.id.dropdownSpinner);
+        // String[] spinner_options = {"tehran.dag.tejaratbank.ir", "tabriz.dag.tejaratbank.ir", "shiraz.dag.tejaratbank.ir"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                R.layout.items_activity_spinner,  // Custom layout
+                spinner_options
+        );
+        adapter.setDropDownViewResource(R.layout.items_activity_spinner); // Same layout for dropdown
+        dropdownSpinner.setAdapter(adapter);
+        // END: spinner of graph_in
+
         //endregion
-
-        // test
-        try {
-            //layout_main_test.setVisibility(View.VISIBLE);
-
-            //pqc_mlkem.test();
-            //pqc_mlkem.test2();
-            //pqc_mldsa_deepseek.test();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        //region init_keypair
 
         //region keypair_variables
         PrivateKey privateKey = null;
@@ -223,11 +240,6 @@ public class MainActivity extends AppCompatActivity {
         String publicKey_x_b58 = "";
         String publicKey_y_b58 = "";
         //endregion
-
-        // sample private key
-        // privateKey_d_b58 - retrieved: BeShxAoNNK5DxgkqUtjZcLPRPr4gaQ2R3PsqKRqLVQbK
-        // d (reloaded): 9e2c6cd535d6439d4bb5d57d50c132ca292340ca37076fd262e4c336f571d792  // lab - debug
-        // d (reloaded): 9af22c59615802bb5db716f5127fcdcde86687d25ce1b177d5da94e97b1f7d60  // mimo - debug
 
         //region local_privacy_sha256
         String local_privacy_sha256 = Access_file.access_file_func_read(getApplicationContext(), "local_privacy_sha256");
@@ -309,8 +321,13 @@ public class MainActivity extends AppCompatActivity {
 
         setting_connection(setting_network_protocol);
 
-        // set connection protocol in the first run
+        // set PQC protocol in the first run
+        app_pqc_serial = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial");
+        app_pqc_pk = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk");
         setting_safeguard_pqc = Access_file.access_file_func_read(getApplicationContext(), "setting_safeguard_pqc");
+
+        Access_log.log_it("i","shahin","333 - app_pqc_serial: " + app_pqc_serial);
+        Access_log.log_it("i","shahin","333 - app_pqc_pk: " + app_pqc_pk);
         Access_log.log_it("i","shahin","333 - setting_safeguard_pqc: " + setting_safeguard_pqc);
 
         if (setting_safeguard_pqc.equals("-"))
@@ -364,6 +381,90 @@ public class MainActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
             }
+        });
+        // Set a selected listener for graph_in_spinner
+        final Boolean[] spinner_isFirstSelection = {true};
+        dropdownSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selectedItem = parent.getItemAtPosition(position).toString();
+
+                // BGN: graph settings
+
+                if (spinner_isFirstSelection[0])
+                {
+                    spinner_isFirstSelection[0] = false;
+
+                    setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
+                    Access_log.log_it("i","shahin","111 - setting_graph_domain_in: " + setting_graph_domain_in);
+
+                    if (setting_graph_domain_in.equals("-"))
+                    {
+                        Access_file.access_file_func_write(getApplicationContext(), "setting_graph_domain_in", selectedItem, "write");
+                        setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
+                        graph_domain_in = setting_graph_domain_in;
+
+                        Access_log.log_it("w","shahin","Graph_in_domain Setup: " + graph_domain_in);
+                    }
+                    else
+                    {
+                        graph_domain_in = setting_graph_domain_in;
+                        Access_log.log_it("w","shahin","Graph_in_domain Reloaded: " + graph_domain_in);
+                    }
+                }
+                else
+                {
+                    setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
+                    Access_log.log_it("i","shahin","222 - setting_graph_domain_in: " + setting_graph_domain_in);
+
+                    if (selectedItem.equals(setting_graph_domain_in))
+                    {
+                        Access_log.log_it("w","shahin","Graph_in_domain Selected: " + graph_domain_in);
+                    }
+                    else
+                    {
+                        Access_file.access_file_func_write(getApplicationContext(), "setting_graph_domain_in", selectedItem, "write");
+                        setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
+                        graph_domain_in = setting_graph_domain_in;
+
+                        Access_log.log_it("w","shahin","Graph_in_domain Rewrote: " + graph_domain_in);
+                    }
+                }
+
+                // END: graph settings
+
+                // Find the position of selection
+                int matchedIndex = -1;
+                for (int i = 0; i < spinner_options.length; i++) {
+                    if (spinner_options[i].equals(graph_domain_in)) {
+                        matchedIndex = i;
+                        break;  // Stop at first match
+                    }
+                }
+
+                // Find the position of selection parallel
+                if (matchedIndex != -1)
+                {
+                    graph_address_in = spinner_options_value[matchedIndex];
+                    // Set the selection
+                    dropdownSpinner.setSelection(matchedIndex);
+                }
+                else
+                {
+                    graph_domain_in = "unknown!!";
+                    graph_address_in = "127.0.0.1";
+                }
+
+                Access_log.log_it("w","shahin","Graph_in_address in parallel: " + graph_address_in);
+
+                // reconfig all network settings
+                setting_connection(setting_network_protocol);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         //endregion
@@ -440,7 +541,6 @@ public class MainActivity extends AppCompatActivity {
 
         //region redraw_views
 
-        textview_graph_in.setText(graph_domain_in);
         crypto_list_label("");
         refresh_label();
 
@@ -869,6 +969,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_kyc) {
+
+            Intent i = new Intent(getApplicationContext(),MainActivity_KYC.class);
+            //finishAffinity();
+            startActivity(i);
+
+            return true;
+        }
+
         if (id == R.id.action_about) {
 
             Intent i = new Intent(getApplicationContext(),MainActivity_About.class);
@@ -980,7 +1089,8 @@ public class MainActivity extends AppCompatActivity {
     public static void setting_connection(String my_protocol)
     {
         setting_network_protocol = my_protocol; // "https"; //  "http"; //
-        server_url = setting_network_protocol + "://192.168.88.111:701/"; // "://tallybox.mixoftix.net/";
+        server_url = setting_network_protocol + "://" + graph_address_in + "/"; // "://192.168.88.111:701/";
+
         server_url_order_accept = server_url;
         server_file_order_accept = "dmz.asmx/order_accept";
         server_url_order_history = server_url;
@@ -989,6 +1099,10 @@ public class MainActivity extends AppCompatActivity {
         server_file_order_history_detail = "dmz.asmx/ledger_history_detail";
         server_url_tally_hash_history = server_url;
         server_file_tally_hash_history = "dmz.asmx/ledger_history_tally_hash";
+
+        server_url_kyc_accept = server_url;
+        server_file_kyc_request = "dmz.asmx/kyc_generate";
+        server_file_kyc_accept = "dmz.asmx/kyc_accept";
     }
 
     //endregion

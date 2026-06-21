@@ -28,7 +28,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <!-- Layout Send -->
-        <!-- Graph Info -->
+        <!-- Graph From -->
         <TextView
             android:id="@+id/textview_graph_in"
             android:layout_width="match_parent"
@@ -41,15 +41,37 @@
             android:layout_marginBottom="10dp"
             />
 
-        <!-- Wallet Target EditText -->
-        <EditText
-            android:id="@+id/editTextWalletTo"
+        <!-- Graph To -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="To Wallet"
-            android:drawablePadding="2dp"
-            android:drawableRight="@drawable/baseline_account_balance_24"
-            android:inputType="text" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="6dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To:"
+                android:textSize="16sp"
+                android:paddingEnd="5dp"
+                />
+
+            <!-- To Graph EditText -->
+            <Spinner
+                android:id="@+id/dropdownSpinner_GraphDomainTo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:padding="0dp"
+                android:drawablePadding="0dp"
+                android:textSize="17sp"
+                android:background="@drawable/frame_white"
+                android:spinnerMode="dropdown"
+                />
+
+        </LinearLayout>
 
         <!-- Currency -->
         <LinearLayout
@@ -63,7 +85,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Coin:"
+            android:text="Token:"
             android:textSize="16sp"
             android:paddingEnd="5dp"
             />
@@ -131,6 +153,16 @@
         </RadioGroup>
         -->
 
+        <!-- Wallet Target EditText -->
+        <EditText
+            android:id="@+id/editTextWalletTo"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="To Wallet"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_account_balance_24"
+            android:inputType="text" />
+
         <!-- Amount EditText -->
         <EditText
             android:id="@+id/editTextAmount"
@@ -164,19 +196,6 @@
             android:background="@drawable/frame_white"
             android:visibility="gone"
             >
-
-        <!-- To Graph EditText -->
-        <Spinner
-            android:id="@+id/dropdownSpinner_GraphDomainTo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:padding="0dp"
-            android:drawablePadding="0dp"
-            android:textSize="17sp"
-            android:background="@drawable/frame_white"
-            android:spinnerMode="dropdown"
-            />
 
         <!-- Order EditText -->
         <EditText

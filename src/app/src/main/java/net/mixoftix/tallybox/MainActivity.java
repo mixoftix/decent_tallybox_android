@@ -42,6 +42,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /*
 Decent TallyBox (Android Wallet)
 Version: 2.932 (MVP)
@@ -1075,23 +1079,6 @@ public class MainActivity extends AppCompatActivity {
 
     //endregion
 
-    //region functions_of_general
-
-    private void copy_to_clipboard(String text)
-    {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Copied Text", text);
-        clipboard.setPrimaryClip(clip);
-    }
-    public boolean bigint_is_odd(BigInteger val) {
-        return !val.mod(new BigInteger("2")).equals(BigInteger.ZERO);
-    }
-    public boolean bigint_is_even(BigInteger val) {
-        return val.mod(new BigInteger("2")).equals(BigInteger.ZERO);
-    }
-
-    //endregion
-
     //region functions_of_dynamic_views
     private void refresh_general()
     {
@@ -1275,6 +1262,8 @@ public class MainActivity extends AppCompatActivity {
                     textview_main_advertise.setMovementMethod(LinkMovementMethod.getInstance());
                 }
             }
+
+            // we need a list of all possible valid tokens among all graphs here
             if (split_result[kk].equals("USD"))
             {
                 dataList.add(new ItemData("USD",split_result[kk+1], R.mipmap.coin_2pn));
@@ -1293,6 +1282,93 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    //endregion
+
+    //region functions_of_GPP
+
+    /**
+     * Returns the common tokens (intersection) between two servers.
+     *
+     * @param server1 First server from spinner_options
+     * @param server2 Second server from spinner_options
+     * @return Comma-separated string of common tokens, or empty string if none
+     */
+    public static String getCommonTokens(String server1, String server2) {
+        if (server1 == null || server2 == null)
+        {
+            return "";
+        }
+
+        int index1 = findServerIndex(server1);
+        int index2 = findServerIndex(server2);
+
+        if (index1 == -1 || index2 == -1) {
+            return ""; // Server not found
+        }
+
+        String tokens1 = MainActivity.spinner_options_tokens[index1];
+        String tokens2 = MainActivity.spinner_options_tokens[index2];
+
+        Access_log.log_it("w","shahin","tokens1: " + tokens1);
+        Access_log.log_it("w","shahin","tokens2: " + tokens2);
+
+        return getIntersection(tokens1, tokens2);
+    }
+
+    /**
+     * Helper: Find index of a server in spinner_options
+     */
+    private static int findServerIndex(String server) {
+        for (int i = 0; i < MainActivity.spinner_options.length; i++) {
+            if (MainActivity.spinner_options[i].equals(server)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Helper: Returns intersection of two comma-separated token strings
+     */
+    private static String getIntersection(String tokens1, String tokens2) {
+        if (tokens1.isEmpty() || tokens2.isEmpty()) {
+            return "";
+        }
+
+        Set<String> set1 = Arrays.stream(tokens1.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toSet());
+
+        Set<String> set2 = Arrays.stream(tokens2.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toSet());
+
+        // Keep only common tokens
+        set1.retainAll(set2);
+
+        if (set1.isEmpty()) {
+            return "";
+        }
+
+        return String.join(",", set1);
+    }
+
+    // Put this in your Activity or a utility class
+    public static int getIconForToken(String token) {
+        switch (token.toUpperCase().trim()) {
+            case "2PN":
+                return R.mipmap.coin_2pn;
+            case "2ZR":
+                return R.mipmap.coin_2zr;
+            case "TLH":
+                return R.mipmap.coin_tlh;
+            default:
+                return R.drawable.baseline_fingerprint_24; // fallback
+        }
     }
 
     //endregion

@@ -118,7 +118,7 @@ public class MainActivity_Setting extends AppCompatActivity {
                                     String result = net.mixoftix.tallybox.MainActivity.browse_url(my_server_url + "dmz.asmx/app_pqc_pk?" + server_url_query);
                                     Access_log.log_it("i","shahin",MainActivity.server_url + " - result: " + result);
 
-                                    String network_msg = " / Net: <font color=red>Er</font>";
+                                    String network_msg = " / net: <font color=red>Er</font>";
 
                                     if (result.equals("Failed"))
                                     {
@@ -143,7 +143,7 @@ public class MainActivity_Setting extends AppCompatActivity {
                                         }
 
                                         // set the text
-                                        network_msg = " / Net: <font color=cyan>OK</font>";
+                                        network_msg = " / net: <font color=cyan>OK</font>";
                                         textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + result + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
 
                                     }
@@ -190,13 +190,13 @@ public class MainActivity_Setting extends AppCompatActivity {
                                             if (pqc_serial.equals(pqcSerial))
                                             {
                                                 // set the text
-                                                network_msg = " / <font color=green>up to date</font> / Net: <font color=cyan>OK</font>";
+                                                network_msg = " / <font color=green>up to date</font> / net: <font color=cyan>OK</font>";
                                                 textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
                                             }
                                             else
                                             {
                                                 // set the text
-                                                network_msg = " / <font color=cyan>updated..</font> / Net: <font color=cyan>OK</font>";
+                                                network_msg = " / <font color=cyan>updated..</font> / net: <font color=cyan>OK</font>";
                                                 textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
                                             }
                                         }
@@ -218,7 +218,7 @@ public class MainActivity_Setting extends AppCompatActivity {
                                             }
 
                                             // set the text
-                                            network_msg = " / <font color=magenta>checksum failed!</font> / Net: <font color=cyan>OK</font>";
+                                            network_msg = " / <font color=magenta>checksum failed!</font> / net: <font color=cyan>OK</font>";
                                             textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: -" +  network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
                                         }
                                     }

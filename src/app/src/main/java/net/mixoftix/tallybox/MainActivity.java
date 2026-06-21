@@ -97,10 +97,11 @@ public class MainActivity extends AppCompatActivity {
             "2ZR",
             "2ZR,USD"
     };
+    public static String[] spinner_options_crypto_list = new String[3];
     public static String[] spinner_options_pqc_serial = new String[3];
     public static String[] spinner_options_pqc_pk = new String[3];
-    public static String graph_domain_in = spinner_options[0]; // ""gpp_mars.mixoftix.net";
-    public static String graph_address_in = spinner_options_value[0]; //  "192.168.88.111:701";
+    public static String graph_domain_in = ""; // ""gpp_mars.mixoftix.net";
+    public static String graph_address_in = ""; //  "192.168.88.111:701";
 
 
     // variables - general
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     public static String aes_of_privateKey_d_b58 = null;
     public static String publicKey_x_HEX = "";
     public static String publicKey_y_HEX = "";
+
 
     // variables - connection
     public static String server_url = "";
@@ -124,60 +126,23 @@ public class MainActivity extends AppCompatActivity {
     public static String server_file_kyc_request = "";
     public static String server_file_kyc_accept = "";
 
+
     // layouts
     private Button buttonSend, buttonReceive;
     private TextView textview_main_test, textview_main_advertise, textview_main_whatsup,
                      textview_balance_wallet;
     private LinearLayout layout_main_whatsup, layout_main_advertise, layout_main_test;
-
-
     private Spinner dropdownSpinner;
     private RecyclerView recyclerView;
     private MyAdapter adapter;
     private List<ItemData> dataList;
     private SwipeRefreshLayout swipeContainer;
-
     private static ActivityMainBinding binding;
 
     //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*
-        try {
-            crypto_asym_keys_recovery.test_recover2();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        long unixSeconds = System.currentTimeMillis() / 1000L;
-        Log.i("shahin","Unix seconds: " + unixSeconds);
-        Log.i("shahin","Local time: " + new java.util.Date());
-        */
-
-        /*
-        String message = "hi there..";
-        Log.w("shahin","message: " + message);
-        String message_prvkey = retrieve_private_key();
-        Log.w("shahin","message_prvkey: " + message_prvkey);
-        */
-
-        /*
-        Log.w("shahin","sign-message: " + message);
-        byte[] message_byte = message.getBytes(StandardCharsets.UTF_8);
-        Log.w("shahin","sign-message-byte: " + message_byte);
-
-        String hash0 = "hash0[]: ";
-        for (int i=1; i<message_byte.length; i++)
-        {
-            hash0 += message_byte[i] + "-";
-        }
-        hash0 += "\r\n";
-        Log.w("shahin","hash0-byte: " + hash0);
-
-        String message_back = new String(message_byte, StandardCharsets.UTF_8); // for UTF-8 encoding
-        Log.w("shahin","sign-message-back: " + message_back);
-        */
 
         /*
         //String message_sign_order = sign_order(message, message_prvkey);
@@ -193,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i("shahin","message_sign_verify: " + message_sign_verify);
         */
+
+        //region activity_initialization
 
         //region define_views
 
@@ -220,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         textview_main_test  = findViewById(R.id.textview_main_test);
 
         // BGN: spinner of graph_in
+
         dropdownSpinner = findViewById(R.id.dropdownSpinner);
         // String[] spinner_options = {"tehran.dag.tejaratbank.ir", "tabriz.dag.tejaratbank.ir", "shiraz.dag.tejaratbank.ir"};
 
@@ -230,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
         );
         adapter.setDropDownViewResource(R.layout.items_activity_spinner); // Same layout for dropdown
         dropdownSpinner.setAdapter(adapter);
+
         // END: spinner of graph_in
 
         //endregion
@@ -247,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         //endregion
 
         //region local_privacy_sha256
+
         String local_privacy_sha256 = Access_file.access_file_func_read(getApplicationContext(), "local_privacy_sha256");
         Access_log.log_it("i","shahin","111 - local_privacy_sha256: " + local_privacy_sha256);
 
@@ -257,9 +227,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
             return;
         }
+
         //endregion
 
         //region access_history_privatekey
+
         String access_history_privatekey = Access_file.access_file_func_read(getApplicationContext(), "access_history_privatekey");
         Access_log.log_it("i","shahin","111 - access_history_privatekey: " + access_history_privatekey);
 
@@ -270,9 +242,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
             //return;
         }
+
         //endregion
 
         //region keypair_generate
+
         // creates the keys in the first run
         aes_of_privateKey_d_b58 = Access_file.access_file_func_read(getApplicationContext(), "aes_of_privateKey_d_b58");
         Access_log.log_it("i","shahin","111 - aes_of_privateKey_d_b58: " + aes_of_privateKey_d_b58);
@@ -290,9 +264,11 @@ public class MainActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
         }
+
         //endregion
 
         //region publickey_load
+
         publicKey_x_b58 = Access_file.access_file_func_read(getApplicationContext(), "publicKey_x_b58");
         publicKey_y_b58 = Access_file.access_file_func_read(getApplicationContext(), "publicKey_y_b58");
 
@@ -309,22 +285,34 @@ public class MainActivity extends AppCompatActivity {
         publicKey_xy = publicKey_x_HEX + "~" + publicKey_y_HEX;
 
         Access_log.log_it("i","shahin","xy (reloaded): " + publicKey_xy);
+
+        //endregion
+
+        //region wallet_load
+
+        wallet_address = wallet_address(publicKey_x_HEX, publicKey_y_HEX);
+        Access_log.log_it("i","shahin","wallet_address: " + wallet_address);
+
+        my_local_key_in_KeyStore = Access_file.access_file_func_read(getApplicationContext(), "my_local_key_in_KeyStore");
+        Access_log.log_it("w","shahin","my_local_key_in_KeyStore - retrieved: " + my_local_key_in_KeyStore);
+        aes_of_privateKey_d_b58 = Access_file.access_file_func_read(getApplicationContext(), "aes_of_privateKey_d_b58");
+        Access_log.log_it("w","shahin","aes_of_privateKey_d_b58 - retrieved: " + aes_of_privateKey_d_b58);
+
         //endregion
 
         //endregion
 
         //region settings
+
         // set connection protocol in the first run
         setting_network_protocol = Access_file.access_file_func_read(getApplicationContext(), "setting_network_protocol");
         Access_log.log_it("i","shahin","333 - setting_network_protocol: " + setting_network_protocol);
 
         if (setting_network_protocol.equals("-"))
         {
-            Access_file.access_file_func_write(getApplicationContext(), "setting_network_protocol", "https", "write");
+            Access_file.access_file_func_write(getApplicationContext(), "setting_network_protocol", "http", "write");
             setting_network_protocol = Access_file.access_file_func_read(getApplicationContext(), "setting_network_protocol");
         }
-
-        setting_connection(setting_network_protocol);
 
         // set PQC protocol in the first run
         setting_safeguard_pqc = Access_file.access_file_func_read(getApplicationContext(), "setting_safeguard_pqc");
@@ -336,33 +324,41 @@ public class MainActivity extends AppCompatActivity {
             setting_safeguard_pqc = Access_file.access_file_func_read(getApplicationContext(), "setting_safeguard_pqc");
         }
 
-        for (int i = 0; i < spinner_options.length; i++) {
+        // set the graph_domain_in
+        setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
+        Access_log.log_it("i","shahin","111 - setting_graph_domain_in: " + setting_graph_domain_in);
 
+        if (setting_graph_domain_in.equals("-"))
+        {
+            Access_file.access_file_func_write(getApplicationContext(), "setting_graph_domain_in", spinner_options[0], "write");
+            setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
+            graph_domain_in = setting_graph_domain_in;
+
+            Access_log.log_it("w","shahin","Graph_in_domain Setup: " + graph_domain_in);
+        }
+        else
+        {
+            graph_domain_in = setting_graph_domain_in;
+            Access_log.log_it("w","shahin","Graph_in_domain Reloaded: " + graph_domain_in);
+        }
+
+        // set all PQC serial and pk including graph_address_in
+        for (int i = 0; i < spinner_options.length; i++)
+        {
             spinner_options_pqc_serial[i] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + i);
             spinner_options_pqc_pk[i] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + i);
 
             Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + i + "]: " + spinner_options_pqc_serial[i]);
             Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ i + "]: " + spinner_options_pqc_pk[i]);
 
-            if (spinner_options[i].equals(graph_domain_in)) {
-                app_pqc_serial = spinner_options_pqc_serial[i];
-                app_pqc_pk = spinner_options_pqc_pk[i];
-
-                Access_log.log_it("i","shahin","333 - app_pqc_serial: " + app_pqc_serial);
-                Access_log.log_it("i","shahin","333 - app_pqc_pk: " + app_pqc_pk);
+            if (spinner_options[i].equals(graph_domain_in))
+            {
+                // reconfig all network settings
+                setting_connection_values(i);
+                setting_connection(setting_network_protocol);
             }
         }
 
-        //endregion
-
-        //region wallet_address
-        my_local_key_in_KeyStore = Access_file.access_file_func_read(getApplicationContext(), "my_local_key_in_KeyStore");
-        Access_log.log_it("w","shahin","my_local_key_in_KeyStore - retrieved: " + my_local_key_in_KeyStore);
-        aes_of_privateKey_d_b58 = Access_file.access_file_func_read(getApplicationContext(), "aes_of_privateKey_d_b58");
-        Access_log.log_it("w","shahin","aes_of_privateKey_d_b58 - retrieved: " + aes_of_privateKey_d_b58);
-
-        wallet_address = wallet_address(publicKey_x_HEX, publicKey_y_HEX);
-        Access_log.log_it("i","shahin","wallet_address: " + wallet_address);
         //endregion
 
         //region define_event_listener
@@ -407,13 +403,12 @@ public class MainActivity extends AppCompatActivity {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
                 // BGN: graph settings
+                setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
+                Access_log.log_it("i","shahin","111 - spinner setting_graph_domain_in: " + setting_graph_domain_in);
 
                 if (spinner_isFirstSelection[0])
                 {
                     spinner_isFirstSelection[0] = false;
-
-                    setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
-                    Access_log.log_it("i","shahin","111 - setting_graph_domain_in: " + setting_graph_domain_in);
 
                     if (setting_graph_domain_in.equals("-"))
                     {
@@ -421,22 +416,19 @@ public class MainActivity extends AppCompatActivity {
                         setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
                         graph_domain_in = setting_graph_domain_in;
 
-                        Access_log.log_it("w","shahin","Graph_in_domain Setup: " + graph_domain_in);
+                        Access_log.log_it("w","shahin","111 - spinner set graph_domain_in: " + graph_domain_in);
                     }
                     else
                     {
                         graph_domain_in = setting_graph_domain_in;
-                        Access_log.log_it("w","shahin","Graph_in_domain Reloaded: " + graph_domain_in);
+                        Access_log.log_it("w","shahin","111 - spinner reload graph_domain_in: " + graph_domain_in);
                     }
                 }
                 else
                 {
-                    setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
-                    Access_log.log_it("i","shahin","222 - setting_graph_domain_in: " + setting_graph_domain_in);
-
                     if (selectedItem.equals(setting_graph_domain_in))
                     {
-                        Access_log.log_it("w","shahin","Graph_in_domain Selected: " + graph_domain_in);
+                        Access_log.log_it("w","shahin","111 - spinner select graph_domain_in: " + graph_domain_in);
                     }
                     else
                     {
@@ -444,8 +436,9 @@ public class MainActivity extends AppCompatActivity {
                         setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
                         graph_domain_in = setting_graph_domain_in;
 
-                        Access_log.log_it("w","shahin","Graph_in_domain Rewrote: " + graph_domain_in);
+                        Access_log.log_it("w","shahin","111 - spinner re-wrote graph_domain_in: " + graph_domain_in);
                     }
+
                 }
 
                 // END: graph settings
@@ -462,7 +455,14 @@ public class MainActivity extends AppCompatActivity {
                 // Find the position of selection parallel
                 if (matchedIndex != -1)
                 {
-                    graph_address_in = spinner_options_value[matchedIndex];
+                    // reconfig all network settings
+                    setting_connection_values(matchedIndex);
+                    setting_connection(setting_network_protocol);
+
+                    // redraw_views
+                    crypto_list_label(graph_domain_in, spinner_options_crypto_list[matchedIndex]);
+                    refresh_label(graph_domain_in, "");
+
                     // Set the selection
                     dropdownSpinner.setSelection(matchedIndex);
                 }
@@ -470,13 +470,10 @@ public class MainActivity extends AppCompatActivity {
                 {
                     graph_domain_in = "unknown!!";
                     graph_address_in = "127.0.0.1";
+                    Access_log.log_it("w","shahin","Fatal Error graph_in_address: " + graph_domain_in);
                 }
 
-                Access_log.log_it("w","shahin","Graph_in_address in parallel: " + graph_address_in);
-
-                // reconfig all network settings
-                setting_connection(setting_network_protocol);
-
+                Access_log.log_it("w","shahin","new spinner graph_in_domain: " + graph_domain_in);
             }
 
             @Override
@@ -506,65 +503,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        swipeContainer.setOnRefreshListener(() -> {
-            Access_log.log_it("i", "shahin", "Swipe-to-refresh triggered!");
-            refresh_general();
-            swipeContainer.setRefreshing(false);
-        });
-        */
-        /*
-        // Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when
-        // the user performs a swipe-to-refresh gesture.
-        swipeContainer.setOnRefreshListener(() ->
-                {
-                    // This method performs the actual data-refresh operation and calls
-                    // setRefreshing(false) when it finishes.
-                    Access_log.log_it("i","shahin","swipeContainer: refresh detected!");
-                    refresh_general();
-                }
-        );
-        */
-        /*
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Access_log.log_it("i","shahin","swipeContainer: refresh detected!");
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                refresh_general();
+        //endregion
 
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() { if(swipeContainer.isRefreshing()) {
-                        swipeContainer.setRefreshing(false);
-                    }        }
-                }, 1000);
+        //region crypto_lists
+
+        // set all crypto_lists
+        for (int i = 0; i < spinner_options.length; i++)
+        {
+            spinner_options_crypto_list[i] = Access_file.access_file_func_read(getApplicationContext(), "crypto_list_last_" + i);
+            Access_log.log_it("i","shahin","444 - spinner_options_crypto_list[" + i + "]: " + spinner_options_crypto_list[i]);
+
+            if (spinner_options[i].equals(graph_domain_in))
+            {
+                // redraw_views
+                crypto_list_label(graph_domain_in, spinner_options_crypto_list[i]);
+                refresh_label(graph_domain_in, "");
             }
-        });
-
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-        */
+        }
 
         //endregion
-
-        //region redraw_views
-
-        crypto_list_label("");
-        refresh_label();
-
-        //endregion
-
     }
 
     //region functions_of_cryptography
+
     private boolean wallet_config(String privateKey_d_exists) throws Exception {
 
         //region define_variables
@@ -804,7 +765,6 @@ public class MainActivity extends AppCompatActivity {
         return publicKey;
     }
 
-
     public static boolean qc_keypairs (String privateKey_d, String publicKey_xy) throws Exception {
 
         boolean final_qc = true;
@@ -925,26 +885,7 @@ public class MainActivity extends AppCompatActivity {
         return final_qc;
 
     }
-    private static void qc_tester() throws Exception {
-        KeyPair eccKeyPair = null;
-        String publicKey_xy = "";
-        String privateKey_d = "";
 
-        // key_pair generation
-        eccKeyPair = crypto_asym_pure_secp256r1.createKeyPair();
-        //Access_log.log_it("w","shahin","QC... eccKeyPair: " + eccKeyPair);
-
-        publicKey_xy = crypto_asym_pure_secp256r1.extract_xy_param(eccKeyPair);
-        Access_log.log_it("i","shahin","QC... xy (public key parameter): " + publicKey_xy);
-
-        assert eccKeyPair != null;
-        privateKey_d = crypto_asym_pure_secp256r1.extract_d_param(eccKeyPair);
-        Access_log.log_it("i","shahin","QC... d (private key parameter): " + privateKey_d);
-
-        boolean result_of_qc = qc_keypairs(privateKey_d,publicKey_xy);
-        Access_log.log_it("i","shahin","QC... final result: " + result_of_qc);
-
-    }
     //endregion
 
     //region functions_of_menu
@@ -1027,6 +968,7 @@ public class MainActivity extends AppCompatActivity {
     //endregion
 
     //region functions_of_Internet
+
     @SuppressLint("SetTextI18n")
     public static String browse_url(String the_url)  {
 
@@ -1102,6 +1044,16 @@ public class MainActivity extends AppCompatActivity {
 
         return result;
     }
+    public static void setting_connection_values(int the_matched_Index)
+    {
+        app_pqc_serial = spinner_options_pqc_serial[the_matched_Index];
+        app_pqc_pk = spinner_options_pqc_pk[the_matched_Index];
+        graph_address_in = spinner_options_value[the_matched_Index];
+
+        Access_log.log_it("i","shahin","555 - app_pqc_serial: " + app_pqc_serial);
+        Access_log.log_it("i","shahin","555 - app_pqc_pk: " + app_pqc_pk);
+        Access_log.log_it("i","shahin","555 - graph_address_in: " + graph_address_in);
+    }
     public static void setting_connection(String my_protocol)
     {
         setting_network_protocol = my_protocol; // "https"; //  "http"; //
@@ -1137,6 +1089,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean bigint_is_even(BigInteger val) {
         return val.mod(new BigInteger("2")).equals(BigInteger.ZERO);
     }
+
     //endregion
 
     //region functions_of_dynamic_views
@@ -1153,18 +1106,36 @@ public class MainActivity extends AppCompatActivity {
         //String result = browse_url_POST(server_url_order_history + server_file_order_history, server_url_query);
         Access_log.log_it("i","shahin",server_file_order_history + " - result: " + result);
 
+        String network_msg = "Net: <font color=red>Er</font> / ";
+
+        // update refresh datetime
+        if (!result.equals("Failed") && !result.equals("no_record"))
+        {
+            refresh_update(graph_domain_in);
+            network_msg = "Net: <font color=cyan>OK</font> / ";
+        }
+
         // show refresh datetime
-        crypto_list_label(result);
-        refresh_label();
+        crypto_list_label(graph_domain_in, result);
+        refresh_label(graph_domain_in, network_msg);
 
         // Now we call setRefreshing(false) to signal refresh has finished
         swipeContainer.setRefreshing(false);
         Access_log.log_it("i","shahin","swipeContainer.setRefreshing(false)");
     }
-    private void refresh_label()
+    private void refresh_label(String my_graph_in, String my_msg)
     {
+        // Find the position of selection
+        int spinner_matchedIndex = -1;
+        for (int i = 0; i < spinner_options.length; i++) {
+            if (spinner_options[i].equals(my_graph_in)) {
+                spinner_matchedIndex = i;
+                break;  // Stop at first match
+            }
+        }
+
         String refresh_utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
-        String refresh_utc_unix_last = Access_file.access_file_func_read(getApplicationContext(), "refresh_utc_unix_last");
+        String refresh_utc_unix_last = Access_file.access_file_func_read(getApplicationContext(), "refresh_utc_unix_last_" + spinner_matchedIndex);
 
         Access_log.log_it("i","shahin","refresh_utc_unix_now: " + refresh_utc_unix_now);
         Access_log.log_it("i","shahin","refresh_utc_unix_last: " + refresh_utc_unix_last);
@@ -1174,19 +1145,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         textview_balance_wallet.setText(
-                HtmlCompat.fromHtml("Last update: <b>" +
+                HtmlCompat.fromHtml(my_msg + "Last update: <b>" +
                                 Access_time.getTimeDifference(refresh_utc_unix_now,refresh_utc_unix_last) +
                                 "</b>",
                         HtmlCompat.FROM_HTML_MODE_LEGACY)
         );
     }
-    private void refresh_update()
+    private void refresh_update(String my_graph_in)
     {
+        // Find the position of selection
+        int spinner_matchedIndex = -1;
+        for (int i = 0; i < spinner_options.length; i++) {
+            if (spinner_options[i].equals(my_graph_in)) {
+                spinner_matchedIndex = i;
+                break;  // Stop at first match
+            }
+        }
+
         String refresh_utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
-        Access_file.access_file_func_write(getApplicationContext(), "refresh_utc_unix_last", refresh_utc_unix_now, "write");
+        Access_file.access_file_func_write(getApplicationContext(), "refresh_utc_unix_last_" + spinner_matchedIndex, refresh_utc_unix_now, "write");
     }
-    private void crypto_list_label(String crypto_list_download)
+    private void crypto_list_label(String my_graph_in, String my_crypto_list)
     {
+        Access_log.log_it("i","shahin","crypto_list: inside");
+
         // Remove all items from the list
         dataList.clear();
 
@@ -1197,13 +1179,21 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged(); // Notify the adapter of the change
 
-        //textview_balance_2pn.setText("---");
-        //textview_balance_2zr.setText("---");
+        Access_log.log_it("i","shahin","crypto_list: begin");
+
+        // Find the position of selection
+        int spinner_matchedIndex = -1;
+        for (int i = 0; i < spinner_options.length; i++) {
+            if (spinner_options[i].equals(my_graph_in)) {
+                spinner_matchedIndex = i;
+                break;  // Stop at first match
+            }
+        }
 
         String crypto_list = "";
 
-        if (crypto_list_download.contains("~")) {
-            crypto_list = crypto_list_download;
+        if (my_crypto_list.contains("~")) {
+            crypto_list = my_crypto_list;
 
             /*
             // fill the gap
@@ -1224,17 +1214,15 @@ public class MainActivity extends AppCompatActivity {
             }
             */
 
-            // update refresh datetime
-            refresh_update();
-            Access_file.access_file_func_write(getApplicationContext(), "crypto_list_last", crypto_list, "write");
+            Access_file.access_file_func_write(getApplicationContext(), "crypto_list_last_" + spinner_matchedIndex, crypto_list, "write");
             Access_log.log_it("i","shahin","crypto_list: write");
         }
         else
         {
-            crypto_list = Access_file.access_file_func_read(getApplicationContext(), "crypto_list_last");
+            crypto_list = Access_file.access_file_func_read(getApplicationContext(), "crypto_list_last_" + spinner_matchedIndex);
             if (crypto_list.equals("-"))
             {
-                crypto_list = "tallybox.mixoftix.net~~msg~null~adv~null~null";
+                crypto_list = my_graph_in + "~~msg~null~adv~null~null";
             }
             Access_log.log_it("i","shahin","crypto_list: read - " + crypto_list);
         }
@@ -1314,7 +1302,6 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
         finishAffinity();
     }
-
 
     // Inner class for the RecyclerView Adapter
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {

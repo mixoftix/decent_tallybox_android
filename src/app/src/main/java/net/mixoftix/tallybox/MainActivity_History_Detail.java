@@ -27,7 +27,9 @@ import android.widget.Toast;
 
 import net.mixoftix.tallybox.databinding.ActivityMainHistoryDetailBinding;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity_History_Detail extends AppCompatActivity {
 
@@ -192,12 +194,24 @@ public class MainActivity_History_Detail extends AppCompatActivity {
         if (is_pqc.equals("enable") && MainActivity.app_pqc_serial.equals("-"))
         {
             Access_log.log_it("i","shahin","app_pqc_serial: not found! procedure bypassed.. (" + MainActivity.app_pqc_serial + ")");
-            the_log_str += "PQC - Serial: not found! procedure bypassed..\n\r\n\r";
+            the_log_str += "PQC - Serial: not found! procedure bypassed..\n";
         }
         if (is_pqc.equals("enable") && !MainActivity.app_pqc_serial.equals("-"))
         {
             Access_log.log_it("i","shahin","app_pqc_serial: " + MainActivity.app_pqc_serial);
-            the_log_str += "PQC - Serial: " + MainActivity.app_pqc_serial + "\n\r\n\r";
+            the_log_str += "PQC - Serial: " + MainActivity.app_pqc_serial + "\n";
+
+            // make the local privacy
+            String local_pqc_sha256 = null;
+            try {
+                local_pqc_sha256 = hash_functions.Hash_SHA_256(MainActivity.app_pqc_pk);
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+
+            the_log_str += "PQC - Checksum: \n" + local_pqc_sha256 + "\n\n";
 
             // initial pqc connection
             pqc_mlkem.pqc_psk_pk();
@@ -209,8 +223,8 @@ public class MainActivity_History_Detail extends AppCompatActivity {
             Access_log.log_it("i","shahin","the_pqc_cipher: " + the_pqc_cipher);
             Access_log.log_it("i","shahin","the_pqc_psk: " + the_pqc_psk);
 
-            the_log_str += "PQC - Cipher: " + "\n\r" + the_pqc_cipher + "\n\r\n\r";
-            the_log_str += "PQC - PSK: " + "\n\r" + the_pqc_psk + "\n\r\n\r";
+            the_log_str += "PQC - Cipher: " + "\n" + the_pqc_cipher + "\n\n";
+            the_log_str += "PQC - PSK: " + "\n" + the_pqc_psk + "\n\n";
         }
 
         Access_log.log_it("i","shahin","in_graph: " + MainActivity.graph_domain_in);
@@ -229,10 +243,9 @@ public class MainActivity_History_Detail extends AppCompatActivity {
                         + "&pqc_cipher_base64=" + URLEncoder.encode(the_pqc_cipher)
                         ;
 
-        the_log_str += "Request - Wallet: " + "\n\r" + MainActivity.wallet_address + "\n\r\n\r";
-        the_log_str += "Request - TallyHash: " + "\n\r" + detail_of_tnx_tally_hash + "\n\r\n\r";
-        the_log_str += "Url: " + "\n\r" + MainActivity.server_url_tally_hash_history + "\n\r\n\r";
-
+        the_log_str += "Request - Wallet: " + "\n" + MainActivity.wallet_address + "\n\n";
+        the_log_str += "Request - TallyHash: " + "\n" + detail_of_tnx_tally_hash + "\n\n";
+        the_log_str += "Url: " + "\n" + MainActivity.server_url_tally_hash_history + "\n\n";
 
         String result_history_by_tally_hash = MainActivity.browse_url(
                 MainActivity.server_url_tally_hash_history +
@@ -259,16 +272,16 @@ public class MainActivity_History_Detail extends AppCompatActivity {
 
         if (is_pqc.equals("enable") && !MainActivity.app_pqc_serial.equals("-"))
         {
-            the_log_str += "Response - Encrypted: " + "\n\r" + result_history_by_tally_hash + "\n\r\n\r";
+            the_log_str += "Response - Encrypted: " + "\n" + result_history_by_tally_hash + "\n\n";
 
             // decrypt the server response..
             result_history_by_tally_hash = crypto_symm_aes.AES_Decrypt_by_secret_with_custom_padding(result_history_by_tally_hash,the_pqc_psk);
 
-            the_log_str += "Response - Decrypted: " + "\n\r" + result_history_by_tally_hash + "\n\r";
+            the_log_str += "Response - Decrypted: " + "\n" + result_history_by_tally_hash + "\n";
         }
         else
         {
-            the_log_str += "Response: " + "\n\r" + result_history_by_tally_hash + "\n\r";
+            the_log_str += "Response: " + "\n" + result_history_by_tally_hash + "\n";
         }
 
         Access_log.log_it("i","shahin","result_history_by_tally_hash: " + result_history_by_tally_hash);

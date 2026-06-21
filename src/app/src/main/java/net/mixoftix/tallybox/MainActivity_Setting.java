@@ -2,6 +2,7 @@ package net.mixoftix.tallybox;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.text.HtmlCompat;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -117,7 +118,14 @@ public class MainActivity_Setting extends AppCompatActivity {
                                     String result = net.mixoftix.tallybox.MainActivity.browse_url(my_server_url + "dmz.asmx/app_pqc_pk?" + server_url_query);
                                     Access_log.log_it("i","shahin",MainActivity.server_url + " - result: " + result);
 
-                                    if (result.equals("no_record") || result.equals("Failed"))
+                                    String network_msg = " / Net: <font color=red>Er</font>";
+
+                                    if (result.equals("Failed"))
+                                    {
+                                        // set the text
+                                        textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + pqcSerial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                    }
+                                    else if (result.equals("no_record"))
                                     {
                                         for (int j = 0; j < MainActivity.spinner_options.length; j++)
                                         {
@@ -135,7 +143,9 @@ public class MainActivity_Setting extends AppCompatActivity {
                                         }
 
                                         // set the text
-                                        textView.setText(graph + "\nserial: " + result);
+                                        network_msg = " / Net: <font color=cyan>OK</font>";
+                                        textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + result + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
+
                                     }
                                     else
                                     {
@@ -147,46 +157,69 @@ public class MainActivity_Setting extends AppCompatActivity {
                                         String pqc_sha256 = split_output[1];
                                         String pqc_pk = split_output[2];
 
-                                        //if (pqc_serial.equals(pqcSerial))
-                                        //{
-                                        //    // set the text
-                                        //    textView.setText(graph + "\nserial: " + pqc_serial + " - fresh");
-                                        //}
-                                        //else
+                                        // make the local privacy
+                                        String local_pqc_sha256 = null;
+                                        try {
+                                            local_pqc_sha256 = hash_functions.Hash_SHA_256(pqc_pk);
+                                        } catch (NoSuchAlgorithmException e) {
+                                            throw new RuntimeException(e);
+                                        } catch (UnsupportedEncodingException e) {
+                                            throw new RuntimeException(e);
+                                        }
+
+                                        Access_log.log_it("i","shahin","333 - pqc_sha256: " + pqc_sha256);
+                                        Access_log.log_it("i","shahin","333 - local_pqc_sha256: " + local_pqc_sha256);
+
+                                        if (local_pqc_sha256.equals(pqc_sha256))
                                         {
-                                            // make the local privacy
-                                            String local_pqc_sha256 = null;
-                                            try {
-                                                local_pqc_sha256 = hash_functions.Hash_SHA_256(pqc_pk);
-                                            } catch (NoSuchAlgorithmException e) {
-                                                throw new RuntimeException(e);
-                                            } catch (UnsupportedEncodingException e) {
-                                                throw new RuntimeException(e);
+                                            for (int j = 0; j < MainActivity.spinner_options.length; j++)
+                                            {
+                                                if (MainActivity.spinner_options[j].equals(graph))
+                                                {
+                                                    Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, pqc_serial, "write");
+                                                    Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, pqc_pk, "write");
+
+                                                    MainActivity.spinner_options_pqc_serial[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + j);
+                                                    MainActivity.spinner_options_pqc_pk[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + j);
+
+                                                    Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + j + "]: " + MainActivity.spinner_options_pqc_serial[j]);
+                                                    Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ j + "]: " + MainActivity.spinner_options_pqc_pk[j]);
+                                                }
                                             }
 
-                                            Access_log.log_it("i","shahin","333 - pqc_sha256: " + pqc_sha256);
-                                            Access_log.log_it("i","shahin","333 - local_pqc_sha256: " + local_pqc_sha256);
-
-                                            if (local_pqc_sha256.equals(pqc_sha256))
+                                            if (pqc_serial.equals(pqcSerial))
                                             {
-                                                for (int j = 0; j < MainActivity.spinner_options.length; j++)
+                                                // set the text
+                                                network_msg = " / <font color=green>up to date</font> / Net: <font color=cyan>OK</font>";
+                                                textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                            }
+                                            else
+                                            {
+                                                // set the text
+                                                network_msg = " / <font color=cyan>updated..</font> / Net: <font color=cyan>OK</font>";
+                                                textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int j = 0; j < MainActivity.spinner_options.length; j++)
+                                            {
+                                                if (MainActivity.spinner_options[j].equals(graph))
                                                 {
-                                                    if (MainActivity.spinner_options[j].equals(graph))
-                                                    {
-                                                        Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, pqc_serial, "write");
-                                                        Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, pqc_pk, "write");
+                                                    Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, "", "write");
+                                                    Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, "", "write");
 
-                                                        MainActivity.spinner_options_pqc_serial[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + j);
-                                                        MainActivity.spinner_options_pqc_pk[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + j);
+                                                    MainActivity.spinner_options_pqc_serial[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + j);
+                                                    MainActivity.spinner_options_pqc_pk[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + j);
 
-                                                        Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + j + "]: " + MainActivity.spinner_options_pqc_serial[j]);
-                                                        Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ j + "]: " + MainActivity.spinner_options_pqc_pk[j]);
-                                                    }
+                                                    Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + j + "]: " + MainActivity.spinner_options_pqc_serial[j]);
+                                                    Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ j + "]: " + MainActivity.spinner_options_pqc_pk[j]);
                                                 }
                                             }
 
                                             // set the text
-                                            textView.setText(graph + "\nserial: " + pqc_serial + " - updated");
+                                            network_msg = " / <font color=magenta>checksum failed!</font> / Net: <font color=cyan>OK</font>";
+                                            textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: -" +  network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
                                         }
                                     }
                                 }

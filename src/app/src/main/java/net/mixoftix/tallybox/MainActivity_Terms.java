@@ -36,18 +36,15 @@ public class MainActivity_Terms extends AppCompatActivity {
                         "<br>" +
                 "<b>2. Description of Service</b>" +
                         "<br>" +
-                "TallyBox is an innovative cryptocurrency wallet developed to facilitate digital transactions with simplicity and efficiency. It operates on a cutting-edge Directed Acyclic Graph (DAG) protocol, reducing transaction costs to 0.75 2PN (digital two-penny) per transaction—down from 25 cents on the lowest fees of several blockchains. " +
+                "TallyBox is an innovative cryptocurrency wallet developed to facilitate digital transactions with simplicity and efficiency. It operates on a cutting-edge Directed Acyclic Graph (DAG) protocol, reducing transaction costs on the lowest fees of several blockchains. " +
                         "<br>" +
                         "<br>" +
-                "TallyBox features a unique dual-token model with 2ZR (digital do-zari) and 2PN, inspired by cultural expressions like “I said a penny for your thoughts, but I got two pennies’ worth.” It is designed as a closed-loop system with potential for inter-loop transactions, offering a secure, educational, cost-effective, and engaging platform for managing digital assets." +
+                "TallyBox features a unique dual-token model with Fiat money and Digital Token. It is designed as a closed-loop system with potential for inter-loop transactions, offering a secure, educational, cost-effective, and engaging platform for managing digital assets." +
                         "<br>" +
                         "<br>" +
                 "<b>3. Description of System Coins</b>" +
                         "<br>" +
                 "2ZR (Digital Do-Zari): 2ZR is a zero-stable meme coin used to support the research and development (R&D) phase of the TallyBox project. 2ZR is NOT ALLOWED for exchange within or outside the TallyBox ecosystem." +
-                        "<br>" +
-                        "<br>" +
-                "2PN (Digital Two-Pennies): 2PN is a cent-stable meme coin used to facilitate fee processing within the TallyBox project. 2PN is NOT ALLOWED for exchange within or outside the TallyBox ecosystem." +
                         "<br>" +
                         "<br>" +
                 "<b>4. User Responsibilities</b>" +
@@ -61,12 +58,12 @@ public class MainActivity_Terms extends AppCompatActivity {
                 "You agree not to use TallyBox for any illegal or unauthorized purpose, including but not limited to money laundering, fraud, or violation of cryptocurrency regulations." +
                         "<br>" +
                         "<br>" +
-                "2ZR and 2PN are not intended to be securities or investment vehicles and are restricted to use within the TallyBox ecosystem only." +
+                "2ZR is not intended to be securities or investment vehicles and is restricted to use within the TallyBox ecosystem only." +
                         "<br>" +
                         "<br>" +
                 "<b>5. Fees and Transactions</b>" +
                         "<br>" +
-                "TallyBox charges a transaction fee of 0.75 2PN per transaction, deducted automatically via the DAG protocol. Additional fees may apply for inter-loop transactions or other services, as updated in these Terms or within the app. " +
+                "TallyBox charges a transaction fee per transaction, deducted automatically via the DAG protocol. Additional fees may apply for inter-graph transactions or other services, as updated within the DAG structure. " +
                         "<br>" +
                         "<br>" +
                 "All transactions are final and non-reversible once confirmed on the TallyBox network." +
@@ -100,7 +97,7 @@ public class MainActivity_Terms extends AppCompatActivity {
         String tallybox_disclaimer =
                 "<b>Disclaimer</b>" +
                         "<br>" +
-                "TallyBox is a cryptocurrency wallet and does not constitute financial, legal, or investment advice. The use of 2ZR, 2PN, or any digital assets within TallyBox carries inherent risks, including potential loss of value, market volatility, and technological failures. " +
+                "TallyBox is a cryptocurrency wallet and does not constitute financial, legal, or investment advice. The use of 2ZR, or any digital assets within TallyBox carries inherent risks, including potential loss of value, market volatility, and technological failures. " +
                         "<br>" +
                         "<br>" +
                 "\"Mixoftix Curiosity Lab\" does not guarantee the stability, security, or value of any digital assets managed through TallyBox. " +
@@ -112,7 +109,7 @@ public class MainActivity_Terms extends AppCompatActivity {
                 "TallyBox operates in compliance with applicable cryptocurrency regulations, but users should be aware that such regulations may change, impacting the use of digital assets." +
                         "<br>" +
                         "<br>" +
-                "2ZR and 2PN are not intended to be securities or investment vehicles and are restricted to use within the TallyBox ecosystem only." +
+                "2ZR is not intended to be securities or investment vehicles and is restricted to use within the TallyBox ecosystem only." +
                         "<br>";
 
         textview_about.setText(HtmlCompat.fromHtml(tallybox_terms,HtmlCompat.FROM_HTML_MODE_LEGACY));

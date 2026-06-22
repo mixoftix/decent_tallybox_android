@@ -49,10 +49,14 @@ public class MainActivity_About extends AppCompatActivity {
         String tallybox_about =
                 "<b>Description of Service</b>" +
                         "<br>" +
-                "TallyBox is an innovative cryptocurrency wallet developed to redefine digital transactions with simplicity and efficiency. Designed as a closed-loop system with potential for inter-loop transactions, TallyBox is poised to empower users in the evolving world of cryptocurrency, offering a secure, educational, cost-effective, and engaging platform for managing digital assets." +
+                        "<br>" +
+                "TallyBox is an innovative cryptocurrency wallet developed to redefine digital transactions with simplicity and efficiency. " +
                         "<br>" +
                         "<br>" +
-                "Developed with passion in our lab, featuring a unique dual-token model with 2ZR (digital do-zari) and 2PN (digital two-pennies), TallyBox draws inspiration from cultural expressions like “I said a penny for your thoughts, but I got two pennies’ worth,” adding a playful yet meaningful layer to the crypto experience." +
+                "Designed as a closed-loop system with potential for inter-loop transactions, TallyBox is poised to empower users in the evolving world of cryptocurrency, offering a secure, educational, cost-effective, and engaging platform for managing digital assets." +
+                        "<br>" +
+                        "<br>" +
+                "Developed with passion in our lab, featuring a unique dual-token model with both Fiat money and Digital Token, TallyBox draws inspiration from digital transformation adding a playful yet meaningful layer to the crypto experience." +
                         "<br>";
 
         textview_about_update.setText(HtmlCompat.fromHtml(tallybox_update,HtmlCompat.FROM_HTML_MODE_LEGACY));

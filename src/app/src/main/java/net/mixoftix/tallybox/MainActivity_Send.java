@@ -405,17 +405,10 @@ public class MainActivity_Send extends AppCompatActivity {
 
                     // config internet connection
                     String server_url_query =
-                            "app_name=" + URLEncoder.encode(net.mixoftix.tallybox.MainActivity.app_name)
-                                    + "&app_version=" + URLEncoder.encode(net.mixoftix.tallybox.MainActivity.app_version)
+                            "app_name=" + URLEncoder.encode(MainActivity.app_name)
+                                    + "&app_version=" + URLEncoder.encode(MainActivity.app_version)
                                     + "&order_csv=" + URLEncoder.encode(textviewSend.getText().toString().replace("\n","").replace("\r",""))
                             ;
-
-                    /*
-                    String result = net.mixoftix.tallybox.MainActivity.browse_url(
-                            net.mixoftix.tallybox.MainActivity.server_url_accept_order +
-                                    net.mixoftix.tallybox.MainActivity.server_file_accept_order +
-                                    server_url_query);
-                    */
 
                     String result = net.mixoftix.tallybox.MainActivity.browse_url_POST(
                                             net.mixoftix.tallybox.MainActivity.server_url_order_accept +
@@ -425,7 +418,7 @@ public class MainActivity_Send extends AppCompatActivity {
 
                     textview_broadcast_report.setVisibility(View.VISIBLE);
 
-                    if (result.startsWith("submitted~200~"))
+                    if (result.startsWith("pending~200~"))
                     {
                         textview_broadcast_report.setText(HtmlCompat.fromHtml(
                                 "<font color='#32CD32'>" + result + "</font>"
@@ -538,6 +531,7 @@ public class MainActivity_Send extends AppCompatActivity {
     }
 
     //region functions_of_menu
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -578,6 +572,7 @@ public class MainActivity_Send extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     //endregion
 
     //region functions_of_parcel_processor
@@ -616,7 +611,7 @@ public class MainActivity_Send extends AppCompatActivity {
             // split publicKey_xy
             String[] split_tally_parcel;
             split_tally_parcel = tally_parcel.split("~");
-            String graph_domain_to = "";
+            String graph_to = "";
             String wallet_to = "";
             String order_id = "";
             String order_amount = "";
@@ -624,9 +619,9 @@ public class MainActivity_Send extends AppCompatActivity {
 
             for (int i = 0; i < split_tally_parcel.length; i++) {
 
-                if (split_tally_parcel[i].equals("graph_domain_to"))
+                if (split_tally_parcel[i].equals("graph_to"))
                 {
-                    graph_domain_to = split_tally_parcel[i + 1];
+                    graph_to = split_tally_parcel[i + 1];
                 }
                 if (split_tally_parcel[i].equals("wallet_to"))
                 {
@@ -652,7 +647,7 @@ public class MainActivity_Send extends AppCompatActivity {
             Access_log.log_it("i", "shahin", "is_parcel_processing(before): " + is_parcel_processing);
             int targetIndex = -1;
             for (int i = 0; i < spinner_options.length; i++) {
-                if (spinner_options[i].equals(graph_domain_to)) {
+                if (spinner_options[i].equals(graph_to)) {
                     targetIndex = i;
                     break;
                 }
@@ -745,7 +740,6 @@ public class MainActivity_Send extends AppCompatActivity {
 
     //region functions_of_graph_token
 
-    // Tokens Helper methods
     private void onGraphDomainChanged(int position) {
         if (position < 0 || position >= spinner_options.length) return;
 

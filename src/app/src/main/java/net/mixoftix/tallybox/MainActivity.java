@@ -68,9 +68,39 @@ public class MainActivity extends AppCompatActivity {
 
     //region define_variables
 
-    // constants
+    //region constants
+
+    public static final boolean log_is_enable = true;
     public static final String app_name = "tallybox";
     public static final String app_version = "2.932";
+    public static final String file_name_path = "net_mixoftix_tallybox";
+    public static final String[] spinner_options = {
+            "gpp_mars.mixoftix.net",
+            "gpp_venus.mixoftix.net",
+            "gpp_pluto.mixoftix.net"
+    };
+    public static final String[] spinner_options_value = {
+            "192.168.88.111:701",
+            "192.168.88.111:711",
+            "192.168.88.111:721"
+    };
+    public static final String[] spinner_options_tokens = {
+            "2ZR,TLH",
+            "",
+            "USD"
+    };
+
+    //endregion
+
+    //region variables_of_spinners
+
+    public static String[] spinner_options_crypto_list = new String[3];
+    public static String[] spinner_options_pqc_serial = new String[3];
+    public static String[] spinner_options_pqc_pk = new String[3];
+
+    //endregion
+
+    //region variables_of_runtime
 
     // variables - PQC
     public static String app_pqc_serial ="";
@@ -84,39 +114,23 @@ public class MainActivity extends AppCompatActivity {
     public static String setting_graph_domain_in = "";
 
     // variables - graphs
-    public static final String file_name_path = "net_mixoftix_tallybox";
-    public static final boolean log_is_enable = true;
-    public static final String[] spinner_options = {
-            "gpp_mars.mixoftix.net",
-            "gpp_venus.mixoftix.net",
-            "gpp_pluto.mixoftix.net"
-    };
-    public static final String[] spinner_options_value = {
-            "192.168.88.111:701",
-            "192.168.88.111:711",
-            "192.168.88.111:721"
-    };
-    public static final String[] spinner_options_tokens = {
-            "USD,TLH,IRR",
-            "2ZR",
-            "2ZR,USD"
-    };
-    public static String[] spinner_options_crypto_list = new String[3];
-    public static String[] spinner_options_pqc_serial = new String[3];
-    public static String[] spinner_options_pqc_pk = new String[3];
     public static String graph_domain_in = ""; // ""gpp_mars.mixoftix.net";
     public static String graph_address_in = ""; //  "192.168.88.111:701";
 
+    //endregion
 
-    // variables - general
+    //region variables_of_cryptography
+
     public static String wallet_address;
     public static String my_local_key_in_KeyStore = null;
     public static String aes_of_privateKey_d_b58 = null;
     public static String publicKey_x_HEX = "";
     public static String publicKey_y_HEX = "";
 
+    //endregion
 
-    // variables - connection
+    //region variables_of_connections
+
     public static String server_url = "";
     public static String server_url_order_accept = "";
     public static String server_file_order_accept = "";
@@ -130,8 +144,10 @@ public class MainActivity extends AppCompatActivity {
     public static String server_file_kyc_request = "";
     public static String server_file_kyc_accept = "";
 
+    //endregion
 
-    // layouts
+    //region variables_of_layouts
+
     private Button buttonSend, buttonReceive;
     private TextView textview_main_test, textview_main_advertise, textview_main_whatsup,
                      textview_balance_wallet;
@@ -142,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
     private List<ItemData> dataList;
     private SwipeRefreshLayout swipeContainer;
     private static ActivityMainBinding binding;
+
+    //endregion
 
     //endregion
 
@@ -1128,7 +1146,8 @@ public class MainActivity extends AppCompatActivity {
         Access_log.log_it("i","shahin","refresh_utc_unix_last: " + refresh_utc_unix_last);
 
         if (refresh_utc_unix_last.equals("-")) {
-            refresh_utc_unix_last = refresh_utc_unix_now;
+            //refresh_utc_unix_last = refresh_utc_unix_now;
+            refresh_utc_unix_last = "-1";
         }
 
         textview_balance_wallet.setText(
@@ -1166,6 +1185,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged(); // Notify the adapter of the change
 
+        String crypto_intersection = getCommonTokens(my_graph_in,my_graph_in);
+        Access_log.log_it("i","shahin","crypto_intersection: " + crypto_intersection);
+
+        // split result
+        String[] split_crypto_intersection;
+        split_crypto_intersection = crypto_intersection.split(",");
+
         Access_log.log_it("i","shahin","crypto_list: begin");
 
         // Find the position of selection
@@ -1201,6 +1227,15 @@ public class MainActivity extends AppCompatActivity {
             }
             */
 
+            for (int kk=0; kk < split_crypto_intersection.length; kk++)
+            {
+                if (!crypto_list.contains(split_crypto_intersection[kk]))
+                {
+                    crypto_list += "~" + split_crypto_intersection[kk] + "~0.00000000";
+                    Access_log.log_it("i","shahin","crypto_list added (" + split_crypto_intersection[kk] + "): " + crypto_list);
+                }
+            }
+
             Access_file.access_file_func_write(getApplicationContext(), "crypto_list_last_" + spinner_matchedIndex, crypto_list, "write");
             Access_log.log_it("i","shahin","crypto_list: write");
         }
@@ -1209,12 +1244,23 @@ public class MainActivity extends AppCompatActivity {
             crypto_list = Access_file.access_file_func_read(getApplicationContext(), "crypto_list_last_" + spinner_matchedIndex);
             if (crypto_list.equals("-"))
             {
-                crypto_list = my_graph_in + "~~msg~null~adv~null~null";
+                crypto_list = my_graph_in + "~~msg~null~adv~null";
             }
+
+            for (int kk=0; kk < split_crypto_intersection.length; kk++)
+            {
+                if (!crypto_list.contains(split_crypto_intersection[kk]))
+                {
+                    crypto_list += "~" + split_crypto_intersection[kk] + "~0.00000000";
+                    Access_log.log_it("i","shahin","crypto_list added (" + split_crypto_intersection[kk] + "): " + crypto_list);
+                }
+            }
+
             Access_log.log_it("i","shahin","crypto_list: read - " + crypto_list);
         }
 
         Access_log.log_it("i","shahin","crypto_list: " + crypto_list);
+        Access_log.log_it("i","shahin","crypto_list: end");
 
         // split result
         String[] split_result;
@@ -1227,8 +1273,9 @@ public class MainActivity extends AppCompatActivity {
         // split_result[0] : in_graph
         // split_result[1] : wallet_address
 
-        //for (int kk=2; kk < split_result.length; kk=kk+2)
-        for (int kk=2; kk < split_result.length; kk++)   // changed to k++ for empty wallets
+        Access_log.log_it("i","shahin","split_result.length: " + split_result.length);
+        for (int kk=2; kk < split_result.length; kk=kk+2)
+        //for (int kk=2; kk < split_result.length; kk++)   // changed to k++ for empty wallets
         {
             if (split_result[kk].equals("msg"))
             {
@@ -1262,7 +1309,17 @@ public class MainActivity extends AppCompatActivity {
                     textview_main_advertise.setMovementMethod(LinkMovementMethod.getInstance());
                 }
             }
+            if (crypto_intersection.contains(split_result[kk]))
+            {
+                dataList.add(new ItemData(split_result[kk],split_result[kk+1], getIconForToken(split_result[kk])));
+                Access_log.log_it("i","shahin",kk + ": ItemData - if  : " + split_result[kk] + " - " + split_result[kk+1]);
+            }
+            else
+            {
+                Access_log.log_it("i","shahin",kk + ": ItemData - else: " + split_result[kk]);
+            }
 
+            /*
             // we need a list of all possible valid tokens among all graphs here
             if (split_result[kk].equals("USD"))
             {
@@ -1279,7 +1336,7 @@ public class MainActivity extends AppCompatActivity {
                 dataList.add(new ItemData("TLH", split_result[kk+1], R.mipmap.coin_tlh));
                 Access_log.log_it("i","shahin","ItemData: " + split_result[kk] + " - " + split_result[kk+1]);
             }
-
+            */
         }
 
     }
@@ -1360,12 +1417,14 @@ public class MainActivity extends AppCompatActivity {
     // Put this in your Activity or a utility class
     public static int getIconForToken(String token) {
         switch (token.toUpperCase().trim()) {
-            case "2PN":
-                return R.mipmap.coin_2pn;
             case "2ZR":
                 return R.mipmap.coin_2zr;
             case "TLH":
                 return R.mipmap.coin_tlh;
+            case "USD":
+                return R.mipmap.coin_usd;
+            case "IRR":
+                return R.mipmap.coin_irr;
             default:
                 return R.drawable.baseline_fingerprint_24; // fallback
         }

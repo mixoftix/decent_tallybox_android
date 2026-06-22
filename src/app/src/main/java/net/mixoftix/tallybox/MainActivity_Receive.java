@@ -136,7 +136,7 @@ public class MainActivity_Receive extends AppCompatActivity {
         textview_wallet.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                copy_to_clipboard(net.mixoftix.tallybox.MainActivity.wallet_address);
+                copy_to_clipboard(MainActivity.wallet_address);
                 Toast.makeText(MainActivity_Receive.this, "Copied..", Toast.LENGTH_SHORT).show();
             }
         });
@@ -178,7 +178,7 @@ public class MainActivity_Receive extends AppCompatActivity {
                 String str_order = editTextOrder.getText().toString();
                 String str_amount = editTextAmount.getText().toString();
                 String the_qr_xml = "tallybox~parcel_of_pos" +
-                        "~graph_domain_to~" + MainActivity.graph_domain_in +
+                        "~graph_to~" + MainActivity.graph_domain_in +
                         "~wallet_to~" + MainActivity.wallet_address +
                         "~order_id~" + str_order +
                         "~order_amount~" + str_amount +

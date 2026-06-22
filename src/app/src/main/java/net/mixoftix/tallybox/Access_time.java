@@ -8,6 +8,11 @@ public class Access_time {
 
     public static String getTimeDifference(String str_epoch1, String str_epoch2)
     {
+        if (str_epoch2.equals("-1"))
+        {
+            return "never";
+        }
+
         long epoch1 = (long)Double.parseDouble(str_epoch1) * 1000L;
         long epoch2 = (long)Double.parseDouble(str_epoch2) * 1000L;
         long diffInMillis = Math.abs(epoch1 - epoch2);

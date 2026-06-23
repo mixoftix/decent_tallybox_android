@@ -79,16 +79,30 @@ public class MainActivity extends AppCompatActivity {
             "gpp_venus.mixoftix.net",
             "gpp_pluto.mixoftix.net"
     };
+    // Decent GPP - Live Demo
+    public static final String[] spinner_options_value = {
+            "79.127.15.60:801",
+            "79.127.15.60:811",
+            "79.127.15.60:821"
+    };
+    public static final String[] spinner_options_tokens = {
+            "2ZR",
+            "",
+            ""
+    };
+    // Decent GPP - Research Lab
+    /*
     public static final String[] spinner_options_value = {
             "192.168.88.111:701",
             "192.168.88.111:711",
             "192.168.88.111:721"
     };
     public static final String[] spinner_options_tokens = {
-            "2ZR,TLH",
-            "",
-            "USD"
+            "USD,TLH,IRR",
+            "2ZR",
+            "USD,2ZR"
     };
+    */
 
     //endregion
 
@@ -117,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
     public static String graph_domain_in = ""; // ""gpp_mars.mixoftix.net";
     public static String graph_address_in = ""; //  "192.168.88.111:701";
 
+    // variables - connection
+    public static String server_url = "";
+
     //endregion
 
     //region variables_of_cryptography
@@ -126,23 +143,6 @@ public class MainActivity extends AppCompatActivity {
     public static String aes_of_privateKey_d_b58 = null;
     public static String publicKey_x_HEX = "";
     public static String publicKey_y_HEX = "";
-
-    //endregion
-
-    //region variables_of_connections
-
-    public static String server_url = "";
-    public static String server_url_order_accept = "";
-    public static String server_file_order_accept = "";
-    public static String server_url_order_history = "";
-    public static String server_file_order_history = "";
-    public static String server_url_order_history_detail = "";
-    public static String server_file_order_history_detail = "";
-    public static String server_url_tally_hash_history = "";
-    public static String server_file_tally_hash_history = "";
-    public static String server_url_kyc_accept = "";
-    public static String server_file_kyc_request = "";
-    public static String server_file_kyc_accept = "";
 
     //endregion
 
@@ -1080,19 +1080,6 @@ public class MainActivity extends AppCompatActivity {
     {
         setting_network_protocol = my_protocol; // "https"; //  "http"; //
         server_url = setting_network_protocol + "://" + graph_address_in + "/"; // "://192.168.88.111:701/";
-
-        server_url_order_accept = server_url;
-        server_file_order_accept = "dmz.asmx/order_accept";
-        server_url_order_history = server_url;
-        server_file_order_history = "dmz.asmx/ledger_history";
-        server_url_order_history_detail = server_url;
-        server_file_order_history_detail = "dmz.asmx/ledger_history_detail";
-        server_url_tally_hash_history = server_url;
-        server_file_tally_hash_history = "dmz.asmx/ledger_history_tally_hash";
-
-        server_url_kyc_accept = server_url;
-        server_file_kyc_request = "dmz.asmx/kyc_generate";
-        server_file_kyc_accept = "dmz.asmx/kyc_accept";
     }
 
     //endregion
@@ -1107,9 +1094,9 @@ public class MainActivity extends AppCompatActivity {
                         + "&in_graph=" + URLEncoder.encode(graph_domain_in)
                         + "&wallet_address=" + URLEncoder.encode(wallet_address);
 
-        String result = browse_url(server_url_order_history + server_file_order_history + server_url_query);
+        String result = browse_url(server_url + "dmz.asmx/ledger_history" + server_url_query);
         //String result = browse_url_POST(server_url_order_history + server_file_order_history, server_url_query);
-        Access_log.log_it("i","shahin",server_file_order_history + " - result: " + result);
+        Access_log.log_it("i","shahin","dmz.asmx/ledger_history" + " - result: " + result);
 
         String network_msg = "Net: <font color=red>Er</font> / ";
 

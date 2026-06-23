@@ -80,7 +80,12 @@ public class MainActivity_About extends AppCompatActivity {
                         "app_name=" + URLEncoder.encode(MainActivity.app_name)
                                 + "&app_version=" + URLEncoder.encode(MainActivity.app_version);
 
-                String result = net.mixoftix.tallybox.MainActivity.browse_url(MainActivity.server_url + "dmz.asmx/app_version?" + server_url_query);
+                String result = MainActivity.browse_url(
+                                                MainActivity.setting_network_protocol +
+                                                       "://wallet.mixoftix.net/" +
+                                                       "dmz.asmx/app_version?" +
+                                                       server_url_query
+                                                       );
                 Access_log.log_it("i","shahin",MainActivity.server_url + " - result: " + result);
                 //result = result.replace ("http://","https://");
                 result = result.replace ("http://",MainActivity.setting_network_protocol + "://");

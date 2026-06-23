@@ -233,8 +233,8 @@ public class MainActivity_History extends AppCompatActivity {
                         + "&currency_name=" + detail_of_currency_name;
 
         String result_history_wallet_currency = MainActivity.browse_url(
-                MainActivity.server_url_order_history_detail +
-                        MainActivity.server_file_order_history_detail +
+                MainActivity.server_url +
+                        "dmz.asmx/ledger_history_detail" +
                         server_url_query);
 
         // update datetime

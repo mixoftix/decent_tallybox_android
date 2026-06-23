@@ -410,11 +410,11 @@ public class MainActivity_Send extends AppCompatActivity {
                                     + "&order_csv=" + URLEncoder.encode(textviewSend.getText().toString().replace("\n","").replace("\r",""))
                             ;
 
-                    String result = net.mixoftix.tallybox.MainActivity.browse_url_POST(
-                                            net.mixoftix.tallybox.MainActivity.server_url_order_accept +
-                                                    net.mixoftix.tallybox.MainActivity.server_file_order_accept, server_url_query);
+                    String result = MainActivity.browse_url_POST(
+                                                          MainActivity.server_url +
+                                                                 "dmz.asmx/order_accept", server_url_query);
 
-                    Access_log.log_it("i","shahin",net.mixoftix.tallybox.MainActivity.server_file_order_accept + " - result: " + result);
+                    Access_log.log_it("i","shahin","dmz.asmx/order_accept" + " - result: " + result);
 
                     textview_broadcast_report.setVisibility(View.VISIBLE);
 

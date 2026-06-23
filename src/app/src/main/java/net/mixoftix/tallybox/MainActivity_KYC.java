@@ -88,11 +88,11 @@ public class MainActivity_KYC extends AppCompatActivity {
                                 + "&mobile_number=" + URLEncoder.encode(editText_KYC_Mobile_Number.getText().toString().replace("\n","").replace("\r",""))
                         ;
 
-                String result = net.mixoftix.tallybox.MainActivity.browse_url_POST(
-                        net.mixoftix.tallybox.MainActivity.server_url_kyc_accept +
-                                net.mixoftix.tallybox.MainActivity.server_file_kyc_request, server_url_query);
+                String result = MainActivity.browse_url_POST(
+                                                     MainActivity.server_url +
+                                                            "dmz.asmx/kyc_generate", server_url_query);
 
-                Access_log.log_it("i","shahin",net.mixoftix.tallybox.MainActivity.server_file_kyc_request + " - result: " + result);
+                Access_log.log_it("i","shahin","dmz.asmx/kyc_generate" + " - result: " + result);
 
                 if (result.startsWith("error~"))
                 {
@@ -164,11 +164,11 @@ public class MainActivity_KYC extends AppCompatActivity {
                                 + "&sign_4_kyc=" + URLEncoder.encode(my_sign.replace("\n","").replace("\r",""))
                         ;
 
-                String result = net.mixoftix.tallybox.MainActivity.browse_url_POST(
-                        net.mixoftix.tallybox.MainActivity.server_url_kyc_accept +
-                                net.mixoftix.tallybox.MainActivity.server_file_kyc_accept, server_url_query);
+                String result = MainActivity.browse_url_POST(
+                                                    MainActivity.server_url +
+                                                           "dmz.asmx/kyc_accept", server_url_query);
 
-                Access_log.log_it("i","shahin",net.mixoftix.tallybox.MainActivity.server_file_kyc_accept + " - result: " + result);
+                Access_log.log_it("i","shahin","dmz.asmx/kyc_accept" + " - result: " + result);
 
                 if (result.startsWith("error~"))
                 {

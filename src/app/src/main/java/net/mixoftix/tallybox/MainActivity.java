@@ -70,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
     //region constants
 
-    public static final boolean log_is_enable = true;
+    public static final boolean log_is_enable = false;
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.932";
+    public static final String app_version = "2.934";
     public static final String file_name_path = "net_mixoftix_tallybox";
     public static final String[] spinner_options = {
             "gpp_mars.mixoftix.net",
@@ -81,15 +81,21 @@ public class MainActivity extends AppCompatActivity {
     };
     // Decent GPP - Live Demo
     public static final String[] spinner_options_value = {
-            "79.127.15.60:801",
-            "79.127.15.60:811",
-            "79.127.15.60:821"
+            "gpp_mars_ws.mixoftix.net",
+            "gpp_venus_ws.mixoftix.net",
+            "gpp_pluto_ws.mixoftix.net"
     };
     public static final String[] spinner_options_tokens = {
             "2ZR",
             "",
             ""
     };
+    public static final String[] spinner_options_zones = {
+            "Mars",      // index 0 - gpp_mars
+            "Venus",     // index 1 - gpp_venus
+            "Pluto"      // index 2 - gpp_pluto
+    };
+
     // Decent GPP - Research Lab
     /*
     public static final String[] spinner_options_value = {
@@ -213,12 +219,7 @@ public class MainActivity extends AppCompatActivity {
         dropdownSpinner = findViewById(R.id.dropdownSpinner);
         // String[] spinner_options = {"tehran.dag.tejaratbank.ir", "tabriz.dag.tejaratbank.ir", "shiraz.dag.tejaratbank.ir"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                R.layout.items_activity_spinner,  // Custom layout
-                spinner_options
-        );
-        adapter.setDropDownViewResource(R.layout.items_activity_spinner); // Same layout for dropdown
+        GraphSpinnerAdapter adapter = new GraphSpinnerAdapter(this, spinner_options);
         dropdownSpinner.setAdapter(adapter);
 
         // END: spinner of graph_in
@@ -1085,6 +1086,8 @@ public class MainActivity extends AppCompatActivity {
     //endregion
 
     //region functions_of_dynamic_views
+
+    // Show spinners
     private void refresh_general()
     {
         // config internet connection
@@ -1509,5 +1512,44 @@ public class MainActivity extends AppCompatActivity {
         // Or String getImageUrl
     }
 
+
+    // Custom Adapter to show Graph + Zones
+    private class GraphSpinnerAdapter extends ArrayAdapter<String> {
+
+        public GraphSpinnerAdapter(Context context, String[] domains) {
+            super(context, 0, domains);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return createCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return createCustomView(position, convertView, parent);
+        }
+
+        private View createCustomView(int position, View convertView, ViewGroup parent) {
+            View view = convertView;
+            if (view == null) {
+                view = LayoutInflater.from(getContext()).inflate(
+                        R.layout.items_activity_spinner, parent, false);
+            }
+
+            TextView textView = view.findViewById(R.id.spinnerText);
+
+            String domain = spinner_options[position];
+            String zones = spinner_options_zones[position];
+
+            String zonesText = (zones.length() > 0)
+                    ? " [" + String.join(", ", zones) + "]"
+                    : " [no zone]";
+
+            textView.setText(domain + zonesText);
+
+            return view;
+        }
+    }
 }
 

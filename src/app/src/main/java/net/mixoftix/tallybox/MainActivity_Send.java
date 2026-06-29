@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,8 +48,8 @@ public class MainActivity_Send extends AppCompatActivity {
 
     private boolean is_sign_broadcatable, is_parcel_processing;
     private static ActivityMainSendBinding binding;
-    private static ImageView ImageView_wallet_qr;
-    private TextView textview_graph_in, textviewSend, textview_broadcast_report;
+    private static ImageView ImageView_offline_qr;
+    private TextView textview_graph_in, textview_offline_Send, textview_offline_url, textview_broadcast_report;
     private EditText editTextGraphDomainTo, editTextWalletTo, editTextAmount, editTextOrder;
     private CheckBox checkbox_extra_info,checkbox_offline_sign;
     private Button buttonSign, buttonBroadcast;
@@ -89,14 +90,12 @@ public class MainActivity_Send extends AppCompatActivity {
 
         // BGN: spinner of graph_in
         dropdownSpinner_GraphDomainTo = findViewById(R.id.dropdownSpinner_GraphDomainTo);
-        // String[] spinner_options = {"tehran.dag.tejaratbank.ir", "tabriz.dag.tejaratbank.ir", "shiraz.dag.tejaratbank.ir"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        GraphSpinnerAdapter adapter = new GraphSpinnerAdapter(
                 this,
-                R.layout.items_activity_spinner,  // Custom layout
-                spinner_options
+                MainActivity.spinner_options
         );
-        adapter.setDropDownViewResource(R.layout.items_activity_spinner); // Same layout for dropdown
+
         dropdownSpinner_GraphDomainTo.setAdapter(adapter);
         // END: spinner of graph_in
 
@@ -111,8 +110,9 @@ public class MainActivity_Send extends AppCompatActivity {
         buttonBroadcast = findViewById(R.id.buttonBroadcast);
 
         textview_broadcast_report = findViewById(R.id.textview_broadcast_report);
-        ImageView_wallet_qr = findViewById(R.id.ImageView_SendQR);
-        textviewSend = findViewById(R.id.textview_send);
+        ImageView_offline_qr = findViewById(R.id.ImageView_offline_SendQR);
+        textview_offline_Send = findViewById(R.id.textview_offline_send);
+        textview_offline_url = findViewById(R.id.textview_offline_url);
 
         layout_of_extra = findViewById(R.id.layout_of_extra);
         layout_send_offline = findViewById(R.id.layout_send_offline);
@@ -226,7 +226,16 @@ public class MainActivity_Send extends AppCompatActivity {
 
                 // Retrieve order data
                 String str_graph_domain_from = MainActivity.graph_domain_in;
-                String str_graph_domain_to = dropdownSpinner_GraphDomainTo.getSelectedItem().toString(); //editTextGraphDomainTo.getText().toString();
+                String str_graph_domain_to = dropdownSpinner_GraphDomainTo.getSelectedItem().toString();
+
+                int fromIdx = getGraphIndex(str_graph_domain_from);
+                int toIdx   = getGraphIndex(str_graph_domain_to);
+
+                if (!haveSameZone(fromIdx, toIdx)) {
+                    Toast.makeText(MainActivity_Send.this, "Transfer not allowed: Different zones", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 String str_wallet_from = net.mixoftix.tallybox.MainActivity.wallet_address;
                 String str_wallet_to = editTextWalletTo.getText().toString();
                 String str_amount = editTextAmount.getText().toString();
@@ -368,10 +377,24 @@ public class MainActivity_Send extends AppCompatActivity {
                 if (qrCodeBitmap != null) {
                     is_sign_broadcatable = true;
 
-                    ImageView_wallet_qr.setVisibility(View.VISIBLE);
-                    textviewSend.setVisibility(View.VISIBLE);
-                    ImageView_wallet_qr.setImageBitmap(qrCodeBitmap);
-                    textviewSend.setText(result);
+                    ImageView_offline_qr.setVisibility(View.VISIBLE);
+                    textview_offline_Send.setVisibility(View.VISIBLE);
+                    textview_offline_url.setVisibility(View.VISIBLE);
+
+                    ImageView_offline_qr.setImageBitmap(qrCodeBitmap);
+                    textview_offline_Send.setText(result);
+                    String the_offline_url = MainActivity.spinner_options_value[getGraphIndex(str_graph_domain_from)];
+                    textview_offline_url.setText(HtmlCompat.fromHtml(
+                            "Manually submit in URL: <br>" +
+                                    "<a href='" +
+                                    MainActivity.setting_network_protocol +
+                                    "://" +
+                                    the_offline_url + "' target=_blank>" +
+                                    the_offline_url +
+                                    "</a>",
+                                    HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    textview_offline_url.setMovementMethod(LinkMovementMethod.getInstance());
+
                 }
 
                 //endregion
@@ -407,7 +430,7 @@ public class MainActivity_Send extends AppCompatActivity {
                     String server_url_query =
                             "app_name=" + URLEncoder.encode(MainActivity.app_name)
                                     + "&app_version=" + URLEncoder.encode(MainActivity.app_version)
-                                    + "&order_csv=" + URLEncoder.encode(textviewSend.getText().toString().replace("\n","").replace("\r",""))
+                                    + "&order_csv=" + URLEncoder.encode(textview_offline_Send.getText().toString().replace("\n","").replace("\r",""))
                             ;
 
                     String result = MainActivity.browse_url_POST(
@@ -444,10 +467,10 @@ public class MainActivity_Send extends AppCompatActivity {
             }
         });
         // Set a click listener for the raw-transaction
-        textviewSend.setOnClickListener(new View.OnClickListener(){
+        textview_offline_Send.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                copy_to_clipboard(textviewSend.getText().toString());
+                copy_to_clipboard(textview_offline_Send.getText().toString());
                 Toast.makeText(MainActivity_Send.this, "copied..", Toast.LENGTH_SHORT).show();
             }
         });
@@ -475,7 +498,9 @@ public class MainActivity_Send extends AppCompatActivity {
             parcel_processor(Scanner_Result);
         }
 
-        textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + ")");
+        //textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + ")");
+        updateGraphFromDisplay();
+
         //editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
         // Find the index of the target domain
         int targetIndex = -1;
@@ -586,8 +611,8 @@ public class MainActivity_Send extends AppCompatActivity {
         buttonBroadcast.setEnabled(false);
 
         textview_broadcast_report.setVisibility(View.GONE);
-        ImageView_wallet_qr.setVisibility(View.GONE);
-        textviewSend.setVisibility(View.GONE);
+        ImageView_offline_qr.setVisibility(View.GONE);
+        textview_offline_Send.setVisibility(View.GONE);
 
         if (tally_parcel.startsWith("box")) {
             editTextWalletTo.setText(tally_parcel);
@@ -738,28 +763,120 @@ public class MainActivity_Send extends AppCompatActivity {
 
     //endregion
 
+    //region function_of_graph_in
+
+    // Show Graph From + Zones
+    private void updateGraphFromDisplay() {
+        int index = getGraphIndex(MainActivity.graph_domain_in);
+        String zones = (index != -1) ? getZoneForGraph(index) : " [no zone]";
+
+        String zonesText = (zones.length() > 0)
+                ? " [" + String.join(", ", zones) + "]"
+                : " [no zone]";
+
+        //textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + zonesText + ")");
+        textview_graph_in.setText(HtmlCompat.fromHtml(
+                "(in graph: <b>" + MainActivity.graph_domain_in + "</b>" +
+                        "<font color='cyan'>" + zonesText + "</font>)",
+                HtmlCompat.FROM_HTML_MODE_LEGACY));
+    }
+    // Get zones for a graph by index
+    private int getGraphIndex(String domain) {
+        for (int i = 0; i < MainActivity.spinner_options.length; i++) {
+            if (MainActivity.spinner_options[i].equals(domain)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    // Get zone for a graph by index
+    private String getZoneForGraph(int graphIndex) {
+        if (graphIndex < 0 || graphIndex >= MainActivity.spinner_options_zones.length) {
+            return "";
+        }
+        return MainActivity.spinner_options_zones[graphIndex];
+    }
+
+    //endregion
+
+    //region functions_of_graph_zone
+
+    // Check if two graphs have the SAME zone
+    private boolean haveSameZone(int fromIndex, int toIndex) {
+        String zoneFrom = getZoneForGraph(fromIndex);
+        String zoneTo   = getZoneForGraph(toIndex);
+
+        if (zoneFrom.isEmpty() || zoneTo.isEmpty()) {
+            return fromIndex == toIndex;   // fallback: only same graph
+        }
+
+        return zoneFrom.equals(zoneTo);
+    }
+    // Custom Adapter to show domain + zones using your existing layout
+    private class GraphSpinnerAdapter extends ArrayAdapter<String> {
+
+        public GraphSpinnerAdapter(Context context, String[] domains) {
+            super(context, 0, domains);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return createCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return createCustomView(position, convertView, parent);
+        }
+
+        private View createCustomView(int position, View convertView, ViewGroup parent) {
+            View view = convertView;
+            if (view == null) {
+                view = LayoutInflater.from(getContext()).inflate(
+                        R.layout.items_activity_spinner, parent, false);
+            }
+
+            TextView textView = view.findViewById(R.id.spinnerText);
+
+            String domain = MainActivity.spinner_options[position];
+            String zones = getZoneForGraph(position);
+
+            String zonesText = (zones.length() > 0)
+                    ? " [" + String.join(", ", zones) + "]"
+                    : " [no zone]";
+
+            textView.setText(domain + zonesText);
+
+            return view;
+        }
+    }
+
+    //endregion
+
     //region functions_of_graph_token
 
     private void onGraphDomainChanged(int position) {
-        if (position < 0 || position >= spinner_options.length) return;
+        if (position < 0 || position >= MainActivity.spinner_options.length) return;
 
-        String selectedServer1 = MainActivity.graph_domain_in;
-        String selectedDomain = spinner_options[position];
+        String selectedServer1 = MainActivity.graph_domain_in;   // Graph From
+        int fromIndex = getGraphIndex(selectedServer1);
+        int toIndex   = position;
 
-        updateCommonTokensDropdown(selectedServer1,selectedDomain);
+        // === Zone Validation (Same Zone Only) ===
+        if (!haveSameZone(fromIndex, toIndex)) {
+            Toast.makeText(this,
+                    "Transfer not allowed: Different zones",
+                    Toast.LENGTH_LONG).show();
 
-        Access_log.log_it("i", "shahin", "is_parcel_processing (before_spin): " + is_parcel_processing);
-        if (is_parcel_processing)
-        {
+        }
+
+        updateCommonTokensDropdown(selectedServer1, MainActivity.spinner_options[position]);
+
+        if (!is_parcel_processing) {
+            popupWindow.show();
+        } else {
             is_parcel_processing = false;
         }
-        else
-        {
-            popupWindow.show();
-            Access_log.log_it("i", "shahin", "popupWindow.show()");
-        }
-        Access_log.log_it("i", "shahin", "is_parcel_processing (after_spin): " + is_parcel_processing);
-
     }
     private boolean isValidSelectedCurrency(String selectedCurrency) {
         if (selectedCurrency == null || selectedCurrency.equals("No common tokens") || selectedCurrency.trim().isEmpty()) {

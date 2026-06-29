@@ -93,7 +93,7 @@ public class MainActivity_Send_Scanner extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         barcodeView.resume(); // Start the camera preview
-        Log.d("shahin", "scanner resumed");
+        //Log.d("shahin", "scanner resumed");
         Access_log.log_it("d","shahin","scanner resumed");
     }
 

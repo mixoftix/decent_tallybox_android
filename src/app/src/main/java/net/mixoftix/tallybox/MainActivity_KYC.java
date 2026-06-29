@@ -59,7 +59,8 @@ public class MainActivity_KYC extends AppCompatActivity {
         buttonSign = findViewById(R.id.buttonSign);
 
         textview_graph_in = findViewById(R.id.textview_graph_in);
-        textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + ")");
+        //textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + ")");
+        updateGraphFromDisplay();
 
         // check previous kyc attempts
         String previous_kyc_result = Access_file.access_file_func_read(getApplicationContext(), "kyc_result");
@@ -261,5 +262,40 @@ public class MainActivity_KYC extends AppCompatActivity {
         thread.start();
     }
 
+    //region function_of_graph_in
+
+    // Show Graph From + Zones
+    private void updateGraphFromDisplay() {
+        int index = getGraphIndex(MainActivity.graph_domain_in);
+        String zones = (index != -1) ? getZoneForGraph(index) : " [no zone]";
+
+        String zonesText = (zones.length() > 0)
+                ? " [" + String.join(", ", zones) + "]"
+                : " [no zone]";
+
+        //textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + zonesText + ")");
+        textview_graph_in.setText(HtmlCompat.fromHtml(
+                "(in graph: <b>" + MainActivity.graph_domain_in + "</b>" +
+                        "<font color='cyan'>" + zonesText + "</font>)",
+                HtmlCompat.FROM_HTML_MODE_LEGACY));
+    }
+    // Get zones for a graph by index
+    private int getGraphIndex(String domain) {
+        for (int i = 0; i < MainActivity.spinner_options.length; i++) {
+            if (MainActivity.spinner_options[i].equals(domain)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    // Get zone for a graph by index
+    private String getZoneForGraph(int graphIndex) {
+        if (graphIndex < 0 || graphIndex >= MainActivity.spinner_options_zones.length) {
+            return "";
+        }
+        return MainActivity.spinner_options_zones[graphIndex];
+    }
+
+    //endregion
 
 }

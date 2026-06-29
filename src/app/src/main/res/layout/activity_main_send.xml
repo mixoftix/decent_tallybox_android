@@ -279,7 +279,7 @@
             android:visibility="gone"
             />
 
-        <!-- Layout Send -->
+        <!-- Layout Offline Send -->
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/layout_send_offline"
             android:layout_width="match_parent"
@@ -289,9 +289,9 @@
             android:visibility="gone"
             >
 
-        <!-- Wallet-QR ImageView -->
+        <!-- Offline Wallet-QR -->
         <ImageView
-            android:id="@+id/ImageView_SendQR"
+            android:id="@+id/ImageView_offline_SendQR"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_marginTop="5dp"
@@ -301,10 +301,10 @@
             android:visibility="gone"
             />
 
-        <!-- Broadcast Result -->
+        <!-- Offline Raw Transaction -->
         <TextView
-            android:id="@+id/textview_send"
-            android:layout_width="wrap_content"
+            android:id="@+id/textview_offline_send"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:gravity="top"
@@ -316,6 +316,23 @@
             android:background="@drawable/frame_white"
             android:visibility="gone"
             />
+
+            <!-- Offline URL -->
+            <TextView
+                android:id="@+id/textview_offline_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="---"
+                android:drawablePadding="2dp"
+                android:drawableRight="@drawable/baseline_upload_24"
+                android:textSize="17sp"
+                android:background="@drawable/frame_white"
+                android:visibility="gone"
+                android:linksClickable="true"
+                />
 
         </LinearLayout>
 

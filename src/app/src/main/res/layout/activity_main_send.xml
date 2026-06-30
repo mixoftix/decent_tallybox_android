@@ -41,6 +41,16 @@
             android:layout_marginBottom="10dp"
             />
 
+        <!-- Wallet Target EditText -->
+        <EditText
+            android:id="@+id/editTextWalletTo"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="to wallet"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/baseline_account_balance_24"
+            android:inputType="text" />
+
         <!-- Graph To -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +63,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="To:"
+                android:text="at:"
                 android:textSize="16sp"
                 android:paddingEnd="5dp"
                 />
@@ -85,7 +95,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Token:"
+            android:text="token:"
             android:textSize="16sp"
             android:paddingEnd="5dp"
             />
@@ -153,22 +163,12 @@
         </RadioGroup>
         -->
 
-        <!-- Wallet Target EditText -->
-        <EditText
-            android:id="@+id/editTextWalletTo"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="To Wallet"
-            android:drawablePadding="2dp"
-            android:drawableRight="@drawable/baseline_account_balance_24"
-            android:inputType="text" />
-
         <!-- Amount EditText -->
         <EditText
             android:id="@+id/editTextAmount"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:hint="Amount"
+            android:hint="amount"
             android:drawablePadding="2dp"
             android:drawableRight="@drawable/baseline_dialpad_24"
             android:inputType="text" />

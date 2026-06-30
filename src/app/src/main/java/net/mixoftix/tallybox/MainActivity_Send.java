@@ -88,7 +88,7 @@ public class MainActivity_Send extends AppCompatActivity {
         textview_graph_in = findViewById(R.id.textview_graph_in);
         //editTextGraphDomainTo = findViewById(R.id.editTextGraphDomainTo);
 
-        // BGN: spinner of graph_in
+        // BGN: spinner of graph_to
         dropdownSpinner_GraphDomainTo = findViewById(R.id.dropdownSpinner_GraphDomainTo);
 
         GraphSpinnerAdapter adapter = new GraphSpinnerAdapter(
@@ -97,7 +97,7 @@ public class MainActivity_Send extends AppCompatActivity {
         );
 
         dropdownSpinner_GraphDomainTo.setAdapter(adapter);
-        // END: spinner of graph_in
+        // END: spinner of graph_to
 
         editTextWalletTo = findViewById(R.id.editTextWalletTo);
         //RadioGroupCurrency = findViewById(R.id.RadioGroupCurrency);
@@ -498,8 +498,12 @@ public class MainActivity_Send extends AppCompatActivity {
             parcel_processor(Scanner_Result);
         }
 
+        //endregion
+
         //textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + ")");
         updateGraphFromDisplay();
+
+        //region activity_initialization
 
         //editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
         // Find the index of the target domain
@@ -514,6 +518,9 @@ public class MainActivity_Send extends AppCompatActivity {
         if (targetIndex != -1) {
             dropdownSpinner_GraphDomainTo.setSelection(targetIndex);
         }
+
+        //editTextWalletTo.requestFocus();
+
         //endregion
 
     }
@@ -621,7 +628,9 @@ public class MainActivity_Send extends AppCompatActivity {
                 try {
                     //popupWindow.show();
                     //Access_log.log_it("i", "shahin", "parcel_processor: popupWindow shown successfully");
-                    editTextAmount.requestFocus();
+                    //editTextAmount.requestFocus();
+                    popupWindow.show();
+
                     Access_log.log_it("i", "shahin", "parcel_processor: amount focused successfully");
                 } catch (Exception e) {
                     Access_log.log_it("e", "shahin", "parcel_processor: Error showing popupWindow: " + e.getMessage());
@@ -873,7 +882,8 @@ public class MainActivity_Send extends AppCompatActivity {
         updateCommonTokensDropdown(selectedServer1, MainActivity.spinner_options[position]);
 
         if (!is_parcel_processing) {
-            popupWindow.show();
+            // popupWindow.show();
+            // do nothing
         } else {
             is_parcel_processing = false;
         }
@@ -956,7 +966,9 @@ public class MainActivity_Send extends AppCompatActivity {
                         "item_clicked: " + selectedItem.getText() + " - " + selectedItem.getImageResId());
 
                 popupWindow.dismiss();
-                editTextWalletTo.requestFocus();
+                //editTextWalletTo.requestFocus();
+                editTextAmount.requestFocus();
+
             }
         });
     }

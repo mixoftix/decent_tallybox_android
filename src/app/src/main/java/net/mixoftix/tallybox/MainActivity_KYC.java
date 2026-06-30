@@ -95,7 +95,7 @@ public class MainActivity_KYC extends AppCompatActivity {
 
                 Access_log.log_it("i","shahin","dmz.asmx/kyc_generate" + " - result: " + result);
 
-                if (result.startsWith("error~"))
+                if (result.startsWith("error~") || result.startsWith("info~"))
                 {
                     textview_broadcast_report.setVisibility(View.VISIBLE);
                     textview_broadcast_report.setText(HtmlCompat.fromHtml(

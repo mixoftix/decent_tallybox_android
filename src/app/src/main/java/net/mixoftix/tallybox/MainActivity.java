@@ -48,10 +48,10 @@ import java.util.stream.Collectors;
 
 /*
 Decent TallyBox (Android Wallet)
-Version: 2.932 (MVP)
+Version: 2.935 (MVP)
 Updated: 2026-06-20
 
-This script provisions a Tallybox wallet (https://wallet.mixoftix.net) for secure management of
+This is Tallybox wallet (https://wallet.mixoftix.net) for secure management of
 tokens on a DAG network. It both generates and recovers a private-public key pair of ecc secp256r1,
 derives a wallet address, AES-256-CBC encryption for private keys, RFC 6979-compliant ECDSA signatures,
 and offline transaction signing. Features include RFC 6979-compliant ECDSA signatures.
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final boolean log_is_enable = false;
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.934";
+    public static final String app_version = "2.935";
     public static final String file_name_path = "net_mixoftix_tallybox";
     public static final String[] spinner_options = {
             "gpp_mars.mixoftix.net",

@@ -36,6 +36,7 @@ public class MainActivity_About extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_about);
         setContentView(R.layout.activity_main_about);
 
         binding = ActivityMainAboutBinding.inflate(getLayoutInflater());

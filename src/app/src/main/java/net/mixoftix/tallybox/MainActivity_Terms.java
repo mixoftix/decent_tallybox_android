@@ -18,6 +18,7 @@ public class MainActivity_Terms extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_terms);
         setContentView(R.layout.activity_main_terms);
 
         binding = ActivityMainTermsBinding.inflate(getLayoutInflater());

@@ -59,6 +59,7 @@ public class MainActivity_History extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_history);
         setContentView(R.layout.activity_main_history);
 
         binding = ActivityMainHistoryBinding.inflate(getLayoutInflater());

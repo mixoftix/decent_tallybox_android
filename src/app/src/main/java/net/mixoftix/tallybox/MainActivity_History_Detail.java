@@ -54,6 +54,7 @@ public class MainActivity_History_Detail extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_history_detail);
         setContentView(R.layout.activity_main_history_detail);
 
         binding = ActivityMainHistoryDetailBinding.inflate(getLayoutInflater());

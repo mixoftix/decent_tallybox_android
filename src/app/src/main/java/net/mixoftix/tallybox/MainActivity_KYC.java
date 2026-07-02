@@ -41,6 +41,7 @@ public class MainActivity_KYC extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_kyc);
         setContentView(R.layout.activity_main_kyc);
 
         binding = ActivityMainKycBinding.inflate(getLayoutInflater());

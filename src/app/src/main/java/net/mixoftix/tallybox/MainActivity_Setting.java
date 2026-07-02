@@ -32,6 +32,7 @@ public class MainActivity_Setting extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_settings);
         setContentView(R.layout.activity_main_setting);
 
         binding = ActivityMainSettingBinding.inflate(getLayoutInflater());

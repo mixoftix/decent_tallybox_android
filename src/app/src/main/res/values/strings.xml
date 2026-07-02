@@ -19,18 +19,18 @@
 
     <!-- Manifest -->
     <string name="app_name">TallyBox</string>
-    <string name="title_kyc">KYC</string>
-    <string name="title_settings">Setting</string>
-    <string name="title_terms">Terms</string>
     <string name="title_about">About</string>
     <string name="title_history">Transactions History</string>
     <string name="title_history_detail">Transaction Detail</string>
-    <string name="title_wallet_config">Config Wallet</string>
+    <string name="title_kyc">KYC</string>
     <string name="title_private_key">Private Key</string>
-    <string name="title_send">Pay</string>
-    <string name="title_send_scanner">Pay by Scanner</string>
     <string name="title_receive">Receive</string>
     <string name="title_receive_qr">Receive by QR</string>
+    <string name="title_send">Pay</string>
+    <string name="title_send_scanner">Pay by Scanner</string>
+    <string name="title_settings">Setting</string>
+    <string name="title_terms">Terms</string>
+    <string name="title_wallet_config">Config Wallet</string>
 
     <!-- MainActivity -->
     <string name="receive">Receive</string>

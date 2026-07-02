@@ -28,6 +28,7 @@ public class MainActivity_Wallet_config extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_wallet_config);
         setContentView(R.layout.activity_main_wallet_config);
 
         binding = ActivityMainWalletConfigBinding.inflate(getLayoutInflater());

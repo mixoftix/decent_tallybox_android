@@ -31,6 +31,7 @@ public class MainActivity_Receive_qr extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_receive_qr);
         setContentView(R.layout.activity_main_receive_qr);
 
         binding = ActivityMainReceiveQrBinding.inflate(getLayoutInflater());

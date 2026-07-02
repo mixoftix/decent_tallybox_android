@@ -29,6 +29,7 @@ public class MainActivity_Send_Scanner extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_send_scanner);
         setContentView(R.layout.activity_main_send_scanner);
 
         binding = ActivityMainSendScannerBinding.inflate(getLayoutInflater());

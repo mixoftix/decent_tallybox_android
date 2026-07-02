@@ -46,6 +46,8 @@ public class MainActivity_PrivateKey extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_private_key);
+
         // BGN: to prevent screenshots from privatekey - available in version: 2.0
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);

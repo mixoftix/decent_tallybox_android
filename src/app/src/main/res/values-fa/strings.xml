@@ -15,18 +15,18 @@
 
     <!-- Manifest -->
     <string name="app_name">کیف پول تالی</string>
-    <string name="title_kyc">احراز هویت</string>
-    <string name="title_settings">تنظیمات</string>
-    <string name="title_terms">مقررات</string>
     <string name="title_about">معرفی</string>
     <string name="title_history">سوابق تراکنشها</string>
     <string name="title_history_detail">ریز تراکنش</string>
-    <string name="title_wallet_config">پیکربندی</string>
+    <string name="title_kyc">احراز هویت</string>
     <string name="title_private_key">کلید خصوصی</string>
-    <string name="title_send">پرداخت</string>
-    <string name="title_send_scanner">پرداخت با اسکنر</string>
     <string name="title_receive">دریافت</string>
     <string name="title_receive_qr">دریافت با اسکنر</string>
+    <string name="title_send">پرداخت</string>
+    <string name="title_send_scanner">پرداخت با اسکنر</string>
+    <string name="title_settings">تنظیمات</string>
+    <string name="title_terms">مقررات</string>
+    <string name="title_wallet_config">پیکربندی</string>
 
     <!-- MainActivity -->
     <string name="receive">دریافت</string>

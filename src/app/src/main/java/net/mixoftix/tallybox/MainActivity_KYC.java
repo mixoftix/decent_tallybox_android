@@ -25,7 +25,7 @@ import java.util.Locale;
 
 import net.mixoftix.tallybox.databinding.ActivityMainKycBinding;
 
-public class MainActivity_KYC extends AppCompatActivity {
+public class MainActivity_KYC extends BaseActivity {
 
     private TextView textview_graph_in, textview_broadcast_report;
     private EditText editText_KYC_National_ID, editText_KYC_Mobile_Number, EditText_KYC_MSG, editText_KYC_PIN;

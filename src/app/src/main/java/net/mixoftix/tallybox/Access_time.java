@@ -6,11 +6,21 @@ import java.util.concurrent.TimeUnit;
 
 public class Access_time {
 
-    public static String getTimeDifference(String str_epoch1, String str_epoch2)
+    public static String getTimeDifference(String str_lang, String str_epoch1, String str_epoch2)
     {
-        if (str_epoch2.equals("-1"))
+        if (str_lang.equals("fa"))
         {
-            return "never";
+            if (str_epoch2.equals("-1"))
+            {
+                return "هرگز";
+            }
+        }
+        else
+        {
+            if (str_epoch2.equals("-1"))
+            {
+                return "never";
+            }
         }
 
         long epoch1 = (long)Double.parseDouble(str_epoch1) * 1000L;
@@ -28,18 +38,37 @@ public class Access_time {
         //Log.v("shahin", "diffInMillis: " + diffInMillis);
         //Log.v("shahin", "diffInMinutes: " + diffInMinutes);
 
-        if (diffInMinutes < 1) {
-            return "now";
-        } else if (diffInMinutes < 60) {
-            return diffInMinutes + " minute(s) ago";
-        } else if (diffInHours < 24) {
-            return diffInHours + " hour(s) ago";
-        } else if (diffInDays < 7) {
-            return diffInDays + " day(s) ago";
-        } else if (diffInWeeks < 4) {
-            return diffInWeeks + " week(s) ago";
-        } else {
-            return diffInMonths + " month(s) ago";
+        if (str_lang.equals("fa"))
+        {
+            if (diffInMinutes < 1) {
+                return "حالا";
+            } else if (diffInMinutes < 60) {
+                return diffInMinutes + " دقیقه قبل ";
+            } else if (diffInHours < 24) {
+                return diffInHours + " ساعت قبل ";
+            } else if (diffInDays < 7) {
+                return diffInDays + " روز قبل ";
+            } else if (diffInWeeks < 4) {
+                return diffInWeeks + " هفته قبل ";
+            } else {
+                return diffInMonths + " ماه قبل ";
+            }
+        }
+        else
+        {
+            if (diffInMinutes < 1) {
+                return "now";
+            } else if (diffInMinutes < 60) {
+                return diffInMinutes + " minute(s) ago";
+            } else if (diffInHours < 24) {
+                return diffInHours + " hour(s) ago";
+            } else if (diffInDays < 7) {
+                return diffInDays + " day(s) ago";
+            } else if (diffInWeeks < 4) {
+                return diffInWeeks + " week(s) ago";
+            } else {
+                return diffInMonths + " month(s) ago";
+            }
         }
     }
 

@@ -17,7 +17,7 @@ import net.mixoftix.tallybox.databinding.ActivityMainWalletConfigBinding;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
-public class MainActivity_Wallet_config extends AppCompatActivity {
+public class MainActivity_Wallet_config extends BaseActivity {
 
     private EditText editTextPassword1,editTextPassword2,editTextRestore_Privatekey;
     private RadioButton radioWalletType;

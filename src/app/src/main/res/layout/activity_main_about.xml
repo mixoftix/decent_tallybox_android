@@ -37,7 +37,7 @@
             android:text="version: 1.0 - check for update"
             android:textSize="17sp"
             android:drawablePadding="2dp"
-            android:drawableRight="@drawable/baseline_security_update_24"
+            android:drawableEnd="@drawable/baseline_security_update_24"
             android:background="@drawable/frame_white"
             />
 

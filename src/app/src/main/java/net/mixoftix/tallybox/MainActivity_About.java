@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -20,7 +21,7 @@ import net.mixoftix.tallybox.databinding.ActivityMainAboutBinding;
 import java.net.URLEncoder;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity_About extends AppCompatActivity {
+public class MainActivity_About extends BaseActivity {
 
     private static ActivityMainAboutBinding binding;
     private TextView textview_about_update,textview_about;
@@ -44,8 +45,13 @@ public class MainActivity_About extends AppCompatActivity {
         textview_about_update = findViewById(R.id.textview_about_update);
         textview_about = findViewById(R.id.textview_about_content);
 
-        String tallybox_update = "version: " + MainActivity.app_version + " / check for update";
+        String tallybox_about_version = getString(R.string.about_version);
+        String tallybox_about_version_new = getString(R.string.about_version_new);
+        String tallybox_about_update = getString(R.string.about_update_check);
+        String tallybox_about_result = getString(R.string.about_update_result);
+        String tallybox_update = tallybox_about_version + ": " + MainActivity.app_version + " / " + tallybox_about_update;
 
+        /*
         String tallybox_about =
                 "<b>Description of Service</b>" +
                         "<br>" +
@@ -58,9 +64,13 @@ public class MainActivity_About extends AppCompatActivity {
                         "<br>" +
                 "Developed with passion in our lab, featuring a unique dual-token model with both Fiat money and Digital Token, TallyBox draws inspiration from digital transformation adding a playful yet meaningful layer to the crypto experience." +
                         "<br>";
+        */
 
         textview_about_update.setText(HtmlCompat.fromHtml(tallybox_update,HtmlCompat.FROM_HTML_MODE_LEGACY));
         textview_about_update.setMovementMethod(LinkMovementMethod.getInstance());
+
+        String tallybox_about = getString(R.string.tallybox_about);
+        //textview_about.setText(Html.fromHtml(tallybox_about, Html.FROM_HTML_MODE_LEGACY));
         textview_about.setText(HtmlCompat.fromHtml(tallybox_about,HtmlCompat.FROM_HTML_MODE_LEGACY));
 
         // Set a click listener for textview_about_update
@@ -96,11 +106,11 @@ public class MainActivity_About extends AppCompatActivity {
                                                 "/" + MainActivity.app_name + "_" + result + ".apk"
                                                 ;
 
-                    textview_about_update.setText(HtmlCompat.fromHtml("<a href=" + server_url_wallet_dl + ">New version: " + result + "</a>",HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    textview_about_update.setText(HtmlCompat.fromHtml("<a href=" + server_url_wallet_dl + ">" + tallybox_about_version_new + ": " + result + "</a>",HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }
                 else
                 {
-                    textview_about_update.setText(HtmlCompat.fromHtml("version: " + MainActivity.app_version + " / up to date!",HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    textview_about_update.setText(HtmlCompat.fromHtml(tallybox_about_version + ": " + MainActivity.app_version + " / " + tallybox_about_result,HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }
 
                 // reset progressbar

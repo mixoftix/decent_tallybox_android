@@ -1,5 +1,6 @@
 package net.mixoftix.tallybox;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 
 import android.view.LayoutInflater;
@@ -64,15 +66,15 @@ MixofTix Was Here!
 by shahiN Noursalehi
 */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     //region define_variables
 
     //region constants
 
-    public static final boolean log_is_enable = false;
+    public static final boolean log_is_enable = true;
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.935";
+    public static final String app_version = "2.95";
     public static final String file_name_path = "net_mixoftix_tallybox";
     public static final String[] spinner_options = {
             "gpp_mars.mixoftix.net",
@@ -154,8 +156,9 @@ public class MainActivity extends AppCompatActivity {
 
     //region variables_of_layouts
 
+    private StringHelper stringHelper;
     private Button buttonSend, buttonReceive;
-    private TextView textview_main_test, textview_main_advertise, textview_main_whatsup,
+    private TextView textview_main_advertise, textview_main_whatsup,
                      textview_balance_wallet;
     private LinearLayout layout_main_whatsup, layout_main_advertise, layout_main_test;
     private Spinner dropdownSpinner;
@@ -194,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         // Force light mode programmatically
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
+        setTitle(R.string.app_name);
         setContentView(R.layout.activity_main);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -203,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize UI elements
         layout_main_whatsup = findViewById(R.id.layout_main_whatsup);
         layout_main_advertise = findViewById(R.id.layout_main_advertise);
-        layout_main_test = findViewById(R.id.layout_main_test);
+        //layout_main_test = findViewById(R.id.layout_main_test);
 
         buttonReceive = findViewById(R.id.buttonReceive);
         buttonSend = findViewById(R.id.buttonSend);
@@ -212,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         textview_main_advertise = findViewById(R.id.textview_main_advertise);
 
         textview_balance_wallet  = findViewById(R.id.textview_balance_wallet);
-        textview_main_test  = findViewById(R.id.textview_main_test);
+        //textview_main_test  = findViewById(R.id.textview_main_test);
 
         // BGN: spinner of graph_in
 
@@ -225,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
         // END: spinner of graph_in
 
         //endregion
+
+        stringHelper = new StringHelper(this);
 
         //region keypair_variables
         PrivateKey privateKey = null;
@@ -404,19 +410,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        // Set a click listener for qc-tester
-        textview_main_test.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                try {
-                    //pqc_mlkem.pqc_psk_pk();
-                    //pqc_mldsa.test();
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
         // Set a selected listener for graph_in_spinner
         final Boolean[] spinner_isFirstSelection = {true};
         dropdownSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -545,6 +538,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //endregion
+
     }
 
     //region functions_of_cryptography
@@ -949,6 +943,13 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_language) {
+
+            showLanguageSelector();
+
+            return true;
+        }
+
         if (id == R.id.action_kyc) {
 
             Intent i = new Intent(getApplicationContext(),MainActivity_KYC.class);
@@ -986,6 +987,40 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Inside your Settings Activity
+    private void showLanguageSelector() {
+        String[] languageNames = {"English", "فارسی (Persian)"};
+        String[] languageCodes = {"en", "fa"};
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.select_language)   // Better to use string resource
+                .setSingleChoiceItems(languageNames, -1, (dialog, which) -> {
+                    String selectedCode = languageCodes[which];
+
+                    dialog.dismiss();
+
+                    // Use the new method
+                    changeLanguage(selectedCode);
+                })
+                .show();
+    }
+
+    // New Method - Recommended
+    private void changeLanguage(String newLang) {
+        // Save and apply new language
+        LocaleHelper.setLocale(this, newLang);
+
+        // Restart the app cleanly (best for full direction refresh)
+        restartApplication();
+    }
+
+    private void restartApplication() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finishAffinity();        // Close all old activities
     }
 
     //endregion
@@ -1101,13 +1136,14 @@ public class MainActivity extends AppCompatActivity {
         //String result = browse_url_POST(server_url_order_history + server_file_order_history, server_url_query);
         Access_log.log_it("i","shahin","dmz.asmx/ledger_history" + " - result: " + result);
 
-        String network_msg = "Net: <font color=red>Er</font> / ";
+        String network_msg = "Er";
 
         // update refresh datetime
         if (!result.equals("Failed") && !result.equals("no_record"))
         {
             refresh_update(graph_domain_in);
-            network_msg = "Net: <font color=cyan>OK</font> / ";
+            //network_msg = "Net: <font color=cyan>OK</font> / ";
+            network_msg = "OK";
         }
 
         // show refresh datetime
@@ -1140,12 +1176,38 @@ public class MainActivity extends AppCompatActivity {
             refresh_utc_unix_last = "-1";
         }
 
+        /*
         textview_balance_wallet.setText(
                 HtmlCompat.fromHtml(my_msg + "Last update: <b>" +
                                 Access_time.getTimeDifference(refresh_utc_unix_now,refresh_utc_unix_last) +
                                 "</b>",
                         HtmlCompat.FROM_HTML_MODE_LEGACY)
         );
+
+        // Get current language
+        String currentLang = LocaleHelper.getCurrentLanguage(this);
+
+        CharSequence result = TextUtils.concat(
+                stringHelper.getNetworkAccessText(my_msg),
+                stringHelper.getLastUpdateText(
+                             Access_time.getTimeDifference(
+                                                          currentLang,
+                                                          refresh_utc_unix_now,
+                                                          refresh_utc_unix_last
+                                                          )
+                                               )
+        );
+
+        textview_balance_wallet.setText(result);
+        */
+
+        CharSequence result = stringHelper.getBalanceHeaderText(
+                my_msg,
+                refresh_utc_unix_now,
+                refresh_utc_unix_last
+        );
+
+        textview_balance_wallet.setText(result);
     }
     private void refresh_update(String my_graph_in)
     {

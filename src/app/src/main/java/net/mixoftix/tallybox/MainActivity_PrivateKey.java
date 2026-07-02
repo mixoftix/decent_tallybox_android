@@ -30,7 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity_PrivateKey extends AppCompatActivity {
+public class MainActivity_PrivateKey extends BaseActivity {
 
     private TextView textview_privatekey_info, textview_privatekey,
             textview_privatekey_attempt_info, textview_privatekey_attempt;

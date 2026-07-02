@@ -4,39 +4,38 @@
 
     <item
         android:id="@+id/action_refresh"
-        android:orderInCategory="100"
-        android:title="Refresh"
         android:icon="@drawable/baseline_refresh_24"
+        android:title="@string/action_refresh"
         app:showAsAction="ifRoom|withText" />
 
     <item
-        android:id="@+id/action_private_key"
-        android:orderInCategory="100"
-        android:title="Private key"
+        android:id="@+id/action_language"
+        android:title="@string/action_language"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_kyc"
-        android:orderInCategory="100"
-        android:title="KYC"
+        android:title="@string/action_kyc"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_setting"
-        android:orderInCategory="100"
-        android:title="Setting"
+        android:title="@string/action_setting"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_private_key"
+        android:title="@string/action_private_key"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_terms"
-        android:orderInCategory="100"
-        android:title="Terms"
+        android:title="@string/action_terms"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_about"
-        android:orderInCategory="100"
-        android:title="About"
+        android:title="@string/action_about"
         app:showAsAction="never" />
 
 </menu>

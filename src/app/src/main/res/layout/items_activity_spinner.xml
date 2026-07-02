@@ -7,7 +7,7 @@
     android:paddingBottom="6dp"
     android:padding="10dp"
     android:textSize="17sp"
-    android:drawableRight="@drawable/baseline_hub_24"
+    android:drawableEnd="@drawable/baseline_hub_24"
     android:background="@drawable/frame_white"
     android:drawablePadding="2dp"
     />

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btn_broadcast">انتشار</string>
+    <string name="tally_box">کیف پول تالی!</string>
+    <string name="target_id">به:</string>
+    <string name="amount">مقدار:</string>
+    <string name="empty">خالی</string>
+    <string name="title_activity_main_qr">صفحه اسکنر</string>
+    <string name="first_fragment_label">بخش اول</string>
+    <string name="second_fragment_label">بخش دوم</string>
+    <string name="next">بعدی</string>
+    <string name="previous">قبلی</string>
+    <string name="lorem_ipsum">متن تستی</string>
+    <string name="hello_blank_fragment">بخش تهی</string>
+
+    <!-- Manifest -->
+    <string name="app_name">کیف پول تالی</string>
+    <string name="title_kyc">احراز هویت</string>
+    <string name="title_settings">تنظیمات</string>
+    <string name="title_terms">مقررات</string>
+    <string name="title_about">معرفی</string>
+    <string name="title_history">سوابق تراکنشها</string>
+    <string name="title_history_detail">ریز تراکنش</string>
+    <string name="title_wallet_config">پیکربندی</string>
+    <string name="title_private_key">کلید خصوصی</string>
+    <string name="title_send">پرداخت</string>
+    <string name="title_send_scanner">پرداخت با اسکنر</string>
+    <string name="title_receive">دریافت</string>
+    <string name="title_receive_qr">دریافت با اسکنر</string>
+
+    <!-- MainActivity -->
+    <string name="receive">دریافت</string>
+    <string name="send">پرداخت</string>
+    <string name="app_is_up_to_date">نرم افزار به روز است</string>
+    <string name="advertise_text">-</string>
+    <string name="last_update">آخرین بروزرسانی: <b>%1$s</b></string>
+    <string name="last_update_label">آخرین بروزرسانی: </string>
+    <string name="network_status_ok">شبکه: </string>
+    <string name="network_status_error">شبکه: </string>
+
+    <!-- MainActivity / Menu -->
+    <string name="select_language">انتخاب زبان</string>
+    <string name="action_refresh">به روز رسانی</string>
+    <string name="action_private_key">کلید خصوصی</string>
+    <string name="action_language">انتخاب زبان</string>
+    <string name="action_kyc">احراز هویت</string>
+    <string name="action_setting">تنظیمات</string>
+    <string name="action_terms">مقررات</string>
+    <string name="action_about">معرفی</string>
+
+    <!-- MainActivity / Receive-->
+    <string name="graph_info_placeholder">---</string>
+    <string name="my_wallet">کیف پول من:</string>
+    <string name="wallet_address_placeholder">---</string>
+    <string name="point_of_sale">حالت فروشنده</string>
+    <string name="token_label">توکن:</string>
+    <string name="select_token">انتخاب توکن</string>
+    <string name="hint_amount">مقدار</string>
+    <string name="hint_order_id_optional">شماره فاکتور (دلخواه)</string>
+    <string name="generate_qr_code">تولید بارکد (دستور دریافت)</string>
+
+    <!-- MainActivity / Send-->
+    <string name="hint_to_wallet">به کیف پول:</string>
+    <string name="at_label">به گراف:</string>
+    <string name="extra_info">اطلاعات بیشتر</string>
+    <string name="offline_sign">امضای آفلاین</string>
+    <string name="sign">امضا</string>
+    <string name="broadcast">انتشار</string>
+    <string name="broadcast_report_placeholder">---</string>
+    <string name="qr_code">بارکد</string>
+    <string name="offline_raw_transaction_placeholder">---</string>
+    <string name="offline_url_placeholder">---</string>
+
+    <!-- MainActivity / History Detail -->
+    <string name="history_network">شبکه: در حال اتصال..</string>
+    <string name="history_wait">منتظر بمانید</string>
+
+    <string name="history_in_graph">در گراف</string>
+    <string name="history_transaction">تراکنش</string>
+    <string name="history_order_id">شماره فاکتور</string>
+    <string name="history_channel">کانال</string>
+    <string name="history_channel_concrete">مستحکم</string>
+    <string name="history_channel_safe">ایمن</string>
+    <string name="history_channel_caution">احتیاط</string>
+    <string name="history_channel_dangerous">خطرناک</string>
+    <string name="history_monitor">مشاهده</string>
+
+    <string name="history_detail_fee">کارمزد</string>
+    <string name="history_detail_send">فرستنده</string>
+    <string name="history_detail_receive">گیرنده</string>
+    <string name="history_detail_me">خودم!</string>
+
+    <!-- MainActivity / Settings-->
+    <string name="settings_serial">سریال</string>
+    <string name="settings_network">شبکه</string>
+    <string name="settings_uptodate">به روز است</string>
+    <string name="settings_updated">به روز شد</string>
+    <string name="settings_checksum">بی اعتبار!</string>
+
+    <string name="network_protocol_label">پروتکل شبکه:</string>
+    <string name="connection_http">http</string>
+    <string name="connection_https">https</string>
+    <string name="pqc_label">رمزنگاری پسا-کوانتومی:</string>
+    <string name="pqc_disable">disable</string>
+    <string name="pqc_enable">enable</string>
+    <string name="pqc_info_note">
+    *توجه: تالی‌باکس الگوریتم ML-KEM، یکی از پیشرفته‌ترین روش‌های رمزنگاری پساکوانتومی (PQC)، را در این برنامه ادغام کرده است تا کارایی آن را ارزیابی کند. این قابلیت با جلوگیری از حملات مرد میانی (MITM) و تقلب در رسید، از داده‌های حساس تراکنش‌ها محافظت می‌کند.
+    </string>
+
+    <!-- MainActivity / Private Key-->
+    <string name="local_password_label">رمز کیف پول:</string>
+    <string name="password_hint">رمز کیف پول</string>
+    <string name="button_expose_private_key">افشای کلید خصوصی</string>
+    <string name="qc_label">کنترل کیفی</string>
+    <string name="privatekey_info_label">کلید خصوصی من:</string>
+    <string name="privatekey_placeholder">---</string>
+    <string name="privatekey_access_label">آخرین دسترسی:</string>
+    <string name="privatekey_access_placeholder">---</string>
+
+    <!-- MainActivity / KYC-->
+    <string name="kyc_info_placeholder">---</string>
+    <string name="kyc_national_id_hint">کد ملی</string>
+    <string name="kyc_mobile_number_hint">شماره موبایل</string>
+    <string name="kyc_request_button">درخواست احراز هویت</string>
+    <string name="kyc_message_hint">پیغام سرور</string>
+    <string name="kyc_pin_hint">رمز یکبار مصرف</string>
+    <string name="kyc_sign_button">امضا</string>
+    <string name="kyc_report_placeholder">---</string>
+
+    <!-- MainActivity / About-->
+    <string name="about_version">ویرایش</string>
+    <string name="about_version_new">ویرایش جدید</string>
+    <string name="about_update_check">به روز رسانی</string>
+    <string name="about_update_result">شما به روز هستید!</string>
+
+    <string name="tallybox_about">
+    &lt;b&gt;توضیحات سرویس&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;
+    تالی‌باکس یک کیف پول رمزارزی نوآورانه است که برای بازتعریف تراکنش‌های دیجیتال با سادگی و کارایی طراحی شده است.&lt;br/&gt;&lt;br/&gt;
+    این سیستم به‌صورت یک چرخهٔ بسته طراحی شده و قابلیت انجام تراکنش‌های میان‌چرخه‌ای را نیز دارد. تالی‌باکس با فراهم کردن بستری امن، آموزشی، مقرون‌به‌صرفه و جذاب برای مدیریت دارایی‌های دیجیتال، کاربران را در دنیای رو‌به‌رشد رمزارزها توانمند می‌سازد.&lt;br/&gt;&lt;br/&gt;
+    این محصول با اشتیاق در آزمایشگاه ما توسعه یافته و با بهره‌گیری از یک مدل دوگانهٔ توکن شامل پول فیات و توکن دیجیتال، الهام‌گرفته از تحول دیجیتال است و لایه‌ای سرگرم‌کننده اما معنادار به تجربهٔ کار با رمزارزها اضافه می‌کند.&lt;br/&gt;
+    </string>
+
+    <string name="tallybox_terms">
+    &lt;b&gt;1. پذیرش شرایط&lt;/b&gt;&lt;br/&gt;
+    با دانلود، نصب یا استفاده از برنامه تالی‌باکس، شما موافقت می‌کنید که تابع این «شرایط و ضوابط» باشید. اگر با این شرایط موافق نیستید، لطفاً از کیف پول تالی‌باکس استفاده نکنید. این شرایط دسترسی و استفاده شما از تالی‌باکس، شامل هرگونه به‌روزرسانی یا تغییرات، را تنظیم می‌کند.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;2. توضیحات سرویس&lt;/b&gt;&lt;br/&gt;
+    تالی‌باکس یک کیف پول رمزارزی نوآورانه است که برای تسهیل تراکنش‌های دیجیتال با سادگی و کارایی طراحی شده است. این سیستم بر پایهٔ پروتکل پیشرفتهٔ DAG (گراف جهت‌دار غیرمدور) کار می‌کند که هزینهٔ تراکنش‌ها را در کمترین کارمزد چندین بلاک‌چین کاهش می‌دهد.&lt;br/&gt;&lt;br/&gt;
+    تالی‌باکس از یک مدل دوگانهٔ توکن شامل پول فیات و توکن دیجیتال بهره می‌برد. این سیستم به‌صورت چرخهٔ بسته طراحی شده و قابلیت انجام تراکنش‌های میان‌چرخه‌ای را دارد، و بستری امن، آموزشی، مقرون‌به‌صرفه و جذاب برای مدیریت دارایی‌های دیجیتال فراهم می‌کند.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;3. توضیحات کوین‌های سیستم&lt;/b&gt;&lt;br/&gt;
+    توکن 2ZR (دوزاری دیجیتال): 2ZR یک میم‌کوین صفر-پایدار است که برای پشتیبانی از مرحلهٔ تحقیق و توسعه (R&amp;D) پروژهٔ تالی‌باکس استفاده می‌شود. استفاده از 2ZR برای تبادل در داخل یا خارج از اکوسیستم تالی‌باکس مجاز نیست.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;4. مسئولیت‌های کاربر&lt;/b&gt;&lt;br/&gt;
+    شما مسئول حفظ محرمانگی کلیدهای خصوصی، اطلاعات کیف پول و هرگونه توکن مرتبط هستید.&lt;br/&gt;&lt;br/&gt;
+    شما باید هنگام استفاده از تالی‌باکس، از تمامی قوانین، مقررات و این شرایط پیروی کنید.&lt;br/&gt;&lt;br/&gt;
+    شما موافقت می‌کنید که از تالی‌باکس برای هیچ فعالیت غیرقانونی یا غیرمجاز، از جمله پول‌شویی، تقلب یا نقض مقررات رمزارزی، استفاده نکنید.&lt;br/&gt;&lt;br/&gt;
+    توکن 2ZR به‌عنوان اوراق بهادار یا ابزار سرمایه‌گذاری در نظر گرفته نمی‌شود و استفاده از آن تنها در اکوسیستم تالی‌باکس مجاز است.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;5. کارمزدها و تراکنش‌ها&lt;/b&gt;&lt;br/&gt;
+    تالی‌باکس برای هر تراکنش یک کارمزد دریافت می‌کند که به‌صورت خودکار از طریق پروتکل DAG کسر می‌شود. ممکن است برای تراکنش‌های میان‌گراف یا سایر خدمات، کارمزدهای اضافی اعمال شود.&lt;br/&gt;&lt;br/&gt;
+    تمامی تراکنش‌ها پس از تأیید در شبکهٔ تالی‌باکس نهایی و غیرقابل بازگشت هستند.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;6. مالکیت معنوی&lt;/b&gt;&lt;br/&gt;
+    تالی‌باکس و نرم‌افزار، لوگوها و محتوای مرتبط با آن، متعلق به «آزمایشگاه کنجکاوی میکسافتیکس» است. شما مجاز به بازتولید، توزیع یا تغییر تالی‌باکس بدون کسب اجازهٔ صریح نیستید.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;7. محدودیت مسئولیت&lt;/b&gt;&lt;br/&gt;
+    در بیشترین حد مجاز قانونی، «آزمایشگاه کنجکاوی میکسافتیکس» مسئول هیچ‌گونه خسارت مستقیم، غیرمستقیم، اتفاقی، ویژه یا تبعی ناشی از استفادهٔ شما از تالی‌باکس نیست؛ از جمله، اما نه محدود به، از دست رفتن دارایی‌های دیجیتال، تأخیر در تراکنش‌ها یا اختلالات سیستمی. تالی‌باکس «به همان شکل موجود» ارائه می‌شود و هیچ تضمین یا تعهدی نسبت به عملکرد یا امنیت آن داده نمی‌شود.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;8. خاتمه&lt;/b&gt;&lt;br/&gt;
+    ما این حق را داریم که در صورت نقض شرایط یا انجام فعالیت‌هایی که به اکوسیستم تالی‌باکس آسیب می‌زند، دسترسی شما به تالی‌باکس را با یا بدون اطلاع قبلی تعلیق یا خاتمه دهیم.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;9. تغییرات شرایط&lt;/b&gt;&lt;br/&gt;
+    ممکن است این شرایط به‌صورت دوره‌ای به‌روزرسانی شود. ادامهٔ استفادهٔ شما از تالی‌باکس پس از اعمال تغییرات، به‌منزلهٔ پذیرش شرایط جدید است. لطفاً این شرایط را به‌طور منظم بررسی کنید.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;10. تماس با ما&lt;/b&gt;&lt;br/&gt;
+    برای پرسش‌ها یا نگرانی‌های مرتبط با این شرایط، با ما از طریق mixoftix@gmail.com در ارتباط باشید.&lt;br/&gt;
+    </string>
+
+    <string name="tallybox_disclaimer">
+    &lt;b&gt;سلب مسئولیت&lt;/b&gt;&lt;br/&gt;
+    تالی‌باکس یک کیف پول رمزارزی است و هیچ‌گونه مشاورهٔ مالی، حقوقی یا سرمایه‌گذاری ارائه نمی‌دهد. استفاده از 2ZR یا هر دارایی دیجیتال در تالی‌باکس دارای ریسک‌های ذاتی است؛ از جمله احتمال کاهش ارزش، نوسانات بازار و خطاهای فناوری.&lt;br/&gt;&lt;br/&gt;
+
+    «آزمایشگاه کنجکاوی میکسافتیکس» هیچ تضمینی دربارهٔ پایداری، امنیت یا ارزش دارایی‌های دیجیتال مدیریت‌شده در تالی‌باکس ارائه نمی‌دهد.&lt;br/&gt;&lt;br/&gt;
+
+    کاربران مسئول تصمیمات سرمایه‌گذاری خود و امنیت کلیدهای خصوصی و اطلاعات کیف پولشان هستند.&lt;br/&gt;&lt;br/&gt;
+
+    تالی‌باکس مطابق با مقررات مرتبط با رمزارز فعالیت می‌کند، اما کاربران باید آگاه باشند که این مقررات ممکن است تغییر کند و بر استفاده از دارایی‌های دیجیتال تأثیر بگذارد.&lt;br/&gt;&lt;br/&gt;
+
+    توکن 2ZR به‌عنوان اوراق بهادار یا ابزار سرمایه‌گذاری در نظر گرفته نمی‌شود و استفاده از آن تنها در اکوسیستم تالی‌باکس با اهداف آموزشی مجاز است.&lt;br/&gt;
+    </string>
+
+
+</resources>

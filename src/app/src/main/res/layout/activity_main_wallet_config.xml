@@ -54,8 +54,8 @@
                 android:padding="10dp"
                 android:hint="Password"
                 android:drawablePadding="2dp"
-                android:drawableRight="@drawable/baseline_key_24"
-                android:inputType="text" />
+                android:drawableEnd="@drawable/baseline_key_24"
+                android:inputType="textPassword" />
 
             <!-- Password2 EditText -->
             <EditText
@@ -65,7 +65,7 @@
                 android:padding="10dp"
                 android:hint="Password Re-enter"
                 android:drawablePadding="2dp"
-                android:drawableRight="@drawable/baseline_key_off_24"
+                android:drawableEnd="@drawable/baseline_key_off_24"
                 android:inputType="textPassword" />
 
         </LinearLayout>
@@ -121,7 +121,7 @@
             android:visibility="gone"
             android:hint="Private Key"
             android:drawablePadding="2dp"
-            android:drawableRight="@drawable/baseline_lock_24"
+            android:drawableEnd="@drawable/baseline_lock_24"
             android:inputType="text" />
 
         </LinearLayout>
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:drawablePadding="2dp"
-            android:drawableRight="@drawable/baseline_account_balance_wallet_24"
+            android:drawableEnd="@drawable/baseline_account_balance_wallet_24"
             android:text="Create Wallet">
         </Button>
 

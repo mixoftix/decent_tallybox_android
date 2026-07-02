@@ -21,7 +21,7 @@ import net.mixoftix.tallybox.databinding.ActivityMainSendScannerBinding;
 import java.util.List;
 import android.Manifest;
 
-public class MainActivity_Send_Scanner extends AppCompatActivity {
+public class MainActivity_Send_Scanner extends BaseActivity {
 
     private DecoratedBarcodeView barcodeView;
     private static ActivityMainSendScannerBinding binding;

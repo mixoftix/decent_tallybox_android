@@ -39,10 +39,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class MainActivity_Send extends AppCompatActivity {
+public class MainActivity_Send extends BaseActivity {
 
     //region variables
 
@@ -79,6 +81,7 @@ public class MainActivity_Send extends AppCompatActivity {
         //region activity_definition
 
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_send);
         setContentView(R.layout.activity_main_send);
 
         binding = ActivityMainSendBinding.inflate(getLayoutInflater());
@@ -238,8 +241,9 @@ public class MainActivity_Send extends AppCompatActivity {
 
                 String str_wallet_from = net.mixoftix.tallybox.MainActivity.wallet_address;
                 String str_wallet_to = editTextWalletTo.getText().toString();
-                String str_amount = editTextAmount.getText().toString();
-                String str_order_id = editTextOrder.getText().toString();
+                //String str_amount = editTextAmount.getText().toString();
+                String str_amount = StringHelper.normalizeDigits(editTextAmount.getText().toString());
+                String str_order_id = StringHelper.normalizeDigits(editTextOrder.getText().toString());
                 String str_order_utc_unix = String.valueOf(getUnixTimestampSeconds());
 
                 //int selectedId = RadioGroupCurrency.getCheckedRadioButtonId();
@@ -284,12 +288,24 @@ public class MainActivity_Send extends AppCompatActivity {
 
                 //region proceed_to_sign
 
+                // old single language
+                /*
                 DecimalFormat df = new DecimalFormat();
                 df.setMaximumFractionDigits(8);
                 df.setMinimumFractionDigits(8);
                 df.setGroupingUsed(false); // Disable grouping (commas)
                 double amount = Double.parseDouble(str_amount); // Parsing string to double
                 str_amount = df.format(amount); // Formatting the double and storing back as string
+                */
+
+                // new multi-language
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+                DecimalFormat df = new DecimalFormat("0.00000000", symbols);
+                df.setGroupingUsed(false);
+
+                double amount = Double.parseDouble(str_amount);
+                str_amount = df.format(amount);
+
 
                 //editTextGraphDomainTo.setText("");
                 int drawableResId = R.drawable.baseline_fingerprint_24;
@@ -620,6 +636,7 @@ public class MainActivity_Send extends AppCompatActivity {
         textview_broadcast_report.setVisibility(View.GONE);
         ImageView_offline_qr.setVisibility(View.GONE);
         textview_offline_Send.setVisibility(View.GONE);
+        textview_offline_url.setVisibility(View.GONE);
 
         if (tally_parcel.startsWith("box")) {
             editTextWalletTo.setText(tally_parcel);
@@ -776,7 +793,10 @@ public class MainActivity_Send extends AppCompatActivity {
 
     // Show Graph From + Zones
     private void updateGraphFromDisplay() {
+
+        String history_in_graph = getString(R.string.history_in_graph);
         int index = getGraphIndex(MainActivity.graph_domain_in);
+
         String zones = (index != -1) ? getZoneForGraph(index) : " [no zone]";
 
         String zonesText = (zones.length() > 0)
@@ -785,7 +805,7 @@ public class MainActivity_Send extends AppCompatActivity {
 
         //textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + zonesText + ")");
         textview_graph_in.setText(HtmlCompat.fromHtml(
-                "(in graph: <b>" + MainActivity.graph_domain_in + "</b>" +
+                "(" + history_in_graph + ": <b>" + MainActivity.graph_domain_in + "</b>" +
                         "<font color='cyan'>" + zonesText + "</font>)",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
     }

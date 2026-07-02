@@ -23,7 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 
-public class MainActivity_Setting extends AppCompatActivity {
+public class MainActivity_Setting extends BaseActivity {
 
     private static ActivityMainSettingBinding binding;
     private RadioButton radioConnection, radioPQC;
@@ -89,6 +89,12 @@ public class MainActivity_Setting extends AppCompatActivity {
             }
         });
 
+        String settings_serial = getString(R.string.settings_serial);
+        String settings_network = getString(R.string.settings_network);
+        String settings_uptodate = getString(R.string.settings_uptodate);
+        String settings_updated = getString(R.string.settings_updated);
+        String settings_checksum = getString(R.string.settings_checksum);
+
         // Dynamic TextViews:
         for (int i = 0; i < MainActivity.spinner_options.length; i++) {
 
@@ -118,12 +124,12 @@ public class MainActivity_Setting extends AppCompatActivity {
                                     String result = net.mixoftix.tallybox.MainActivity.browse_url(my_server_url + "dmz.asmx/app_pqc_pk?" + server_url_query);
                                     Access_log.log_it("i","shahin",MainActivity.server_url + " - result: " + result);
 
-                                    String network_msg = " / net: <font color=red>Er</font>";
+                                    String network_msg = " / " + settings_network + ": <font color=red>Er</font>";
 
                                     if (result.equals("Failed"))
                                     {
                                         // set the text
-                                        textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + pqcSerial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                        textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": " + pqcSerial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
                                     }
                                     else if (result.equals("no_record"))
                                     {
@@ -143,8 +149,8 @@ public class MainActivity_Setting extends AppCompatActivity {
                                         }
 
                                         // set the text
-                                        network_msg = " / net: <font color=cyan>OK</font>";
-                                        textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + result + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                        network_msg = " / " + settings_network + ": <font color=cyan>OK</font>";
+                                        textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": " + result + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
 
                                     }
                                     else
@@ -190,14 +196,14 @@ public class MainActivity_Setting extends AppCompatActivity {
                                             if (pqc_serial.equals(pqcSerial))
                                             {
                                                 // set the text
-                                                network_msg = " / <font color=green>up to date</font> / net: <font color=cyan>OK</font>";
-                                                textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                                network_msg = " / <font color=green>" + settings_uptodate + "</font> / " + settings_network + ": <font color=cyan>OK</font>";
+                                                textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
                                             }
                                             else
                                             {
                                                 // set the text
-                                                network_msg = " / <font color=cyan>updated..</font> / net: <font color=cyan>OK</font>";
-                                                textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                                network_msg = " / <font color=cyan>" + settings_updated + "</font> / " + settings_network + ": <font color=cyan>OK</font>";
+                                                textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
                                             }
                                         }
                                         else
@@ -218,8 +224,8 @@ public class MainActivity_Setting extends AppCompatActivity {
                                             }
 
                                             // set the text
-                                            network_msg = " / <font color=magenta>checksum failed!</font> / net: <font color=cyan>OK</font>";
-                                            textView.setText(HtmlCompat.fromHtml(graph + "<br>serial: -" +  network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                            network_msg = " / <font color=magenta>" + settings_checksum + "</font> / " + settings_network + ": <font color=cyan>OK</font>";
+                                            textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": -" +  network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
                                         }
                                     }
                                 }
@@ -270,7 +276,8 @@ public class MainActivity_Setting extends AppCompatActivity {
         params.bottomMargin = dpToPx(10);
         textView.setLayoutParams(params);
 
-        textView.setText(graph_name  + "\nserial: " +  pqc_serial);
+        String settings_serial = getString(R.string.settings_serial);
+        textView.setText(graph_name  + "\n" + settings_serial + ": " +  pqc_serial);
         textView.setTextSize(17);
         textView.setGravity(Gravity.CENTER_VERTICAL);
 

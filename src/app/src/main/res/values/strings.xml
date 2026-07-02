@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">TallyBox</string>
     <string name="btn_broadcast">Broadcast</string>
     <string name="tally_box">Tally Box!</string>
 
     <string name="target_id">To:</string>
     <string name="amount">Amount:</string>
-    <string name="empty"></string>
+    <string name="empty">empty</string>
     <string name="title_activity_main_qr">MainActivity_QR</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -13,43 +12,189 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
+    <string name="lorem_ipsum">Lorem ipsum.</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Manifest -->
+    <string name="app_name">TallyBox</string>
+    <string name="title_kyc">KYC</string>
+    <string name="title_settings">Setting</string>
+    <string name="title_terms">Terms</string>
+    <string name="title_about">About</string>
+    <string name="title_history">Transactions History</string>
+    <string name="title_history_detail">Transaction Detail</string>
+    <string name="title_wallet_config">Config Wallet</string>
+    <string name="title_private_key">Private Key</string>
+    <string name="title_send">Pay</string>
+    <string name="title_send_scanner">Pay by Scanner</string>
+    <string name="title_receive">Receive</string>
+    <string name="title_receive_qr">Receive by QR</string>
+
+    <!-- MainActivity -->
+    <string name="receive">Receive</string>
+    <string name="send">Pay</string>
+    <string name="app_is_up_to_date">Message: App is up-to-date...</string>
+    <string name="advertise_text">-</string>
+
+    <string name="last_update">Last update: <b>%1$s</b></string>
+    <string name="last_update_label">Last update: </string>
+    <string name="network_status_ok">Net: </string>
+    <string name="network_status_error">Net: </string>
+
+    <!-- MainActivity / Menu -->
+    <string name="select_language">Select Language</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_private_key">Private Key</string>
+    <string name="action_language">Language</string>
+    <string name="action_kyc">KYC</string>
+    <string name="action_setting">Setting</string>
+    <string name="action_terms">Terms</string>
+    <string name="action_about">About</string>
+
+    <!-- MainActivity / Receive-->
+    <string name="graph_info_placeholder">---</string>
+    <string name="my_wallet">My wallet:</string>
+    <string name="wallet_address_placeholder">---</string>
+    <string name="point_of_sale">Point of Sale</string>
+    <string name="token_label">Token:</string>
+    <string name="select_token">Select Token</string>
+    <string name="hint_amount">Amount</string>
+    <string name="hint_order_id_optional">Order ID (optional)</string>
+    <string name="generate_qr_code">Generate QR Code (Receive Order)</string>
+
+    <!-- MainActivity / Send-->
+    <string name="hint_to_wallet">To wallet</string>
+    <string name="at_label">To graph:</string>
+    <string name="extra_info">Extra Info</string>
+    <string name="offline_sign">Offline Sign</string>
+    <string name="sign">Sign</string>
+    <string name="broadcast">Broadcast</string>
+    <string name="broadcast_report_placeholder">---</string>
+    <string name="qr_code">QR Code</string>
+    <string name="offline_raw_transaction_placeholder">---</string>
+    <string name="offline_url_placeholder">---</string>
+
+    <!-- MainActivity / History Detail -->
+    <string name="history_network">Network: Connecting..</string>
+    <string name="history_wait">please wait</string>
+
+    <string name="history_in_graph">In Graph</string>
+    <string name="history_transaction">Transaction</string>
+    <string name="history_order_id">Order ID</string>
+    <string name="history_channel">Channel</string>
+    <string name="history_channel_concrete">Concrete</string>
+    <string name="history_channel_safe">Safe</string>
+    <string name="history_channel_caution">Caution</string>
+    <string name="history_channel_dangerous">Dangerous</string>
+    <string name="history_monitor">Monitor</string>
+
+    <string name="history_detail_fee">Fee</string>
+    <string name="history_detail_send">Sender</string>
+    <string name="history_detail_receive">Receiver</string>
+    <string name="history_detail_me">Me!</string>
+
+    <!-- MainActivity / Settings-->
+    <string name="settings_serial">serial</string>
+    <string name="settings_network">net</string>
+    <string name="settings_uptodate">up to date</string>
+    <string name="settings_updated">updated</string>
+    <string name="settings_checksum">checksum failed!</string>
+
+    <string name="network_protocol_label">Network Protocol:</string>
+    <string name="connection_http">http</string>
+    <string name="connection_https">https</string>
+    <string name="pqc_label">Safeguard by PQC:</string>
+    <string name="pqc_disable">disable</string>
+    <string name="pqc_enable">enable</string>
+    <string name="pqc_info_note">
+    *Note: TallyBox has integrated ML-KEM, a cutting-edge Post-Quantum Cryptography (PQC) algorithm, into this app to evaluate its effectiveness. This feature protects sensitive transaction data by preventing Man-in-the-Middle (MITM) attacks and receipt fraud.
+    </string>
+
+    <!-- MainActivity / Private Key-->
+    <string name="local_password_label">Local password:</string>
+    <string name="password_hint">Password</string>
+    <string name="button_expose_private_key">Expose Private Key</string>
+    <string name="qc_label">QC</string>
+    <string name="privatekey_info_label">My private key:</string>
+    <string name="privatekey_placeholder">---</string>
+    <string name="privatekey_access_label">Last access:</string>
+    <string name="privatekey_access_placeholder">---</string>
+
+    <!-- MainActivity / KYC-->
+    <string name="kyc_info_placeholder">---</string>
+    <string name="kyc_national_id_hint">National ID</string>
+    <string name="kyc_mobile_number_hint">Mobile Number</string>
+    <string name="kyc_request_button">Request KYC</string>
+    <string name="kyc_message_hint">KYC Message</string>
+    <string name="kyc_pin_hint">KYC PIN</string>
+    <string name="kyc_sign_button">Sign</string>
+    <string name="kyc_report_placeholder">---</string>
+
+    <!-- MainActivity / About-->
+    <string name="about_version">version</string>
+    <string name="about_version_new">new version</string>
+    <string name="about_update_check">check for update</string>
+    <string name="about_update_result">up to date!</string>
+
+    <string name="tallybox_about">
+    &lt;b&gt;Description of Service&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;
+    TallyBox is an innovative cryptocurrency wallet developed to redefine digital transactions with simplicity and efficiency.&lt;br/&gt;&lt;br/&gt;
+    Designed as a closed-loop system with potential for inter-loop transactions, TallyBox is poised to empower users in the evolving world of cryptocurrency, offering a secure, educational, cost-effective, and engaging platform for managing digital assets.&lt;br/&gt;&lt;br/&gt;
+    Developed with passion in our lab, featuring a unique dual-token model with both Fiat money and Digital Token, TallyBox draws inspiration from digital transformation adding a playful yet meaningful layer to the crypto experience.&lt;br/&gt;
+    </string>
+
+    <!-- MainActivity / Terms-->
+    <string name="tallybox_terms">
+    &lt;b&gt;1. Acceptance of Terms&lt;/b&gt;&lt;br/&gt;
+    By downloading, installing, or using the TallyBox application, you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree with these Terms, please do not use the TallyBox wallet. These Terms govern your access to and use of TallyBox, including any updates or modifications.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;2. Description of Service&lt;/b&gt;&lt;br/&gt;
+    TallyBox is an innovative cryptocurrency wallet developed to facilitate digital transactions with simplicity and efficiency. It operates on a cutting-edge Directed Acyclic Graph (DAG) protocol, reducing transaction costs on the lowest fees of several blockchains.&lt;br/&gt;&lt;br/&gt;
+    TallyBox features a unique dual-token model with Fiat money and Digital Token. It is designed as a closed-loop system with potential for inter-loop transactions, offering a secure, educational, cost-effective, and engaging platform for managing digital assets.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;3. Description of System Coins&lt;/b&gt;&lt;br/&gt;
+    Token 2ZR (Digital Do-Zari): 2ZR is a zero-stable meme coin used to support the research and development (R&amp;D) phase of the TallyBox project. 2ZR is NOT ALLOWED for exchange within or outside the TallyBox ecosystem.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;4. User Responsibilities&lt;/b&gt;&lt;br/&gt;
+    You are responsible for maintaining the confidentiality of your private keys, wallet credentials, and any associated tokens.&lt;br/&gt;&lt;br/&gt;
+    You must comply with all applicable laws, regulations, and these Terms while using TallyBox.&lt;br/&gt;&lt;br/&gt;
+    You agree not to use TallyBox for any illegal or unauthorized purpose, including but not limited to money laundering, fraud, or violation of cryptocurrency regulations.&lt;br/&gt;&lt;br/&gt;
+    Token 2ZR is not intended to be securities or investment vehicles and is restricted to use within the TallyBox ecosystem only.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;5. Fees and Transactions&lt;/b&gt;&lt;br/&gt;
+    TallyBox charges a transaction fee per transaction, deducted automatically via the DAG protocol. Additional fees may apply for inter-graph transactions or other services, as updated within the DAG structure.&lt;br/&gt;&lt;br/&gt;
+    All transactions are final and non-reversible once confirmed on the TallyBox network.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;6. Intellectual Property&lt;/b&gt;&lt;br/&gt;
+    TallyBox and its associated software, logos, and content are the intellectual property of "Mixoftix Curiosity Lab". You may not reproduce, distribute, or modify TallyBox without explicit permission.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;7. Limitation of Liability&lt;/b&gt;&lt;br/&gt;
+    To the fullest extent permitted by law, "Mixoftix Curiosity Lab" is not liable for any direct, indirect, incidental, special, or consequential damages arising from your use of TallyBox, including but not limited to loss of digital assets, transaction delays, or system outages. TallyBox is provided “as is,” and we make no warranties or guarantees regarding its performance or security.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;8. Termination&lt;/b&gt;&lt;br/&gt;
+    We reserve the right to suspend or terminate your access to TallyBox at our discretion, with or without notice, if you violate these Terms or engage in activities that harm the TallyBox ecosystem.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;9. Changes to Terms&lt;/b&gt;&lt;br/&gt;
+    We may update these Terms periodically. Continued use of TallyBox after such updates constitutes your acceptance of the revised Terms. Please review these Terms regularly for changes.&lt;br/&gt;&lt;br/&gt;
+
+    &lt;b&gt;10. Contact Us&lt;/b&gt;&lt;br/&gt;
+    For questions or concerns about these Terms, contact us at mixoftix@gmail.com.&lt;br/&gt;
+    </string>
+
+    <string name="tallybox_disclaimer">
+    &lt;b&gt;Disclaimer&lt;/b&gt;&lt;br/&gt;
+    TallyBox is a cryptocurrency wallet and does not constitute financial, legal, or investment advice. The use of 2ZR, or any digital assets within TallyBox carries inherent risks, including potential loss of value, market volatility, and technological failures.&lt;br/&gt;&lt;br/&gt;
+
+    "Mixoftix Curiosity Lab" does not guarantee the stability, security, or value of any digital assets managed through TallyBox.&lt;br/&gt;&lt;br/&gt;
+
+    Users are solely responsible for their investment decisions and the security of their private keys and wallet data.&lt;br/&gt;&lt;br/&gt;
+
+    TallyBox operates in compliance with applicable cryptocurrency regulations, but users should be aware that such regulations may change, impacting the use of digital assets.&lt;br/&gt;&lt;br/&gt;
+
+    Token 2ZR is not intended to be securities or investment vehicles and is restricted to use within the TallyBox ecosystem for educational purposes only.&lt;br/&gt;
+    </string>
+
 
 </resources>

@@ -31,7 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 
-public class MainActivity_History_Detail extends AppCompatActivity {
+public class MainActivity_History_Detail extends BaseActivity {
 
     private String detail_of_currency_name = "";
     private String tnx_tally_hash = "";
@@ -76,10 +76,13 @@ public class MainActivity_History_Detail extends AppCompatActivity {
         path_interactive_views = (LinearLayout) findViewById(R.id.interactive_views);
 
         // connection
+        String history_network = getString(R.string.history_network);
+        String history_wait = getString(R.string.history_wait);
+
         textview_network.setText(HtmlCompat.fromHtml(
-                "<font color='#FFD700'>Network: Connecting..</font>",
+                "<font color='#FFD700'>" + history_network + "</font>",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
-        textview_graph_in.setText("( please wait )");
+        textview_graph_in.setText("( " + history_wait + " )");
 
         // Trigger code after 1 second (1000 milliseconds)
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -408,15 +411,31 @@ public class MainActivity_History_Detail extends AppCompatActivity {
         String cmd_left_amount = "";
         String cmd_tally_hash = "";
 
-        textview_graph_in.setText("(in graph: " + split_output[0] + ")");
+
+        String history_in_graph = getString(R.string.history_in_graph);
+        String history_transaction = getString(R.string.history_transaction);
+        String history_order_id = getString(R.string.history_order_id);
+        String history_channel = getString(R.string.history_channel);
+        String history_channel_concrete = getString(R.string.history_channel_concrete);
+        String history_channel_safe = getString(R.string.history_channel_safe);
+        String history_channel_caution = getString(R.string.history_channel_caution);
+        String history_channel_dangerous = getString(R.string.history_channel_dangerous);
+        String history_monitor = getString(R.string.history_monitor);
+
+        String history_detail_fee = getString(R.string.history_detail_fee);
+        String history_detail_send = getString(R.string.history_detail_send);
+        String history_detail_receive = getString(R.string.history_detail_receive);
+        String history_detail_me = getString(R.string.history_detail_me);
+
+        textview_graph_in.setText("(" + history_in_graph + ": " + split_output[0] + ")");
         textview_history_hash_tnxid.setText(HtmlCompat.fromHtml(
-                "Transaction: " +
+                 history_transaction + ": " +
                         "<font color='#7851A9'>" +
                         tnx_id +
                         "</font>",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
         textview_history_hash_orderid.setText(HtmlCompat.fromHtml(
-                "Order ID: " +
+                history_order_id + ": " +
                         "<font color='#7851A9'>" +
                         order_id +
                         "</font>",
@@ -438,32 +457,32 @@ public class MainActivity_History_Detail extends AppCompatActivity {
         if (channel_protocol.equals("https") && channel_pqc.equals("enable"))
         {
             channel_color_code = concrete_color_code;
-            channel_info = channel_info + " + PQC" + " (Concrete)";
+            channel_info = channel_info + " + PQC" + " (" + history_channel_concrete + ")";
         }
         if (channel_protocol.equals("https") && channel_pqc.equals("disable"))
         {
             channel_color_code = safe_color_code;
-            channel_info = channel_info + " (Safe)";
+            channel_info = channel_info + " (" + history_channel_safe + ")";
         }
         if (channel_protocol.equals("http") && channel_pqc.equals("enable"))
         {
             channel_color_code = warning_color_code;
-            channel_info = channel_info + " + PQC" + " (Warning)";
+            channel_info = channel_info + " + PQC" + " (" + history_channel_caution + ")";
         }
         if (channel_protocol.equals("http") && channel_pqc.equals("disable"))
         {
             channel_color_code = danger_color_code;
-            channel_info = channel_info + " (Dangerous)";
+            channel_info = channel_info + " (" + history_channel_dangerous + ")";
         }
 
         textview_history_log_monitor.setText(HtmlCompat.fromHtml(
                 "<font color='" + channel_color_code + "'>" +
-                        "<i>Channel monitor:</i>" +
+                        history_monitor + ":" +
                         "</font>",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
 
         textview_history_hash_channel.setText(HtmlCompat.fromHtml(
-                "Channel: " +
+                history_channel + ": " +
                         "<font color='" + channel_color_code + "'>" +
                         channel_info +
                         "</font>",
@@ -500,7 +519,8 @@ public class MainActivity_History_Detail extends AppCompatActivity {
 
             String utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
             String cmd_tnx_id_moment = Access_time.back_from_utc(cmd_tnx_id_dag);
-            cmd_tnx_id_moment = Access_time.getTimeDifference(utc_unix_now,cmd_tnx_id_dag) + ",<br>" + cmd_tnx_id_moment;
+            String currentLang = LocaleHelper.getCurrentLanguage(this);
+            cmd_tnx_id_moment = Access_time.getTimeDifference(currentLang, utc_unix_now,cmd_tnx_id_dag) + ",<br>" + cmd_tnx_id_moment;
             Access_log.log_it("i","shahin",kk + "- cmd_tnx_id_moment:" + cmd_tnx_id_moment);
 
             // generate textviews
@@ -554,25 +574,26 @@ public class MainActivity_History_Detail extends AppCompatActivity {
                 the_color_code = receiver_color_code;
             }
 
+
             // config labels
             String cmd_tnx_type_label = "";
             if (cmd_tnx_type.equals("0"))
             {
-                cmd_tnx_type_label = "Fee";
+                cmd_tnx_type_label = history_detail_fee; //"Fee";
             }
             else if (cmd_tnx_type.equals("1"))
             {
-                cmd_tnx_type_label = "Sender";
+                cmd_tnx_type_label = history_detail_send; //"Sender";
             }
             else
             {
-                cmd_tnx_type_label = "Receiver";
+                cmd_tnx_type_label = history_detail_receive; // "Receiver";
             }
 
             String my_wallet_address = "";
             if (cmd_wallet_id.equals(MainActivity.wallet_address))
             {
-                my_wallet_address = " <i>--Me!</i>";
+                my_wallet_address = " <i>(" + history_detail_me + ")</i>";
             }
 
             if (cmd_tally_hash.equals(the_tnx_tally_hash))

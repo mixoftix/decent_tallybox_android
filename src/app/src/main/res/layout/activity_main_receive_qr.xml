@@ -45,7 +45,7 @@
             android:padding="10dp"
             android:text="---"
             android:drawablePadding="2dp"
-            android:drawableRight="@drawable/baseline_content_copy_24"
+            android:drawableEnd="@drawable/baseline_content_copy_24"
             android:textSize="17sp"
             android:background="@drawable/frame_white"
             />

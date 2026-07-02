@@ -35,9 +35,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:padding="10dp"
-            android:text="Network Protocol:"
-            android:textSize="17sp"
-            />
+            android:text="@string/network_protocol_label"
+            android:textSize="17sp" />
+
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -58,17 +58,17 @@
                 android:id="@+id/RadioGroupConnection">
 
                 <RadioButton
+                    android:id="@+id/connection_http"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/connection_http"
-                    android:text="http"/>
+                    android:text="@string/connection_http" />
 
                 <RadioButton
+                    android:id="@+id/connection_https"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:id="@+id/connection_https"
-                    android:text="https"/>
+                    android:text="@string/connection_https" />
 
             </RadioGroup>
 
@@ -81,9 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:padding="10dp"
-            android:text="Safeguard by PQC:"
-            android:textSize="17sp"
-            />
+            android:text="@string/pqc_label"
+            android:textSize="17sp" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -104,17 +103,17 @@
                 android:id="@+id/RadioGroupPQC">
 
                 <RadioButton
+                    android:id="@+id/pqc_disable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:id="@+id/pqc_disable"
-                    android:text="disable"/>
+                    android:text="@string/pqc_disable" />
 
                 <RadioButton
+                    android:id="@+id/pqc_enable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/pqc_enable"
-                    android:text="enable"/>
+                    android:text="@string/pqc_enable" />
 
             </RadioGroup>
 
@@ -124,10 +123,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="*Note: TallyBox has integrated ML-KEM, a cutting-edge Post-Quantum Cryptography (PQC) algorithm, into this app to evaluate its effectiveness. This feature protects sensitive transaction data by preventing Man-in-the-Middle (MITM) attacks and receipt fraud."
+                android:text="@string/pqc_info_note"
                 android:textStyle="italic"
-                android:textSize="13sp"
-                />
+                android:textSize="13sp" />
 
         </LinearLayout>
 

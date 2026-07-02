@@ -41,7 +41,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity_History extends AppCompatActivity {
+public class MainActivity_History extends BaseActivity {
 
     private String detail_of_currency_name = "";
     private ImageView image_view_coin;
@@ -88,11 +88,14 @@ public class MainActivity_History extends AppCompatActivity {
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
 
         // connection
+        String history_network = getString(R.string.history_network);
+        String history_wait = getString(R.string.history_wait);
+
         textview_history_balance.setText(HtmlCompat.fromHtml(
-                "<font color='#FFD700'>Network: Connecting..</font>",
+                "<font color='#FFD700'>" + history_network + "</font>",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
         textview_history_last_update.setText(HtmlCompat.fromHtml(
-                "( please wait )",
+                "( " + history_wait + " )",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
 
 
@@ -293,7 +296,8 @@ public class MainActivity_History extends AppCompatActivity {
 
             String utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
             String cmd_tnx_id_moment = Access_time.back_from_utc(cmd_tnx_id);
-            cmd_tnx_id_moment = Access_time.getTimeDifference(utc_unix_now,cmd_tnx_id) + ",<br>" + cmd_tnx_id_moment;
+            String currentLang = LocaleHelper.getCurrentLanguage(this);
+            cmd_tnx_id_moment = Access_time.getTimeDifference(currentLang, utc_unix_now,cmd_tnx_id) + ",<br>" + cmd_tnx_id_moment;
 
             Access_log.log_it("i","shahin",kk + "- cmd_tnx_id_moment:" + cmd_tnx_id_moment);
 
@@ -514,7 +518,8 @@ public class MainActivity_History extends AppCompatActivity {
 
             String utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
             String cmd_tnx_id_moment = Access_time.back_from_utc(cmd_tnx_id);
-            cmd_tnx_id_moment = "<i>" + Access_time.getTimeDifference(utc_unix_now,cmd_tnx_id) + ",<br>" + cmd_tnx_id_moment + " (" + (long)Double.parseDouble(cmd_tnx_id) + ")" + "</i>";
+            String currentLang = LocaleHelper.getCurrentLanguage(this);
+            cmd_tnx_id_moment = "<i>" + Access_time.getTimeDifference(currentLang, utc_unix_now,cmd_tnx_id) + ",<br>" + cmd_tnx_id_moment + " (" + (long)Double.parseDouble(cmd_tnx_id) + ")" + "</i>";
 
             Access_log.log_it("i","shahin",kk + "- cmd_tnx_id_moment:" + cmd_tnx_id_moment);
 
@@ -574,7 +579,10 @@ public class MainActivity_History extends AppCompatActivity {
 
     // Show Graph From + Zones
     private void updateGraphFromDisplay() {
+
+        String history_in_graph = getString(R.string.history_in_graph);
         int index = getGraphIndex(MainActivity.graph_domain_in);
+
         String zones = (index != -1) ? getZoneForGraph(index) : " [no zone]";
 
         String zonesText = (zones.length() > 0)
@@ -583,7 +591,7 @@ public class MainActivity_History extends AppCompatActivity {
 
         //textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + zonesText + ")");
         textview_graph_in.setText(HtmlCompat.fromHtml(
-                "(in graph: <b>" + MainActivity.graph_domain_in + "</b>" +
+                "(" + history_in_graph + ": <b>" + MainActivity.graph_domain_in + "</b>" +
                         "<font color='cyan'>" + zonesText + "</font>)",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
     }

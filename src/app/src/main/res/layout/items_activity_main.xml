@@ -18,8 +18,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="4"
-        android:gravity="end|right"
-        android:layout_marginRight="5dp"
+        android:gravity="end|end"
+        android:layout_marginEnd="5dp"
         android:textSize="16sp" />
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="start|left"
+        android:gravity="start|start"
         android:textStyle="bold"
         android:textSize="16sp" />
 

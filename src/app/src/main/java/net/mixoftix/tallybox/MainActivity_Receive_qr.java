@@ -21,7 +21,7 @@ import java.util.zip.Inflater;
 import net.mixoftix.tallybox.databinding.ActivityMainReceiveQrBinding;
 
 
-public class MainActivity_Receive_qr extends AppCompatActivity {
+public class MainActivity_Receive_qr extends BaseActivity {
 
     private static ImageView ImageView_wallet_qr;
     private TextView textview_result_receive;

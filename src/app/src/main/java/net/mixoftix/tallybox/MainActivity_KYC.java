@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,6 +43,8 @@ public class MainActivity_KYC extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home);
+        setSupportActionBar(toolbar);
         setTitle(R.string.title_kyc);
         setContentView(R.layout.activity_main_kyc);
 

@@ -16,6 +16,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import java.util.zip.Inflater;
 
 import net.mixoftix.tallybox.databinding.ActivityMainReceiveQrBinding;
@@ -31,6 +33,8 @@ public class MainActivity_Receive_qr extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_homeqr);
+        setSupportActionBar(toolbar);
         setTitle(R.string.title_receive_qr);
         setContentView(R.layout.activity_main_receive_qr);
 

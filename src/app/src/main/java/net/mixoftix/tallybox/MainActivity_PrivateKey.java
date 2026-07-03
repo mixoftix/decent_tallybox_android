@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import net.mixoftix.tallybox.databinding.ActivityMainPrivateKeyBinding;
 // import net.mixoftix.tallybox.databinding.ActivityMainReceiveBinding;
 
@@ -46,6 +48,8 @@ public class MainActivity_PrivateKey extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home);
+        setSupportActionBar(toolbar);
         setTitle(R.string.title_private_key);
 
         // BGN: to prevent screenshots from privatekey - available in version: 2.0

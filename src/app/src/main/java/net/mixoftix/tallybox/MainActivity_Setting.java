@@ -17,6 +17,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import net.mixoftix.tallybox.databinding.ActivityMainSettingBinding;
 
 import java.io.UnsupportedEncodingException;
@@ -32,6 +34,8 @@ public class MainActivity_Setting extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home);
+        setSupportActionBar(toolbar);
         setTitle(R.string.title_settings);
         setContentView(R.layout.activity_main_setting);
 

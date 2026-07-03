@@ -33,6 +33,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import net.mixoftix.tallybox.databinding.ActivityMainSendBinding;
 
 import java.io.UnsupportedEncodingException;
@@ -81,6 +83,8 @@ public class MainActivity_Send extends BaseActivity {
         //region activity_definition
 
         super.onCreate(savedInstanceState);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_homeqr);
+        setSupportActionBar(toolbar);
         setTitle(R.string.title_send);
         setContentView(R.layout.activity_main_send);
 

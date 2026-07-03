@@ -1,26 +1,29 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-    <!-- Base theme -->
     <style name="Base.Theme.TallyBox" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Disable system ActionBar -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <!-- App font -->
         <item name="android:fontFamily">@font/vazirmatn</item>
 
-        <!-- Title style (only works if ActionBar exists) -->
-        <item name="android:windowTitleStyle">@style/TallyBox.WindowTitleStyle</item>
-
-        <!-- System bar styling -->
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <!-- Apply custom Toolbar style -->
+        <item name="toolbarStyle">@style/TallyBox.ToolbarStyle</item>
     </style>
 
-    <!-- App theme -->
     <style name="Theme.TallyBox" parent="Base.Theme.TallyBox" />
 
+    <!-- Toolbar container style -->
+    <style name="TallyBox.ToolbarStyle" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/TallyBox.ToolbarTitleStyle</item>
+    </style>
+
     <!-- Bold title style -->
-    <style name="TallyBox.WindowTitleStyle" parent="@android:style/TextAppearance.WindowTitle">
+    <style name="TallyBox.ToolbarTitleStyle" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@font/vazirmatn</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>

@@ -94,7 +94,7 @@
     <!-- MainActivity / Settings-->
     <string name="settings_serial">سریال</string>
     <string name="settings_network">شبکه</string>
-    <string name="settings_uptodate">به روز است</string>
+    <string name="settings_uptodate">معتبر است</string>
     <string name="settings_updated">به روز شد</string>
     <string name="settings_checksum">بی اعتبار!</string>
 

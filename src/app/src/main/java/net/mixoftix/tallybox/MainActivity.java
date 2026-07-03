@@ -32,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
@@ -74,7 +76,7 @@ public class MainActivity extends BaseActivity {
 
     public static final boolean log_is_enable = false;
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.952";
+    public static final String app_version = "2.955";
     public static final String file_name_path = "net_mixoftix_tallybox";
     public static final String[] spinner_options = {
             "gpp_mars.mixoftix.net",
@@ -197,6 +199,8 @@ public class MainActivity extends BaseActivity {
         // Force light mode programmatically
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
         setContentView(R.layout.activity_main);
 

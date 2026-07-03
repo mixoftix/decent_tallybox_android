@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import net.mixoftix.tallybox.databinding.ActivityMainTermsBinding;
 
 public class MainActivity_Terms extends BaseActivity {
@@ -18,6 +20,8 @@ public class MainActivity_Terms extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home);
+        setSupportActionBar(toolbar);
         setTitle(R.string.title_terms);
         setContentView(R.layout.activity_main_terms);
 

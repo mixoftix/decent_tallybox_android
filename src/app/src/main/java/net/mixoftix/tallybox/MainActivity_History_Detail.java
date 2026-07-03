@@ -25,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import net.mixoftix.tallybox.databinding.ActivityMainHistoryDetailBinding;
 
 import java.io.UnsupportedEncodingException;
@@ -54,6 +56,8 @@ public class MainActivity_History_Detail extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home);
+        setSupportActionBar(toolbar);
         setTitle(R.string.title_history_detail);
         setContentView(R.layout.activity_main_history_detail);
 

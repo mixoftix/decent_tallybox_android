@@ -32,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import net.mixoftix.tallybox.databinding.ActivityMainHistoryBinding;
 
 import java.net.URLEncoder;
@@ -59,6 +61,8 @@ public class MainActivity_History extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home_refresh);
+        setSupportActionBar(toolbar);
         setTitle(R.string.title_history);
         setContentView(R.layout.activity_main_history);
 

@@ -400,8 +400,10 @@ public class MainActivity_Send extends BaseActivity {
                     ImageView_offline_qr.setImageBitmap(qrCodeBitmap);
                     textview_offline_Send.setText(result);
                     String the_offline_url = MainActivity.spinner_options_value[getGraphIndex(str_graph_domain_from)];
+
+                    String offline_url_guide = getString(R.string.offline_url_guide);
                     textview_offline_url.setText(HtmlCompat.fromHtml(
-                            "Manually submit in URL: <br>" +
+                            offline_url_guide + ": <br>" +
                                     "<a href='" +
                                     MainActivity.setting_network_protocol +
                                     "://" +

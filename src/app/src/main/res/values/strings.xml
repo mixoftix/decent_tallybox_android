@@ -75,6 +75,7 @@
     <string name="qr_code">QR Code</string>
     <string name="offline_raw_transaction_placeholder">---</string>
     <string name="offline_url_placeholder">---</string>
+    <string name="offline_url_guide">Manually submit transaction in URL</string>
 
     <!-- MainActivity / History Detail -->
     <string name="history_network">Network: Connecting..</string>
@@ -154,14 +155,14 @@
     TallyBox is an innovative cryptocurrency wallet developed to facilitate digital transactions with simplicity and efficiency. It operates on a cutting-edge Directed Acyclic Graph (DAG) protocol, reducing transaction costs on the lowest fees of several blockchains.&lt;br/&gt;&lt;br/&gt;
     TallyBox features a unique dual-token model with Fiat money and Digital Token. It is designed as a closed-loop system with potential for inter-loop transactions, offering a secure, educational, cost-effective, and engaging platform for managing digital assets.&lt;br/&gt;&lt;br/&gt;
 
-    &lt;b&gt;3. Description of System Coins&lt;/b&gt;&lt;br/&gt;
-    Token 2ZR (Digital Do-Zari): 2ZR is a zero-stable meme coin used to support the research and development (R&amp;D) phase of the TallyBox project. 2ZR is NOT ALLOWED for exchange within or outside the TallyBox ecosystem.&lt;br/&gt;&lt;br/&gt;
+    &lt;b&gt;3. Description of System Coin&lt;/b&gt;&lt;br/&gt;
+    Token 2ZR (Digital Do-Zari): 2ZR is a stable-zero meme coin used to support the research and development (R&amp;D) phase of the TallyBox project. 2ZR is NOT ALLOWED for commercial exchange within or outside the TallyBox ecosystem.&lt;br/&gt;&lt;br/&gt;
 
     &lt;b&gt;4. User Responsibilities&lt;/b&gt;&lt;br/&gt;
     You are responsible for maintaining the confidentiality of your private keys, wallet credentials, and any associated tokens.&lt;br/&gt;&lt;br/&gt;
     You must comply with all applicable laws, regulations, and these Terms while using TallyBox.&lt;br/&gt;&lt;br/&gt;
     You agree not to use TallyBox for any illegal or unauthorized purpose, including but not limited to money laundering, fraud, or violation of cryptocurrency regulations.&lt;br/&gt;&lt;br/&gt;
-    Token 2ZR is not intended to be securities or investment vehicles and is restricted to use within the TallyBox ecosystem only.&lt;br/&gt;&lt;br/&gt;
+    Token 2ZR is not intended to be securities or investment vehicles and is restricted to use within the TallyBox ecosystem for educational purposes only.&lt;br/&gt;&lt;br/&gt;
 
     &lt;b&gt;5. Fees and Transactions&lt;/b&gt;&lt;br/&gt;
     TallyBox charges a transaction fee per transaction, deducted automatically via the DAG protocol. Additional fees may apply for inter-graph transactions or other services, as updated within the DAG structure.&lt;br/&gt;&lt;br/&gt;

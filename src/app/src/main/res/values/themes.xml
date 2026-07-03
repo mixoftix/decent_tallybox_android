@@ -1,9 +1,26 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base theme -->
     <style name="Base.Theme.TallyBox" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:fontFamily">@font/vazirmatn</item>
+
+        <!-- Title style (only works if ActionBar exists) -->
+        <item name="android:windowTitleStyle">@style/TallyBox.WindowTitleStyle</item>
+
+        <!-- System bar styling -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
     </style>
 
+    <!-- App theme -->
     <style name="Theme.TallyBox" parent="Base.Theme.TallyBox" />
+
+    <!-- Bold title style -->
+    <style name="TallyBox.WindowTitleStyle" parent="@android:style/TextAppearance.WindowTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/vazirmatn</item>
+    </style>
+
 </resources>

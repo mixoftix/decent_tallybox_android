@@ -244,8 +244,16 @@ public class MainActivity_History extends BaseActivity {
                         server_url_query);
 
         // update datetime
+        String currentLang = LocaleHelper.getCurrentLanguage(this);
+        String utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
+        String cmd_tnx_id_moment = Access_time.back_from_utc(utc_unix_now);
+        if (currentLang.equals("fa"))
+        {
+            cmd_tnx_id_moment = Access_time.back_from_utc_persian(utc_unix_now);
+        }
+
         textview_history_last_update.setText(HtmlCompat.fromHtml(
-                "( " + getdatetime_now() + " )",
+                "( " + cmd_tnx_id_moment + " )",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
 
         // generate views of history
@@ -517,9 +525,13 @@ public class MainActivity_History extends BaseActivity {
 
             Access_log.log_it("i","shahin",log_str);
 
+            String currentLang = LocaleHelper.getCurrentLanguage(this);
             String utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
             String cmd_tnx_id_moment = Access_time.back_from_utc(cmd_tnx_id);
-            String currentLang = LocaleHelper.getCurrentLanguage(this);
+            if (currentLang.equals("fa"))
+            {
+                cmd_tnx_id_moment = Access_time.back_from_utc_persian(cmd_tnx_id);
+            }
             cmd_tnx_id_moment = "<i>" + Access_time.getTimeDifference(currentLang, utc_unix_now,cmd_tnx_id) + ",<br>" + cmd_tnx_id_moment + " (" + (long)Double.parseDouble(cmd_tnx_id) + ")" + "</i>";
 
             Access_log.log_it("i","shahin",kk + "- cmd_tnx_id_moment:" + cmd_tnx_id_moment);

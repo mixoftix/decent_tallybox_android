@@ -150,9 +150,11 @@
             android:id="@+id/buttonGenerateQR"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:padding="12dp"
             android:drawablePadding="8dp"
             android:drawableEnd="@drawable/baseline_qr_code_2_24"
+            android:textStyle="bold"
             android:text="@string/generate_qr_code" />
 
     </LinearLayout>

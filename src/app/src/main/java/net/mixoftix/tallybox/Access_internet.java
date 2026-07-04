@@ -38,8 +38,8 @@ public class Access_internet extends AsyncTask<String, Void, String> {
             url = new URL(urls[0]);
 //                this code could give us a error if he had a malformed url.
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setConnectTimeout(3000);
-            urlConnection.setReadTimeout(7000);
+            urlConnection.setConnectTimeout(10000);
+            urlConnection.setReadTimeout(15000);
 
             InputStream in = urlConnection.getInputStream();
             Access_log.log_it("i","shahin","connected");

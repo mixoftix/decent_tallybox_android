@@ -44,32 +44,6 @@
             android:drawableEnd="@drawable/baseline_account_balance_24"
             android:inputType="text" />
 
-        <!-- At Graph -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="6dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/at_label"
-                android:textSize="16sp"
-                android:paddingEnd="8dp" />
-
-            <Spinner
-                android:id="@+id/dropdownSpinner_GraphDomainTo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textDirection="locale"
-                android:layoutDirection="locale"
-                android:textSize="17sp"
-                android:background="@drawable/frame_white"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
-
         <!-- Token -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -146,6 +120,26 @@
             android:background="@drawable/frame_white"
             android:visibility="gone">
 
+            <!-- At Graph -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/at_label"
+                android:textSize="16sp"
+                android:gravity="start"
+                android:paddingEnd="8dp" />
+
+            <Spinner
+                android:id="@+id/dropdownSpinner_GraphDomainTo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:textSize="17sp"
+                android:background="@drawable/frame_white"
+                android:spinnerMode="dropdown" />
+
+            <!-- Order ID -->
             <EditText
                 android:id="@+id/editTextOrder"
                 android:layout_width="match_parent"
@@ -182,6 +176,7 @@
                 android:layout_marginEnd="6dp"
                 android:drawablePadding="8dp"
                 android:drawableEnd="@drawable/baseline_edit_note_24"
+                android:textStyle="bold"
                 android:text="@string/sign" />
 
             <Button
@@ -193,6 +188,7 @@
                 android:drawablePadding="8dp"
                 android:drawableEnd="@drawable/baseline_cloud_upload_24"
                 android:enabled="false"
+                android:textStyle="bold"
                 android:text="@string/broadcast" />
         </LinearLayout>
 

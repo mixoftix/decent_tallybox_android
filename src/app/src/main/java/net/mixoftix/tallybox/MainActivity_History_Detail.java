@@ -1,7 +1,6 @@
 package net.mixoftix.tallybox;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
@@ -289,14 +288,14 @@ public class MainActivity_History_Detail extends BaseActivity {
 
         the_log_str += "Request - Wallet: " + "\n" + MainActivity.wallet_address + "\n\n";
         the_log_str += "Request - TallyHash: " + "\n" + detail_of_tnx_tally_hash + "\n\n";
-        the_log_str += "Url: " + "\n" + MainActivity.server_url + "\n\n";
+        the_log_str += "Url: " + "\n" + MainActivity.server_url_dw + "\n\n";
 
         String result_history_by_tally_hash = MainActivity.browse_url(
-                MainActivity.server_url +
-                        "dmz.asmx/ledger_history_tally_hash" +
+                MainActivity.server_url_dw +
+                        "ledger_history_tally_hash" +
                         server_url_query);
 
-        Access_log.log_it("i","shahin","result_history_by_tally_hash: " + result_history_by_tally_hash);
+        Access_log.log_it("i","shahin","ledger_history_tally_hash: " + result_history_by_tally_hash);
 
         if (result_history_by_tally_hash.equals("Failed"))
         {

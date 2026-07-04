@@ -1,7 +1,6 @@
 package net.mixoftix.tallybox;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,16 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -27,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -188,46 +182,6 @@ public class MainActivity_History extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private String getdatetime_now()
-    {
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy MMM dd, HH:mm:ss");
-        //format.setTimeZone(TimeZone.getTimeZone("GMT"));
-        //Log.d("shahin", format.format(date));
-
-        return format.format(date).toString();
-    }
-    private String getTimeDifference(String str_epoch1, String str_epoch2) {
-        long epoch1 = (long)Double.parseDouble(str_epoch1) * 1000L;
-        long epoch2 = (long)Double.parseDouble(str_epoch2) * 1000L;
-        long diffInMillis = Math.abs(epoch1 - epoch2);
-
-        long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis);
-        long diffInHours = TimeUnit.MILLISECONDS.toHours(diffInMillis);
-        long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
-        long diffInWeeks = diffInDays / 7;
-        long diffInMonths = diffInDays / 30;
-
-        //Log.v("shahin", "epoch1: " + epoch1);
-        //Log.v("shahin", "epoch2: " + epoch2);
-        //Log.v("shahin", "diffInMillis: " + diffInMillis);
-        //Log.v("shahin", "diffInMinutes: " + diffInMinutes);
-
-        if (diffInMinutes < 1) {
-            return "now";
-        } else if (diffInMinutes < 60) {
-            return diffInMinutes + " minute(s) ago";
-        } else if (diffInHours < 24) {
-            return diffInHours + " hour(s) ago";
-        } else if (diffInDays < 7) {
-            return diffInDays + " day(s) ago";
-        } else if (diffInWeeks < 4) {
-            return diffInWeeks + " week(s) ago";
-        } else {
-            return diffInMonths + " month(s) ago";
-        }
-    }
     private void order_history_refresh(String detail_of_currency_name){
 
         // Now we call setRefreshing(true) to signal refresh has begun
@@ -243,8 +197,8 @@ public class MainActivity_History extends BaseActivity {
                         + "&currency_name=" + detail_of_currency_name;
 
         String result_history_wallet_currency = MainActivity.browse_url(
-                MainActivity.server_url +
-                        "dmz.asmx/ledger_history_detail" +
+                MainActivity.server_url_dw +
+                        "ledger_history_detail" +
                         server_url_query);
 
         // update datetime
@@ -406,12 +360,12 @@ public class MainActivity_History extends BaseActivity {
             final int id_msg2 = msg2.getId();
 
             msg2.setText(HtmlCompat.fromHtml(
-                    "<i>" +
+                    "" +
                     cmd_tnx_id_moment +
                             " (" +
                             (long)Double.parseDouble(cmd_tnx_id) +
                             ")" +
-                            "<i>"
+                            ""
                     , HtmlCompat.FROM_HTML_MODE_LEGACY));
             msg2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
             msg2.setTextSize(13);
@@ -536,7 +490,7 @@ public class MainActivity_History extends BaseActivity {
             {
                 cmd_tnx_id_moment = Access_time.back_from_utc_persian(cmd_tnx_id);
             }
-            cmd_tnx_id_moment = "<i>" + Access_time.getTimeDifference(currentLang, utc_unix_now,cmd_tnx_id) + ",<br>" + cmd_tnx_id_moment + " (" + (long)Double.parseDouble(cmd_tnx_id) + ")" + "</i>";
+            cmd_tnx_id_moment = Access_time.getTimeDifference(currentLang, utc_unix_now,cmd_tnx_id) + ",<br>" + cmd_tnx_id_moment; // + " (" + (long)Double.parseDouble(cmd_tnx_id) + ")" + "";
 
             Access_log.log_it("i","shahin",kk + "- cmd_tnx_id_moment:" + cmd_tnx_id_moment);
 

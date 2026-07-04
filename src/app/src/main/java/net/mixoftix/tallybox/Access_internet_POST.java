@@ -74,8 +74,8 @@ public class Access_internet_POST extends AsyncTask<String, Void, String> {
             urlConnection.setRequestProperty("Content-Length", Integer.toString(post_data_len));
             urlConnection.setUseCaches(false);
 
-            urlConnection.setConnectTimeout(3000);
-            urlConnection.setReadTimeout(7000);
+            urlConnection.setConnectTimeout(15000);
+            urlConnection.setReadTimeout(20000);
 
             try(DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream())) {
                 wr.write(post_data.getBytes());

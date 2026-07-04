@@ -1,19 +1,15 @@
 package net.mixoftix.tallybox;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 
 import android.view.LayoutInflater;
@@ -74,9 +70,9 @@ public class MainActivity extends BaseActivity {
 
     //region constants
 
-    public static final boolean log_is_enable = false;
+    public static final boolean log_is_enable = true;
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.955";
+    public static final String app_version = "2.957";
     public static final String file_name_path = "net_mixoftix_tallybox";
     public static final String[] spinner_options = {
             "gpp_mars.mixoftix.net",
@@ -84,7 +80,12 @@ public class MainActivity extends BaseActivity {
             "gpp_pluto.mixoftix.net"
     };
     // Decent GPP - Live Demo
-    public static final String[] spinner_options_value = {
+    public static final String[] spinner_options_address_dw = {
+            "gpp_mars.mixoftix.net",
+            "gpp_venus.mixoftix.net",
+            "gpp_pluto.mixoftix.net"
+    };
+    public static final String[] spinner_options_address_ods = {
             "gpp_mars_ws.mixoftix.net",
             "gpp_venus_ws.mixoftix.net",
             "gpp_pluto_ws.mixoftix.net"
@@ -139,10 +140,12 @@ public class MainActivity extends BaseActivity {
 
     // variables - graphs
     public static String graph_domain_in = ""; // ""gpp_mars.mixoftix.net";
-    public static String graph_address_in = ""; //  "192.168.88.111:701";
+    public static String graph_address_in_dw = ""; //  "192.168.88.111:701";
+    public static String graph_address_in_ods = ""; //  "192.168.88.111:701";
 
     // variables - connection
-    public static String server_url = "";
+    public static String server_url_dw = "";
+    public static String server_url_ods = "";
 
     //endregion
 
@@ -489,7 +492,8 @@ public class MainActivity extends BaseActivity {
                 else
                 {
                     graph_domain_in = "unknown!!";
-                    graph_address_in = "127.0.0.1";
+                    graph_address_in_dw = "127.0.0.1";
+                    graph_address_in_ods = "127.0.0.1";
                     Access_log.log_it("w","shahin","Fatal Error graph_in_address: " + graph_domain_in);
                 }
 
@@ -1110,16 +1114,19 @@ public class MainActivity extends BaseActivity {
     {
         app_pqc_serial = spinner_options_pqc_serial[the_matched_Index];
         app_pqc_pk = spinner_options_pqc_pk[the_matched_Index];
-        graph_address_in = spinner_options_value[the_matched_Index];
+        graph_address_in_dw = spinner_options_address_dw[the_matched_Index];
+        graph_address_in_ods = spinner_options_address_ods[the_matched_Index];
 
         Access_log.log_it("i","shahin","555 - app_pqc_serial: " + app_pqc_serial);
         Access_log.log_it("i","shahin","555 - app_pqc_pk: " + app_pqc_pk);
-        Access_log.log_it("i","shahin","555 - graph_address_in: " + graph_address_in);
+        Access_log.log_it("i","shahin","555 - graph_address_in_dw: " + graph_address_in_dw);
+        Access_log.log_it("i","shahin","555 - graph_address_in_ods: " + graph_address_in_ods);
     }
     public static void setting_connection(String my_protocol)
     {
         setting_network_protocol = my_protocol; // "https"; //  "http"; //
-        server_url = setting_network_protocol + "://" + graph_address_in + "/"; // "://192.168.88.111:701/";
+        server_url_dw = setting_network_protocol + "://" + graph_address_in_dw + "/dmz_dw.asmx/"; // "://192.168.88.111:701/";
+        server_url_ods = setting_network_protocol + "://" + graph_address_in_ods + "/dmz_ods.asmx/"; // "://192.168.88.111:701/";
     }
 
     //endregion
@@ -1136,9 +1143,9 @@ public class MainActivity extends BaseActivity {
                         + "&in_graph=" + URLEncoder.encode(graph_domain_in)
                         + "&wallet_address=" + URLEncoder.encode(wallet_address);
 
-        String result = browse_url(server_url + "dmz.asmx/ledger_history" + server_url_query);
+        String result = browse_url(server_url_dw + "ledger_history" + server_url_query);
         //String result = browse_url_POST(server_url_order_history + server_file_order_history, server_url_query);
-        Access_log.log_it("i","shahin","dmz.asmx/ledger_history" + " - result: " + result);
+        Access_log.log_it("i","shahin","ledger_history" + " - result: " + result);
 
         String network_msg = "Er";
 

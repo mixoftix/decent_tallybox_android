@@ -77,6 +77,7 @@ public class MainActivity_About extends BaseActivity {
         String tallybox_about = getString(R.string.tallybox_about);
         //textview_about.setText(Html.fromHtml(tallybox_about, Html.FROM_HTML_MODE_LEGACY));
         textview_about.setText(HtmlCompat.fromHtml(tallybox_about,HtmlCompat.FROM_HTML_MODE_LEGACY));
+        textview_about.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Set a click listener for textview_about_update
         textview_about_update.setOnClickListener(new View.OnClickListener(){

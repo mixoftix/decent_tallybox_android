@@ -1,8 +1,8 @@
 package net.mixoftix.tallybox;
 
+import static net.mixoftix.tallybox.MainActivity.graph_domain_in;
 import static net.mixoftix.tallybox.MainActivity.spinner_options;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ListPopupWindow;
 import androidx.core.text.HtmlCompat;
 
@@ -403,7 +403,7 @@ public class MainActivity_Send extends BaseActivity {
 
                     ImageView_offline_qr.setImageBitmap(qrCodeBitmap);
                     textview_offline_Send.setText(result);
-                    String the_offline_url = MainActivity.spinner_options_value[getGraphIndex(str_graph_domain_from)];
+                    String the_offline_url = MainActivity.spinner_options_address_ods[getGraphIndex(str_graph_domain_from)];
 
                     String offline_url_guide = getString(R.string.offline_url_guide);
                     textview_offline_url.setText(HtmlCompat.fromHtml(
@@ -456,10 +456,10 @@ public class MainActivity_Send extends BaseActivity {
                             ;
 
                     String result = MainActivity.browse_url_POST(
-                                                          MainActivity.server_url +
-                                                                 "dmz.asmx/order_accept", server_url_query);
+                                                          MainActivity.server_url_ods +
+                                                                 "order_accept", server_url_query);
 
-                    Access_log.log_it("i","shahin","dmz.asmx/order_accept" + " - result: " + result);
+                    Access_log.log_it("i","shahin","order_accept" + " - result: " + result);
 
                     textview_broadcast_report.setVisibility(View.VISIBLE);
 
@@ -701,6 +701,12 @@ public class MainActivity_Send extends BaseActivity {
             //editTextGraphDomainTo.setText(graph_domain_to);
             // Find the index of the target domain
 
+            if (!graph_to.equals(graph_domain_in) || !order_id.isEmpty())
+            {
+                layout_of_extra.setVisibility(View.VISIBLE);
+                checkbox_extra_info.setChecked(true);
+            }
+
             Access_log.log_it("i", "shahin", "is_parcel_processing(before): " + is_parcel_processing);
             int targetIndex = -1;
             for (int i = 0; i < spinner_options.length; i++) {
@@ -715,8 +721,8 @@ public class MainActivity_Send extends BaseActivity {
             }
             Access_log.log_it("i", "shahin", "is_parcel_processing(after): " + is_parcel_processing);
 
-            editTextWalletTo.setText(wallet_to);
             editTextOrder.setText(order_id);
+            editTextWalletTo.setText(wallet_to);
             editTextAmount.setText(order_amount);
 
             // get selected radio button from radioGroup

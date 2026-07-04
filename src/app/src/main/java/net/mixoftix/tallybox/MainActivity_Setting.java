@@ -1,13 +1,11 @@
 package net.mixoftix.tallybox;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -122,12 +120,12 @@ public class MainActivity_Setting extends BaseActivity {
                                     {
                                         if (MainActivity.spinner_options[j].equals(graph))
                                         {
-                                            my_server_url += MainActivity.spinner_options_value[j] + "/";
+                                            my_server_url += MainActivity.spinner_options_address_dw[j] + "/";
                                         }
                                     }
 
-                                    String result = net.mixoftix.tallybox.MainActivity.browse_url(my_server_url + "dmz.asmx/app_pqc_pk?" + server_url_query);
-                                    Access_log.log_it("i","shahin",MainActivity.server_url + " - result: " + result);
+                                    String result = net.mixoftix.tallybox.MainActivity.browse_url(my_server_url + "dmz_dw.asmx/app_pqc_pk?" + server_url_query);
+                                    Access_log.log_it("i","shahin",MainActivity.server_url_dw + " - result: " + result);
 
                                     String network_msg = " / " + settings_network + ": <font color=red>Er</font>";
 

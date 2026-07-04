@@ -117,7 +117,7 @@ public class Access_time {
 
         String jalaliDate = gregorianToJalali(gy, gm, gd);
 
-        String result = jalaliDate + ", " + hour + ":" + minute + ":" + second;
+        String result = jalaliDate + " ساعت: " + hour + ":" + minute + ":" + second;
 
         return StringHelper.normalizeDigits(result); // optional ASCII-only
     }

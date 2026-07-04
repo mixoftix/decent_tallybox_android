@@ -61,7 +61,7 @@
             android:text="---"
             android:textSize="17sp"
             android:background="@drawable/frame_white"
-            />
+            android:linksClickable="true" />
 
     </LinearLayout>
 

@@ -2,7 +2,6 @@ package net.mixoftix.tallybox;
 
 import static net.mixoftix.tallybox.MainActivity.wallet_address;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 
 import android.annotation.SuppressLint;
@@ -16,14 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import net.mixoftix.tallybox.databinding.ActivityMainKycBinding;
 
@@ -95,10 +90,10 @@ public class MainActivity_KYC extends BaseActivity {
                         ;
 
                 String result = MainActivity.browse_url_POST(
-                                                     MainActivity.server_url +
-                                                            "dmz.asmx/kyc_generate", server_url_query);
+                                                     MainActivity.server_url_ods +
+                                                            "kyc_generate", server_url_query);
 
-                Access_log.log_it("i","shahin","dmz.asmx/kyc_generate" + " - result: " + result);
+                Access_log.log_it("i","shahin","kyc_generate" + " - result: " + result);
 
                 if (result.startsWith("error~") || result.startsWith("info~"))
                 {
@@ -171,10 +166,10 @@ public class MainActivity_KYC extends BaseActivity {
                         ;
 
                 String result = MainActivity.browse_url_POST(
-                                                    MainActivity.server_url +
-                                                           "dmz.asmx/kyc_accept", server_url_query);
+                                                    MainActivity.server_url_ods +
+                                                           "kyc_accept", server_url_query);
 
-                Access_log.log_it("i","shahin","dmz.asmx/kyc_accept" + " - result: " + result);
+                Access_log.log_it("i","shahin","kyc_accept" + " - result: " + result);
 
                 if (result.startsWith("error~"))
                 {

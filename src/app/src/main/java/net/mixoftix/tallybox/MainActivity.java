@@ -1,6 +1,8 @@
 package net.mixoftix.tallybox;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,9 +11,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +34,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -70,9 +76,9 @@ public class MainActivity extends BaseActivity {
 
     //region constants
 
-    public static final boolean log_is_enable = true;
+    public static final boolean log_is_enable = false;
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.957";
+    public static final String app_version = "2.97";
     public static final String file_name_path = "net_mixoftix_tallybox";
     public static final String[] spinner_options = {
             "gpp_mars.mixoftix.net",
@@ -81,14 +87,14 @@ public class MainActivity extends BaseActivity {
     };
     // Decent GPP - Live Demo
     public static final String[] spinner_options_address_dw = {
-            "gpp_mars.mixoftix.net",
-            "gpp_venus.mixoftix.net",
-            "gpp_pluto.mixoftix.net"
+            "http://gpp_mars.mixoftix.net",
+            "http://gpp_venus.mixoftix.net",
+            "http://gpp_pluto.mixoftix.net"
     };
     public static final String[] spinner_options_address_ods = {
-            "gpp_mars_ws.mixoftix.net",
-            "gpp_venus_ws.mixoftix.net",
-            "gpp_pluto_ws.mixoftix.net"
+            "http://gpp_mars_ws.mixoftix.net",
+            "http://gpp_venus_ws.mixoftix.net",
+            "http://gpp_pluto_ws.mixoftix.net"
     };
     public static final String[] spinner_options_tokens = {
             "2ZR",
@@ -213,6 +219,7 @@ public class MainActivity extends BaseActivity {
 
         // Initialize UI elements
         layout_main_whatsup = findViewById(R.id.layout_main_whatsup);
+        LinearLayout layoutFollowup = findViewById(R.id.layout_followup);
         layout_main_advertise = findViewById(R.id.layout_main_advertise);
         //layout_main_test = findViewById(R.id.layout_main_test);
 
@@ -335,6 +342,37 @@ public class MainActivity extends BaseActivity {
         Access_log.log_it("w","shahin","aes_of_privateKey_d_b58 - retrieved: " + aes_of_privateKey_d_b58);
 
         //endregion
+
+        //region followup
+
+        String follow_up = getString(R.string.follow_up);
+        String follow_ignore = getString(R.string.follow_ignore);
+
+        for (int i = 0; i < MainActivity.spinner_options.length -2; i++) {
+
+            String payment_graphName = MainActivity.spinner_options[i];
+            String payment_moment = "";
+            String payment_currency = "";
+            String payment_amount = "";
+
+            addDynamicItemLayout(
+                    layoutFollowup,
+                    payment_graphName,
+                    payment_moment,
+                    payment_currency,
+                    payment_amount,
+                    follow_up,               // Button 1 text
+                    follow_ignore,           // Button 2 text
+                    v -> {
+                        // ← Button 1 Clicked (e.g. Check Network / PQC)
+                        //checkPqcStatus(graphName, serial);
+                    },
+                    v -> {
+                        // ← Button 2 Clicked (e.g. Another action)
+                        //doAnotherAction(graphName, serial);
+                    }
+            );
+        }
 
         //endregion
 
@@ -1125,8 +1163,23 @@ public class MainActivity extends BaseActivity {
     public static void setting_connection(String my_protocol)
     {
         setting_network_protocol = my_protocol; // "https"; //  "http"; //
-        server_url_dw = setting_network_protocol + "://" + graph_address_in_dw + "/dmz_dw.asmx/"; // "://192.168.88.111:701/";
-        server_url_ods = setting_network_protocol + "://" + graph_address_in_ods + "/dmz_ods.asmx/"; // "://192.168.88.111:701/";
+        if (graph_address_in_dw.startsWith("http"))
+        {
+            server_url_dw = graph_address_in_dw + "/dmz_dw.asmx/"; // "://192.168.88.111:701/";
+        }
+        else
+        {
+            server_url_dw = setting_network_protocol + "://" + graph_address_in_dw + "/dmz_dw.asmx/"; // "://192.168.88.111:701/";
+        }
+
+        if (graph_address_in_ods.startsWith("http"))
+        {
+            server_url_ods = graph_address_in_ods + "/dmz_ods.asmx/"; // "://192.168.88.111:701/";
+        }
+        else
+        {
+            server_url_ods = setting_network_protocol + "://" + graph_address_in_ods + "/dmz_ods.asmx/"; // "://192.168.88.111:701/";
+        }
     }
 
     //endregion
@@ -1490,6 +1543,109 @@ public class MainActivity extends BaseActivity {
                 return R.mipmap.coin_irr;
             default:
                 return R.drawable.baseline_fingerprint_24; // fallback
+        }
+    }
+
+    //endregion
+
+    //region functions_of_followup
+
+    private void addDynamicItemLayout(LinearLayout parent,
+                                      String graphName,
+                                      String payment_moment,
+                                      String payment_currency,
+                                      String payment_amount,
+                                      String button1Text,
+                                      String button2Text,
+                                      View.OnClickListener button1Listener,
+                                      View.OnClickListener button2Listener) {
+
+        // Main container
+        LinearLayout itemLayout = new LinearLayout(this);
+        itemLayout.setOrientation(LinearLayout.VERTICAL);
+        itemLayout.setBackgroundResource(R.drawable.frame_white);
+
+        int padding = dpToPx(12);
+        itemLayout.setPadding(padding, padding, padding, padding);
+
+        LinearLayout.LayoutParams containerParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        containerParams.bottomMargin = dpToPx(12);
+        itemLayout.setLayoutParams(containerParams);
+
+        // Non-clickable TextView
+        TextView textView = new TextView(this);
+        textView.setText(graphName + "\n" + getString(R.string.settings_serial) + ": " + payment_amount);
+        textView.setTextSize(17);
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+        textView.setPadding(0, 0, 0, dpToPx(12));
+        setVazirmatnFont(textView);
+
+        // Buttons container (Horizontal)
+        LinearLayout buttonsLayout = new LinearLayout(this);
+        buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
+        buttonsLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+        buttonsLayout.setWeightSum(2);
+
+        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        btnParams.leftMargin = dpToPx(4);
+        btnParams.rightMargin = dpToPx(4);
+
+        // === Button 1 ===
+        com.google.android.material.button.MaterialButton button1 =
+                new com.google.android.material.button.MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle);
+        button1.setText(button1Text);
+        button1.setAllCaps(false);
+        button1.setLayoutParams(btnParams);
+        button1.setTextSize(16);
+        setVazirmatnFont(button1);
+        button1.setIcon(ContextCompat.getDrawable(this, R.drawable.baseline_checklist_rtl_24));
+        button1.setIconGravity(MaterialButton.ICON_GRAVITY_END);
+        button1.setIconSize(dpToPx(24));
+        button1.setOnClickListener(button1Listener);
+
+        // === Button 2 ===
+        com.google.android.material.button.MaterialButton button2 =
+                new com.google.android.material.button.MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle);
+
+        button2.setText(button2Text);
+        button2.setAllCaps(false);
+        button2.setLayoutParams(btnParams);
+        button2.setTextSize(16);
+        setVazirmatnFont(button2);
+        button2.setIcon(ContextCompat.getDrawable(this, R.drawable.baseline_visibility_off_24));
+        button2.setIconGravity(MaterialButton.ICON_GRAVITY_END);
+        button2.setIconSize(dpToPx(24));
+        button2.setOnClickListener(button2Listener);
+
+        // Add views
+        itemLayout.addView(textView);
+        buttonsLayout.addView(button1);
+        buttonsLayout.addView(button2);
+        itemLayout.addView(buttonsLayout);
+
+        parent.addView(itemLayout);
+    }
+
+    private interface OnItemClickListener {
+        void onClick(TextView textView, String graphName, String pqcSerial);
+    }
+    private int dpToPx(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
+    }
+
+    private void setVazirmatnFont(TextView view) {
+        try {
+            Typeface vazirTypeface = ResourcesCompat.getFont(this, R.font.vazirmatn);
+            if (vazirTypeface != null) {
+                view.setTypeface(vazirTypeface);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Fallback to default font if loading fails
         }
     }
 

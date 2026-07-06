@@ -114,17 +114,27 @@ public class MainActivity_Setting extends BaseActivity {
                                             "app_name=" + URLEncoder.encode(MainActivity.app_name)
                                                     + "&app_version=" + URLEncoder.encode(MainActivity.app_version);
 
-                                    String my_server_url = MainActivity.setting_network_protocol + "://";
+                                    String my_server_url = "";
 
                                     for (int j = 0; j < MainActivity.spinner_options.length; j++)
                                     {
                                         if (MainActivity.spinner_options[j].equals(graph))
                                         {
-                                            my_server_url += MainActivity.spinner_options_address_dw[j] + "/";
+                                            if (MainActivity.spinner_options_address_dw[j].startsWith("http"))
+                                            {
+                                                my_server_url = MainActivity.spinner_options_address_dw[j] +
+                                                                "/dmz_dw.asmx/"; // "://192.168.88.111:701/";
+                                            }
+                                            else
+                                            {
+                                                my_server_url = MainActivity.setting_network_protocol + "://" +
+                                                                MainActivity.spinner_options_address_dw[j] +
+                                                                "/dmz_dw.asmx/"; // "://192.168.88.111:701/";
+                                            }
                                         }
                                     }
 
-                                    String result = net.mixoftix.tallybox.MainActivity.browse_url(my_server_url + "dmz_dw.asmx/app_pqc_pk?" + server_url_query);
+                                    String result = net.mixoftix.tallybox.MainActivity.browse_url(my_server_url + "app_pqc_pk?" + server_url_query);
                                     Access_log.log_it("i","shahin",MainActivity.server_url_dw + " - result: " + result);
 
                                     String network_msg = " / " + settings_network + ": <font color=red>Er</font>";

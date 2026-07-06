@@ -92,9 +92,7 @@ public class MainActivity_About extends BaseActivity {
                 doStartProgressBar2();
 
                 // config internet connection
-                String server_url_wallet =  MainActivity.setting_network_protocol +
-                                            "://wallet.mixoftix.net/" +
-                                            "VersionString.txt";
+                String server_url_wallet =  "https://wallet.mixoftix.net/VersionString.txt";
 
                 String result = MainActivity.browse_url(server_url_wallet);
                 Access_log.log_it("i","shahin",server_url_wallet + " - result: " + result);
@@ -105,12 +103,11 @@ public class MainActivity_About extends BaseActivity {
                 if (isNewerVersion(result, MainActivity.app_version)) {
                     // New version is available
                     result = result.replace (".","_");
-                    String server_url_wallet_dl =  MainActivity.setting_network_protocol +
-                                                "://wallet.mixoftix.net" +
-                                                "/dlx" +
-                                                "/android" +
-                                                "/" + MainActivity.app_name + "_" + result + ".apk"
-                                                ;
+                    String server_url_wallet_dl = "https://wallet.mixoftix.net" +
+                                                  "/dlx" +
+                                                  "/android" +
+                                                  "/" + MainActivity.app_name + "_" + result + ".apk"
+                                                  ;
 
                     textview_about_update.setText(HtmlCompat.fromHtml("<a href=" + server_url_wallet_dl + ">" + tallybox_about_version_new + ": " + result + "</a>",HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }

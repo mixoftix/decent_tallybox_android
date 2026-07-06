@@ -37,6 +37,8 @@
     <string name="send">Pay</string>
     <string name="app_is_up_to_date">Message: App is up-to-date...</string>
     <string name="advertise_text">-</string>
+    <string name="follow_up">Follow Up</string>
+    <string name="follow_ignore">Ignore</string>
 
     <string name="last_update">Last update: <b>%1$s</b></string>
     <string name="last_update_label">Last update: </string>
@@ -99,7 +101,7 @@
     <!-- MainActivity / Settings-->
     <string name="settings_serial">serial</string>
     <string name="settings_network">net</string>
-    <string name="settings_uptodate">up to date</string>
+    <string name="settings_uptodate">valid</string>
     <string name="settings_updated">updated</string>
     <string name="settings_checksum">checksum failed!</string>
 

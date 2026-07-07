@@ -15,6 +15,7 @@
 
     <!-- Manifest -->
     <string name="app_name">کیف پول تالی</string>
+    <string name="title_followup">پیگیری تراکنش</string>
     <string name="title_about">معرفی</string>
     <string name="title_history">سوابق تراکنشها</string>
     <string name="title_history_detail">ریز تراکنش</string>
@@ -28,18 +29,6 @@
     <string name="title_terms">مقررات</string>
     <string name="title_wallet_config">پیکربندی</string>
 
-    <!-- MainActivity -->
-    <string name="receive">دریافت</string>
-    <string name="send">پرداخت</string>
-    <string name="app_is_up_to_date">نرم افزار به روز است</string>
-    <string name="advertise_text">-</string>
-    <string name="last_update">آخرین بروزرسانی: <b>%1$s</b></string>
-    <string name="last_update_label">آخرین بروزرسانی: </string>
-    <string name="network_status_ok">شبکه: </string>
-    <string name="network_status_error">شبکه: </string>
-    <string name="follow_up">پیگیری</string>
-    <string name="follow_ignore">چشم پوشی</string>
-
     <!-- MainActivity / Menu -->
     <string name="select_language">انتخاب زبان</string>
     <string name="action_refresh">به روز رسانی</string>
@@ -49,6 +38,27 @@
     <string name="action_setting">تنظیمات</string>
     <string name="action_terms">مقررات</string>
     <string name="action_about">معرفی</string>
+
+    <!-- MainActivity -->
+    <string name="receive">دریافت</string>
+    <string name="send">پرداخت</string>
+    <string name="app_is_up_to_date">نرم افزار به روز است</string>
+    <string name="advertise_text">-</string>
+    <string name="last_update">آخرین بروزرسانی: <b>%1$s</b></string>
+    <string name="last_update_label">آخرین بروزرسانی: </string>
+    <string name="network_status_ok">شبکه: </string>
+    <string name="network_status_error">شبکه: </string>
+
+    <string name="follow_up">پیگیری</string>
+    <string name="follow_ignore">چشم پوشی</string>
+    <string name="follow_graph">گراف</string>
+    <string name="follow_moment">لحظه</string>
+    <string name="follow_currency">توکن</string>
+    <string name="follow_amount">مقدار</string>
+
+    <!-- MainActivity / Followup -->
+    <string name="follow_offline_sign">آفلاین</string>
+    <string name="follow_online_sign">آنلاین</string>
 
     <!-- MainActivity / Receive-->
     <string name="graph_info_placeholder">---</string>
@@ -67,6 +77,7 @@
     <string name="extra_info">اطلاعات بیشتر</string>
     <string name="offline_sign">امضای آفلاین</string>
     <string name="sign">امضا</string>
+    <string name="sign_new">امضای جدید</string>
     <string name="broadcast">انتشار</string>
     <string name="broadcast_report_placeholder">---</string>
     <string name="qr_code">بارکد</string>

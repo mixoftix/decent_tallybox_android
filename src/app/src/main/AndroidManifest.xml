@@ -22,80 +22,69 @@
         android:theme="@style/Theme.TallyBox"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
         <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Other Activities -->
+        </activity> <!-- Other Activities -->
+        <activity
+            android:name=".MainActivity_Followup"
+            android:exported="false"
+            android:label="@string/title_followup" />
         <activity
             android:name=".MainActivity_KYC"
             android:exported="false"
             android:label="@string/title_kyc" />
-
         <activity
             android:name=".MainActivity_Setting"
             android:exported="false"
             android:label="@string/title_settings" />
-
         <activity
             android:name=".MainActivity_Terms"
             android:exported="false"
             android:label="@string/title_terms" />
-
         <activity
             android:name=".MainActivity_About"
             android:exported="false"
             android:label="@string/title_about" />
-
         <activity
             android:name=".MainActivity_History"
             android:exported="false"
             android:label="@string/title_history" />
-
         <activity
             android:name=".MainActivity_History_Detail"
             android:exported="false"
             android:label="@string/title_history_detail" />
-
         <activity
             android:name=".MainActivity_Wallet_config"
             android:exported="false"
             android:label="@string/title_wallet_config" />
-
         <activity
             android:name=".MainActivity_PrivateKey"
             android:exported="false"
             android:label="@string/title_private_key" />
-
         <activity
             android:name=".MainActivity_Send"
             android:exported="false"
             android:label="@string/title_send" />
-
         <activity
             android:name=".MainActivity_Send_Scanner"
             android:exported="false"
             android:label="@string/title_send_scanner" />
-
         <activity
             android:name=".MainActivity_Receive"
             android:exported="false"
             android:label="@string/title_receive" />
-
         <activity
             android:name=".MainActivity_Receive_qr"
             android:exported="false"
             android:label="@string/title_receive_qr" />
-
     </application>
 
 </manifest>

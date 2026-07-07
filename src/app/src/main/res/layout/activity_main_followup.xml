@@ -18,7 +18,7 @@
             android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar_homeqr"
+                android:id="@+id/toolbar_home"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
         </com.google.android.material.appbar.AppBarLayout>
@@ -44,123 +44,6 @@
             android:drawableEnd="@drawable/baseline_account_balance_24"
             android:inputType="text" />
 
-        <!-- Token -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="6dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/token_label"
-                android:textSize="16sp"
-                android:paddingEnd="8dp" />
-
-            <LinearLayout
-                android:id="@+id/dropdown_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:background="@drawable/frame_white">
-
-                <ImageView
-                    android:id="@+id/dropdown_icon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/baseline_fingerprint_24" />
-
-                <TextView
-                    android:id="@+id/dropdown_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="@string/select_token"
-                    android:textSize="16sp"
-                    android:paddingStart="8dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Amount -->
-        <EditText
-            android:id="@+id/editTextAmount"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="@string/hint_amount"
-            android:drawablePadding="8dp"
-            android:drawableEnd="@drawable/baseline_dialpad_24"
-            android:inputType="numberDecimal" />
-
-        <!-- Extra Info Checkbox -->
-        <CheckBox
-            android:id="@+id/checkbox_extra_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:padding="10dp"
-            android:text="@string/extra_info"
-            android:textSize="17sp"
-            android:checked="false" />
-
-        <!-- Extra Info Layout -->
-        <LinearLayout
-            android:id="@+id/layout_of_extra"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center|top"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/frame_white"
-            android:visibility="gone">
-
-            <!-- At Graph -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="@string/at_label"
-                android:textSize="16sp"
-                android:gravity="start"
-                android:paddingEnd="8dp" />
-
-            <Spinner
-                android:id="@+id/dropdownSpinner_GraphDomainTo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textDirection="locale"
-                android:layoutDirection="locale"
-                android:textSize="17sp"
-                android:background="@drawable/frame_white"
-                android:spinnerMode="dropdown" />
-
-            <!-- Order ID -->
-            <EditText
-                android:id="@+id/editTextOrder"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:hint="@string/hint_order_id_optional"
-                android:drawablePadding="8dp"
-                android:drawableEnd="@drawable/baseline_shopping_cart_24"
-                android:inputType="text" />
-        </LinearLayout>
-
-        <!-- Offline Sign Checkbox -->
-        <CheckBox
-            android:id="@+id/checkbox_offline_sign"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:padding="10dp"
-            android:text="@string/offline_sign"
-            android:textSize="17sp"
-            android:checked="false" />
-
         <!-- Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -175,11 +58,10 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="6dp"
                 android:drawablePadding="8dp"
-                android:drawableEnd="@drawable/baseline_edit_note_24"
-                android:enabled="true"
-                android:textSize="17sp"
+                android:drawableEnd="@drawable/baseline_offline_share_24"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                android:text="@string/sign" />
+                android:text="@string/follow_offline_sign" />
 
             <Button
                 android:id="@+id/buttonBroadcast"
@@ -188,11 +70,11 @@
                 android:layout_weight="1"
                 android:layout_marginStart="6dp"
                 android:drawablePadding="8dp"
-                android:drawableEnd="@drawable/baseline_draw_24"
+                android:drawableEnd="@drawable/baseline_cloud_upload_24"
                 android:enabled="true"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                android:text="@string/sign_new" />
+                android:text="@string/follow_online_sign" />
         </LinearLayout>
 
         <!-- Broadcast Progress & Report -->

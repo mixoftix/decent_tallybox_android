@@ -1,5 +1,7 @@
 package net.mixoftix.tallybox;
 
+import static net.mixoftix.tallybox.Access_file.followup_keys_list;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -32,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -76,7 +79,7 @@ public class MainActivity extends BaseActivity {
 
     //region constants
 
-    public static final boolean log_is_enable = false;
+    public static final boolean log_is_enable = true;
     public static final String app_name = "tallybox";
     public static final String app_version = "2.97";
     public static final String file_name_path = "net_mixoftix_tallybox";
@@ -201,12 +204,8 @@ public class MainActivity extends BaseActivity {
         Log.i("shahin","message_sign_verify: " + message_sign_verify);
         */
 
-        //region activity_initialization
-
         //region define_views
 
-        // Force light mode programmatically
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -230,7 +229,6 @@ public class MainActivity extends BaseActivity {
         textview_main_advertise = findViewById(R.id.textview_main_advertise);
 
         textview_balance_wallet  = findViewById(R.id.textview_balance_wallet);
-        //textview_main_test  = findViewById(R.id.textview_main_test);
 
         // BGN: spinner of graph_in
 
@@ -348,12 +346,36 @@ public class MainActivity extends BaseActivity {
         String follow_up = getString(R.string.follow_up);
         String follow_ignore = getString(R.string.follow_ignore);
 
-        for (int i = 0; i < MainActivity.spinner_options.length -2; i++) {
+        String currentLang = LocaleHelper.getCurrentLanguage(this);
+        String refresh_utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
+        List<String> followup_keys_list = Access_file.followup_keys_list(getApplicationContext());
 
-            String payment_graphName = MainActivity.spinner_options[i];
-            String payment_moment = "";
-            String payment_currency = "";
-            String payment_amount = "";
+        for (String key : followup_keys_list) {
+            String followup_raw_tx = Access_file.followup_keys_read(getApplicationContext(), key);
+            Access_log.log_it("i","shahin","followup_raw_tx: " + followup_raw_tx);
+
+            /*
+            "tallybox~parcel_of_transaction~" +
+            "graph_from~gpp_mars.mixoftix.net~" +
+            "graph_to~gpp_mars.mixoftix.net~" +
+            "wallet_from~boxB3d60b7f32966MuJqnEpqFwKD5gk7CGbfuKG9q3t7GFxiBvXnmg3B9LH~" +
+            "wallet_to~boxB3d60b7f32966MuJqnEpqFwKD5gk7CGbfuKG9q3t7GFxiBvXnmg3B9LH~" +
+            "order_currency~2ZR~" +
+            "order_amount~450000.00000000~" +
+            "order_id~~" +
+            "order_utc_unix~1783410580~" +
+            "the_sign~MEUCIQCKaLnYLne423FkhiQs+iNEh/nZm8w4Fq96+03/auvEnAIgKgyD8PzbXi7zRzjrNp1acsdYthz4wlyLoFviRiSKHaM=~" +
+            "publicKey_xy_compressed~FGnWVEefuuB3iN4MBGgSWiAzCuCJMdAttp2qZcSqhaJQ*1"
+            */
+
+            String[] split_followup_tx;
+            split_followup_tx = followup_raw_tx.split("~");
+
+            String payment_graphName = split_followup_tx[3];
+            String payment_moment = key.replace("followup_","");
+            payment_moment = Access_time.getTimeDifference(currentLang,refresh_utc_unix_now,payment_moment);
+            String payment_currency = split_followup_tx[11];
+            String payment_amount = split_followup_tx[13];
 
             addDynamicItemLayout(
                     layoutFollowup,
@@ -366,12 +388,22 @@ public class MainActivity extends BaseActivity {
                     v -> {
                         // ← Button 1 Clicked (e.g. Check Network / PQC)
                         //checkPqcStatus(graphName, serial);
+                        Intent i = new Intent(getApplicationContext(),MainActivity_Followup.class);
+                        i.putExtra("followup_key", key);
+                        startActivity(i);
                     },
                     v -> {
                         // ← Button 2 Clicked (e.g. Another action)
                         //doAnotherAction(graphName, serial);
+                        String followup_ignore_result = Access_file.followup_keys_remove(getApplicationContext(), key);
+                        Toast.makeText(this, "Followup " + followup_ignore_result + "..", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
                     }
             );
+
         }
 
         //endregion
@@ -1577,7 +1609,11 @@ public class MainActivity extends BaseActivity {
 
         // Non-clickable TextView
         TextView textView = new TextView(this);
-        textView.setText(graphName + "\n" + getString(R.string.settings_serial) + ": " + payment_amount);
+        textView.setText(getString(R.string.follow_graph) + ": " + graphName + "\n" +
+                         getString(R.string.follow_moment) + ": " + payment_moment + "\n" +
+                         getString(R.string.follow_currency) + ": " + payment_currency + "\n" +
+                         getString(R.string.follow_amount) + ": " + payment_amount
+        );
         textView.setTextSize(17);
         textView.setGravity(Gravity.CENTER_VERTICAL);
         textView.setPadding(0, 0, 0, dpToPx(12));

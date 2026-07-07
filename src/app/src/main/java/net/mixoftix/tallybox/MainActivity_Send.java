@@ -392,6 +392,10 @@ public class MainActivity_Send extends BaseActivity {
 
                 Access_log.log_it("i","shahin","broadcast_result: " + result);
 
+                // BGN: write followup here
+                Access_file.followup_keys_write(getApplicationContext(), str_order_utc_unix, result);
+                // END: write followup here
+
                 //encodeToQrCode(wallet_address,300,300);
                 Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(result,512,512);
                 if (qrCodeBitmap != null) {
@@ -448,6 +452,11 @@ public class MainActivity_Send extends BaseActivity {
                     progressbar_stat = true;
                     doStartProgressBar2();
 
+                    textview_broadcast_report.setVisibility(View.VISIBLE);
+                    textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                            "<font color='cyan'>" + "broadcasting is in progress.." + "</font>"
+                            ,HtmlCompat.FROM_HTML_MODE_LEGACY));
+
                     // config internet connection
                     String server_url_query =
                             "app_name=" + URLEncoder.encode(MainActivity.app_name)
@@ -461,7 +470,6 @@ public class MainActivity_Send extends BaseActivity {
 
                     Access_log.log_it("i","shahin","order_accept" + " - result: " + result);
 
-                    textview_broadcast_report.setVisibility(View.VISIBLE);
 
                     if (result.startsWith("pending~200~"))
                     {

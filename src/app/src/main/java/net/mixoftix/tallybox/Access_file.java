@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class Access_file {
     // BGN: handling file for path saving in client side
     private static SharedPreferences sharedPreferences;
@@ -49,4 +53,57 @@ public class Access_file {
         editor.apply();
         // END: handling file for path saving in client side
     }
+
+    public static List<String> followup_keys_list(Context context)
+    {
+        // BGN: handling file for path saving in client side
+        SharedPreferences prefs = context.getSharedPreferences("followups", Context.MODE_PRIVATE);
+
+        Map<String, ?> all = prefs.getAll();
+        List<String> keys = new ArrayList<>();
+
+        for (String key : all.keySet())
+        {
+            if (key.startsWith("followup_"))
+            {
+                keys.add(key);
+            }
+        }
+
+        return keys;
+        // END: handling file for path saving in client side
+    }
+    public static String followup_keys_read(Context context, String followup_key)
+    {
+        // BGN: handling file for path saving in client side
+        SharedPreferences prefs = context.getSharedPreferences("followups", Context.MODE_PRIVATE);
+        return prefs.getString(followup_key, "");
+
+        // END: handling file for path saving in client side
+    }
+    public static String followup_keys_write(Context context, String followup_timestamp, String followup_text)
+    {
+        // BGN: handling file for path saving in client side
+        SharedPreferences prefs = context.getSharedPreferences("followups", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        String key = "followup_" + followup_timestamp;
+        editor.putString(key, followup_text);
+        editor.apply();
+
+        return key;
+        // END: handling file for path saving in client side
+    }
+    public static String followup_keys_remove(Context context, String followup_key)
+    {
+        SharedPreferences prefs = context.getSharedPreferences("followups", Context.MODE_PRIVATE);
+
+        if (prefs.contains(followup_key)) {
+            prefs.edit().remove(followup_key).apply();
+            return "ignored";
+        }
+
+        return "failed";
+    }
+
 }

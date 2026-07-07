@@ -19,6 +19,7 @@
 
     <!-- Manifest -->
     <string name="app_name">TallyBox</string>
+    <string name="title_followup">Followup Transaction</string>
     <string name="title_about">About</string>
     <string name="title_history">Transactions History</string>
     <string name="title_history_detail">Transaction Detail</string>
@@ -32,19 +33,6 @@
     <string name="title_terms">Terms</string>
     <string name="title_wallet_config">Config Wallet</string>
 
-    <!-- MainActivity -->
-    <string name="receive">Receive</string>
-    <string name="send">Pay</string>
-    <string name="app_is_up_to_date">Message: App is up-to-date...</string>
-    <string name="advertise_text">-</string>
-    <string name="follow_up">Follow Up</string>
-    <string name="follow_ignore">Ignore</string>
-
-    <string name="last_update">Last update: <b>%1$s</b></string>
-    <string name="last_update_label">Last update: </string>
-    <string name="network_status_ok">Net: </string>
-    <string name="network_status_error">Net: </string>
-
     <!-- MainActivity / Menu -->
     <string name="select_language">Select Language</string>
     <string name="action_refresh">Refresh</string>
@@ -55,7 +43,29 @@
     <string name="action_terms">Terms</string>
     <string name="action_about">About</string>
 
-    <!-- MainActivity / Receive-->
+    <!-- MainActivity -->
+    <string name="receive">Receive</string>
+    <string name="send">Pay</string>
+    <string name="app_is_up_to_date">Message: App is up-to-date...</string>
+    <string name="advertise_text">-</string>
+
+    <string name="follow_up">Follow Up</string>
+    <string name="follow_ignore">Ignore</string>
+    <string name="follow_graph">Graph</string>
+    <string name="follow_moment">Moment</string>
+    <string name="follow_currency">Token</string>
+    <string name="follow_amount">Amount</string>
+
+    <string name="last_update">Last update: <b>%1$s</b></string>
+    <string name="last_update_label">Last update: </string>
+    <string name="network_status_ok">Net: </string>
+    <string name="network_status_error">Net: </string>
+
+    <!-- MainActivity / Followup -->
+    <string name="follow_offline_sign">Offline</string>
+    <string name="follow_online_sign">Online</string>
+
+    <!-- MainActivity / Receive -->
     <string name="graph_info_placeholder">---</string>
     <string name="my_wallet">My wallet:</string>
     <string name="wallet_address_placeholder">---</string>
@@ -66,12 +76,13 @@
     <string name="hint_order_id_optional">Order ID (optional)</string>
     <string name="generate_qr_code">Generate QR Code (Receive Order)</string>
 
-    <!-- MainActivity / Send-->
+    <!-- MainActivity / Send -->
     <string name="hint_to_wallet">To wallet</string>
     <string name="at_label">To graph:</string>
     <string name="extra_info">Extra Info</string>
     <string name="offline_sign">Offline Sign</string>
     <string name="sign">Sign</string>
+    <string name="sign_new">New Sign</string>
     <string name="broadcast">Broadcast</string>
     <string name="broadcast_report_placeholder">---</string>
     <string name="qr_code">QR Code</string>

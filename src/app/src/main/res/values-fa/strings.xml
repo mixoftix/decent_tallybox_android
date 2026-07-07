@@ -51,14 +51,27 @@
 
     <string name="follow_up">پیگیری</string>
     <string name="follow_ignore">چشم پوشی</string>
-    <string name="follow_graph">گراف</string>
-    <string name="follow_moment">لحظه</string>
+    <string name="follow_graph">گراف امضا</string>
+    <string name="follow_moment">زمان امضا</string>
     <string name="follow_currency">توکن</string>
     <string name="follow_amount">مقدار</string>
 
     <!-- MainActivity / Followup -->
     <string name="follow_offline_sign">آفلاین</string>
     <string name="follow_online_sign">آنلاین</string>
+    <string name="follow_ledger_exists">این تراکنش در لجر موجود است</string>
+
+    <string name="parcel_graph_from">از گراف</string>
+    <string name="parcel_graph_to">به گراف</string>
+    <string name="parcel_wallet_from">از کیف پول</string>
+    <string name="parcel_wallet_to">به کیف پول</string>
+    <string name="parcel_currency">توکن</string>
+    <string name="parcel_amount">مقدار</string>
+    <string name="parcel_order_id">فاکتور</string>
+    <string name="parcel_order_utc">زمان</string>
+    <string name="parcel_order_sign">امضا</string>
+    <string name="parcel_order_pubkey">کلید عمومی</string>
+
 
     <!-- MainActivity / Receive-->
     <string name="graph_info_placeholder">---</string>

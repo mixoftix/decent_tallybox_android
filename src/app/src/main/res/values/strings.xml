@@ -51,8 +51,8 @@
 
     <string name="follow_up">Follow Up</string>
     <string name="follow_ignore">Ignore</string>
-    <string name="follow_graph">Graph</string>
-    <string name="follow_moment">Moment</string>
+    <string name="follow_graph">Graph of Sign</string>
+    <string name="follow_moment">Time of Sign</string>
     <string name="follow_currency">Token</string>
     <string name="follow_amount">Amount</string>
 
@@ -64,6 +64,18 @@
     <!-- MainActivity / Followup -->
     <string name="follow_offline_sign">Offline</string>
     <string name="follow_online_sign">Online</string>
+    <string name="follow_ledger_exists">This transaction exists in ledger</string>
+
+    <string name="parcel_graph_from">Graph from</string>
+    <string name="parcel_graph_to">Graph to</string>
+    <string name="parcel_wallet_from">Wallet from</string>
+    <string name="parcel_wallet_to">Wallet to</string>
+    <string name="parcel_currency">Token</string>
+    <string name="parcel_amount">Amount</string>
+    <string name="parcel_order_id">Invoice</string>
+    <string name="parcel_order_utc">Time stamp</string>
+    <string name="parcel_order_sign">Sign</string>
+    <string name="parcel_order_pubkey">Public Key</string>
 
     <!-- MainActivity / Receive -->
     <string name="graph_info_placeholder">---</string>

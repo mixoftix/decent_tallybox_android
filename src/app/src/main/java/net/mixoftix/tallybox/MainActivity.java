@@ -1609,10 +1609,8 @@ public class MainActivity extends BaseActivity {
 
         // Non-clickable TextView
         TextView textView = new TextView(this);
-        textView.setText(getString(R.string.follow_graph) + ": " + graphName + "\n" +
-                         getString(R.string.follow_moment) + ": " + payment_moment + "\n" +
-                         getString(R.string.follow_currency) + ": " + payment_currency + "\n" +
-                         getString(R.string.follow_amount) + ": " + payment_amount
+        textView.setText(getString(R.string.follow_moment) + ": " + payment_moment + "\n" +
+                         getString(R.string.follow_amount) + ": " + payment_amount + " (" + payment_currency + ")"
         );
         textView.setTextSize(17);
         textView.setGravity(Gravity.CENTER_VERTICAL);

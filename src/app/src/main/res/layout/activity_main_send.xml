@@ -150,17 +150,6 @@
                 android:inputType="text" />
         </LinearLayout>
 
-        <!-- Offline Sign Checkbox -->
-        <CheckBox
-            android:id="@+id/checkbox_offline_sign"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:padding="10dp"
-            android:text="@string/offline_sign"
-            android:textSize="17sp"
-            android:checked="false" />
-
         <!-- Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -182,7 +171,7 @@
                 android:text="@string/sign" />
 
             <Button
-                android:id="@+id/buttonBroadcast"
+                android:id="@+id/buttonSignNew"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -193,74 +182,6 @@
                 android:textSize="17sp"
                 android:textStyle="bold"
                 android:text="@string/sign_new" />
-        </LinearLayout>
-
-        <!-- Broadcast Progress & Report -->
-        <ProgressBar
-            android:id="@+id/progressBar2"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:indeterminate="false"
-            android:progress="0"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textview_broadcast_report"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="@string/broadcast_report_placeholder"
-            android:textSize="17sp"
-            android:background="@drawable/frame_white"
-            android:visibility="gone" />
-
-        <!-- Offline Send Layout -->
-        <LinearLayout
-            android:id="@+id/layout_send_offline"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="top|center"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/ImageView_offline_SendQR"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:layout_marginTop="12dp"
-                android:contentDescription="@string/qr_code"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/textview_offline_send"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:padding="12dp"
-                android:text="@string/offline_raw_transaction_placeholder"
-                android:drawablePadding="8dp"
-                android:drawableEnd="@drawable/baseline_content_copy_24"
-                android:textSize="17sp"
-                android:background="@drawable/frame_white"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/textview_offline_url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:padding="12dp"
-                android:text="@string/offline_url_placeholder"
-                android:drawablePadding="8dp"
-                android:drawableEnd="@drawable/baseline_upload_24"
-                android:textSize="17sp"
-                android:background="@drawable/frame_white"
-                android:visibility="gone"
-                android:linksClickable="true" />
         </LinearLayout>
 
     </LinearLayout>

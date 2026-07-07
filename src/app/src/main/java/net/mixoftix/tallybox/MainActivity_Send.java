@@ -50,13 +50,12 @@ public class MainActivity_Send extends BaseActivity {
 
     //region variables
 
-    private boolean is_sign_broadcatable, is_parcel_processing;
+    private boolean is_parcel_processing;
     private static ActivityMainSendBinding binding;
-    private static ImageView ImageView_offline_qr;
-    private TextView textview_graph_in, textview_offline_Send, textview_offline_url, textview_broadcast_report;
-    private EditText editTextGraphDomainTo, editTextWalletTo, editTextAmount, editTextOrder;
-    private CheckBox checkbox_extra_info,checkbox_offline_sign;
-    private Button buttonSign, buttonBroadcast;
+    private TextView textview_graph_in;
+    private EditText editTextWalletTo, editTextAmount, editTextOrder;
+    private CheckBox checkbox_extra_info;
+    private Button buttonSign,buttonSignNew;
 
     //private RadioButton radioCurrency;
     //private RadioGroup RadioGroupCurrency;
@@ -66,14 +65,7 @@ public class MainActivity_Send extends BaseActivity {
     private TextView dropdownText;
     private ListPopupWindow popupWindow;
     private List<DropdownItem> currentDropdownItems = new ArrayList<>();
-
-    private LinearLayout layout_of_extra,layout_send_offline;
-
-    // BGN: browse http
-    private static Handler handler = new Handler();
-    private static boolean progressbar_stat = false;
-    private String submit_txt = "";
-    // END: browse http
+    private LinearLayout layout_of_extra;
 
     //endregion
 
@@ -112,17 +104,10 @@ public class MainActivity_Send extends BaseActivity {
         editTextAmount = findViewById(R.id.editTextAmount);
 
         checkbox_extra_info = findViewById(R.id.checkbox_extra_info);
-        checkbox_offline_sign = findViewById(R.id.checkbox_offline_sign);
         buttonSign = findViewById(R.id.buttonSign);
-        buttonBroadcast = findViewById(R.id.buttonBroadcast);
-
-        textview_broadcast_report = findViewById(R.id.textview_broadcast_report);
-        ImageView_offline_qr = findViewById(R.id.ImageView_offline_SendQR);
-        textview_offline_Send = findViewById(R.id.textview_offline_send);
-        textview_offline_url = findViewById(R.id.textview_offline_url);
+        buttonSignNew = findViewById(R.id.buttonSignNew);
 
         layout_of_extra = findViewById(R.id.layout_of_extra);
-        layout_send_offline = findViewById(R.id.layout_send_offline);
 
         //endregion
 
@@ -181,47 +166,6 @@ public class MainActivity_Send extends BaseActivity {
             }
         });
 
-        // set offline sign in the first run
-        String str_is_offline_sign = Access_file.access_file_func_read(getApplicationContext(), "setting_is_offline_sign");
-        Access_log.log_it("i","shahin","str_is_offline_sign: " + str_is_offline_sign);
-
-        if (str_is_offline_sign.toLowerCase().equals("true"))
-        {
-            checkbox_offline_sign.setChecked(true);
-            layout_send_offline.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            checkbox_offline_sign.setChecked(false);
-            layout_send_offline.setVisibility(View.GONE);
-        }
-
-        // Set a click listener for the extra info
-        checkbox_offline_sign.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-
-                String str_is_offline_sign = String.valueOf(checkbox_offline_sign.isChecked());
-                Access_log.log_it("i","shahin","setting str_is_offline_sign: " + str_is_offline_sign);
-                Access_file.access_file_func_write(getApplicationContext(), "setting_is_offline_sign", str_is_offline_sign, "write");
-
-                if (str_is_offline_sign.toLowerCase().equals("true"))
-                {
-                    layout_send_offline.setVisibility(View.VISIBLE);
-                    buttonBroadcast.setEnabled(false);
-                }
-                else
-                {
-                    layout_send_offline.setVisibility(View.GONE);
-                    if (is_sign_broadcatable)
-                    {
-                        buttonBroadcast.setEnabled(true);
-                    }
-                }
-
-            }
-        });
-
         //endregion
 
         //region view_listeners
@@ -261,9 +205,9 @@ public class MainActivity_Send extends BaseActivity {
                 //ImageView_wallet_qr.setVisibility(View.GONE);
                 //textviewSend.setVisibility(View.GONE);
 
-                textview_broadcast_report.setVisibility(View.GONE);
-                buttonBroadcast.setEnabled(false);
-                is_sign_broadcatable = false;
+                //textview_broadcast_report.setVisibility(View.GONE);
+                //buttonBroadcast.setEnabled(false);
+                //is_sign_broadcatable = false;
 
                 if (str_graph_domain_to == null || str_graph_domain_to.isEmpty())
                 {
@@ -324,10 +268,6 @@ public class MainActivity_Send extends BaseActivity {
                 //ImageView_wallet_qr.setVisibility(View.VISIBLE);
                 //textviewSend.setVisibility(View.VISIBLE);
 
-                if (!checkbox_offline_sign.isChecked())
-                {
-                    buttonBroadcast.setEnabled(true);
-                }
 
                 // "I said a penny for your thoughts, but I got two pennies' worth"
                 // get selected radio button from radioGroup
@@ -393,117 +333,35 @@ public class MainActivity_Send extends BaseActivity {
                 Access_log.log_it("i","shahin","broadcast_result: " + result);
 
                 // BGN: write followup here
-                Access_file.followup_keys_write(getApplicationContext(), str_order_utc_unix, result);
+                String the_key = Access_file.followup_keys_write(getApplicationContext(), str_order_utc_unix, result);
                 // END: write followup here
 
-                //encodeToQrCode(wallet_address,300,300);
-                Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(result,512,512);
-                if (qrCodeBitmap != null) {
-                    is_sign_broadcatable = true;
-
-                    ImageView_offline_qr.setVisibility(View.VISIBLE);
-                    textview_offline_Send.setVisibility(View.VISIBLE);
-                    textview_offline_url.setVisibility(View.VISIBLE);
-
-                    ImageView_offline_qr.setImageBitmap(qrCodeBitmap);
-                    textview_offline_Send.setText(result);
-                    String the_offline_url = MainActivity.spinner_options_address_ods[getGraphIndex(str_graph_domain_from)];
-
-                    String offline_url_guide = getString(R.string.offline_url_guide);
-                    textview_offline_url.setText(HtmlCompat.fromHtml(
-                            offline_url_guide + ": <br>" +
-                                    "<a href='" +
-                                    MainActivity.setting_network_protocol +
-                                    "://" +
-                                    the_offline_url + "' target=_blank>" +
-                                    the_offline_url +
-                                    "</a>",
-                                    HtmlCompat.FROM_HTML_MODE_LEGACY));
-                    textview_offline_url.setMovementMethod(LinkMovementMethod.getInstance());
-
-                }
+                Intent i = new Intent(getApplicationContext(),MainActivity_Followup.class);
+                i.putExtra("followup_key", the_key);
+                startActivity(i);
 
                 //endregion
 
             }
         });
-        // Set a click listener for the broadcast button
-        buttonBroadcast.setOnClickListener(new View.OnClickListener() {
+        // Set a click listener for the sign button
+        buttonSignNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                // tallybox~
-                // graph_from~tallybox.mixoftix.net~
-                // graph_to~tallybox.mixoftix.net~
-                // wallet_from~boxB2bbc15c8c135W8PzPEZf98cEu2h2muhkeJQS3MwTYUaTHVkFTgihcS7~
-                // wallet_to~boxB2bbc15c8c135W8PzPEZf98cEu2h2muhkeJQS3MwTYUaTHVkFTgihcS7~
-                // order_currency~2ZR~
-                // order_amount~3500.00000000~
-                // order_id~778844~
-                // order_utc_unix~1741675583~
-                // the_sign~MEYCIQCxzNKhOUXijLr+z2mI9npu/+KZijiEv3//W7Ya3VpvzgIhAI1m7wJLJ9ldP2m5jmYfUreuvoKTjoZmFQmt5e6foakp~
-                // publicKey_xy_compressed~2C7SVvEj45VMWwbd8UQNoYYWMeCMeyKm6qfDNQXhHkKK*1
+                //editTextGraphDomainTo.setText("");
+                int drawableResId = R.drawable.baseline_fingerprint_24;
+                dropdownText.setText("null");
+                dropdownIcon.setImageResource(drawableResId);
 
-                if (buttonBroadcast.isEnabled())
-                {
-                    buttonBroadcast.setEnabled(false);
+                editTextWalletTo.setText("");
+                editTextAmount.setText("");
+                editTextOrder.setText("");
 
-                    // set progressbar
-                    progressbar_stat = true;
-                    doStartProgressBar2();
-
-                    textview_broadcast_report.setVisibility(View.VISIBLE);
-                    textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                            "<font color='cyan'>" + "broadcasting is in progress.." + "</font>"
-                            ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-
-                    // config internet connection
-                    String server_url_query =
-                            "app_name=" + URLEncoder.encode(MainActivity.app_name)
-                                    + "&app_version=" + URLEncoder.encode(MainActivity.app_version)
-                                    + "&order_csv=" + URLEncoder.encode(textview_offline_Send.getText().toString().replace("\n","").replace("\r",""))
-                            ;
-
-                    String result = MainActivity.browse_url_POST(
-                                                          MainActivity.server_url_ods +
-                                                                 "order_accept", server_url_query);
-
-                    Access_log.log_it("i","shahin","order_accept" + " - result: " + result);
-
-
-                    if (result.startsWith("pending~200~"))
-                    {
-                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                                "<font color='#32CD32'>" + result + "</font>"
-                                ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-                    }
-                    else
-                    {
-                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                                "<font color='#FF4500'>" + result + "</font>"
-                                ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-                    }
-
-                    // reset buttom
-                    is_sign_broadcatable = false;
-                    // reset progressbar
-                    progressbar_stat = false;
-                }
-                else
-                {
-                    Toast.makeText(MainActivity_Send.this, "broadcasting is in progress..", Toast.LENGTH_SHORT).show();
-                }
-
+                editTextWalletTo.requestFocus();
             }
         });
-        // Set a click listener for the raw-transaction
-        textview_offline_Send.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                copy_to_clipboard(textview_offline_Send.getText().toString());
-                Toast.makeText(MainActivity_Send.this, "copied..", Toast.LENGTH_SHORT).show();
-            }
-        });
+
         // Set a selected listener for graph_in_spinner
         dropdownSpinner_GraphDomainTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -553,43 +411,6 @@ public class MainActivity_Send extends BaseActivity {
 
         //endregion
 
-    }
-    private static void doStartProgressBar2()  {
-        binding.progressBar2.setIndeterminate(true);
-
-        Thread thread = new Thread(new Runnable()  {
-            @Override
-            public void run() {
-
-                // Update interface
-                handler.post(new Runnable() {
-                    @SuppressLint("SetTextI18n")
-                    public void run() {
-                        //binding.textviewWhatsUp.setText("Working...");
-                        //buttonStart2.setEnabled(false);
-                    }
-                });
-
-                while (progressbar_stat)
-                {
-                    // Do something ... (Update database,..)
-                    SystemClock.sleep(500); // Sleep 1 seconds.
-                }
-
-                binding.progressBar2.setIndeterminate(false);
-                binding.progressBar2.setMax(1);
-                binding.progressBar2.setProgress(1);
-
-                // Update interface
-                handler.post(new Runnable() {
-                    public void run() {
-                        //textViewInfo2.setText("Completed!");
-                        //buttonStart2.setEnabled(true);
-                    }
-                });
-            }
-        });
-        thread.start();
     }
 
     //region functions_of_menu
@@ -644,13 +465,8 @@ public class MainActivity_Send extends BaseActivity {
         is_parcel_processing = true;
 
         // reset buttom
-        is_sign_broadcatable = false;
-        buttonBroadcast.setEnabled(false);
-
-        textview_broadcast_report.setVisibility(View.GONE);
-        ImageView_offline_qr.setVisibility(View.GONE);
-        textview_offline_Send.setVisibility(View.GONE);
-        textview_offline_url.setVisibility(View.GONE);
+        //is_sign_broadcatable = false;
+        //buttonBroadcast.setEnabled(false);
 
         if (tally_parcel.startsWith("box")) {
             editTextWalletTo.setText(tally_parcel);

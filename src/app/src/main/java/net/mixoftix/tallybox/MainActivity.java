@@ -79,9 +79,9 @@ public class MainActivity extends BaseActivity {
 
     //region constants
 
-    public static final boolean log_is_enable = true;
+    public static final boolean log_is_enable = false;
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.97";
+    public static final String app_version = "2.971";
     public static final String file_name_path = "net_mixoftix_tallybox";
     public static final String[] spinner_options = {
             "gpp_mars.mixoftix.net",

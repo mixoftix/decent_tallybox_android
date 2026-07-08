@@ -63,6 +63,50 @@
             android:background="@drawable/frame_white"
             android:linksClickable="true" />
 
+        <!-- Wallet Layout -->
+        <LinearLayout
+            android:id="@+id/layout_main_list_of_coins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/frame_white">
+
+            <!-- Wallet Invitation -->
+            <TextView
+                android:id="@+id/textview_wallet_invitation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="---"
+                android:textSize="17sp"
+                android:linksClickable="true" />
+
+            <!-- Wallet-QR -->
+            <ImageView
+                android:id="@+id/ImageView_wallet_url"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="qr_code" />
+
+            <!-- Wallet URL -->
+            <TextView
+                android:id="@+id/textview_wallet_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="---"
+                android:textSize="17sp"
+                android:linksClickable="true" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

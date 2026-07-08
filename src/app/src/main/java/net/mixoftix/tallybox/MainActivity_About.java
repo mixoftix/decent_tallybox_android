@@ -5,6 +5,7 @@ import androidx.core.text.HtmlCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -26,7 +28,8 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity_About extends BaseActivity {
 
     private static ActivityMainAboutBinding binding;
-    private TextView textview_about_update,textview_about;
+    private static ImageView ImageView_wallet_url;
+    private TextView textview_about_update,textview_about,textview_wallet_url,textview_wallet_invitation;
 
     // BGN: browse http
     private static Handler handler = new Handler();
@@ -49,6 +52,9 @@ public class MainActivity_About extends BaseActivity {
 
         textview_about_update = findViewById(R.id.textview_about_update);
         textview_about = findViewById(R.id.textview_about_content);
+        ImageView_wallet_url = findViewById(R.id.ImageView_wallet_url);
+        textview_wallet_url = findViewById(R.id.textview_wallet_url);
+        textview_wallet_invitation = findViewById(R.id.textview_wallet_invitation);
 
         String tallybox_about_version = getString(R.string.about_version);
         String tallybox_about_version_new = getString(R.string.about_version_new);
@@ -78,6 +84,19 @@ public class MainActivity_About extends BaseActivity {
         //textview_about.setText(Html.fromHtml(tallybox_about, Html.FROM_HTML_MODE_LEGACY));
         textview_about.setText(HtmlCompat.fromHtml(tallybox_about,HtmlCompat.FROM_HTML_MODE_LEGACY));
         textview_about.setMovementMethod(LinkMovementMethod.getInstance());
+
+        //encodeToQrCode(wallet_address,300,300);
+        String wallet_url = "https://wallet.mixoftix.net";
+        Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(wallet_url,300,300);
+        if (qrCodeBitmap != null) {
+            String tallybox_invite = getString(R.string.tallybox_invite);
+            textview_wallet_invitation.setText(HtmlCompat.fromHtml(tallybox_invite,HtmlCompat.FROM_HTML_MODE_LEGACY));
+            ImageView_wallet_url.setImageBitmap(qrCodeBitmap);
+            textview_wallet_url.setText(HtmlCompat.fromHtml(
+                                "<a href=\"" + wallet_url + "\">" + wallet_url + "</a>"
+                                ,HtmlCompat.FROM_HTML_MODE_LEGACY));
+            textview_wallet_url.setMovementMethod(LinkMovementMethod.getInstance());
+        }
 
         // Set a click listener for textview_about_update
         textview_about_update.setOnClickListener(new View.OnClickListener(){

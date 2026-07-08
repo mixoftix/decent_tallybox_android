@@ -168,11 +168,10 @@
     <string name="about_version_new">new version</string>
     <string name="about_update_check">check for update</string>
     <string name="about_update_result">up to date!</string>
+    <string name="tallybox_invite">Invite your friends</string>
 
     <string name="tallybox_about">
-    Decent Tallybox open-source software is an innovative cryptocurrency wallet developed to simplify, educate, and make digital transactions more efficient. This wallet is built on an enhanced Directed Acyclic Graph (DAG) protocol and a dual-token model consisting of fiat money and standard cryptocurrencies, which—through its decentralized architecture—reduces transaction costs and enables transfers across multiple digital vaults.&lt;br/&gt;&lt;br/&gt;
-    &lt;b&gt;Note:&lt;/b&gt; The 2ZR token (Digital Dozari) is a stable-zero meme coin used for system development and for teaching users the skills needed to participate in the digital economy. Using 2ZR for commercial exchange inside or outside the Tallybox ecosystem is strictly prohibited.&lt;br/&gt;&lt;br/&gt;
-    &lt;b&gt;Note:&lt;/b&gt; The decentralized TallyBox wallet is released under the GPL-3 open-source license:&lt;br/&gt;
+    Decent Tallybox open-source software is an innovative cryptocurrency wallet built on an enhanced Directed Acyclic Graph (DAG) protocol and a dual-token model consisting of fiat money and standard cryptocurrencies developed to simplify, educate, and make digital transactions more efficient. The decentralized TallyBox wallet is released under the GPL-3 open-source license:&lt;br/&gt;&lt;br/&gt;
     &lt;a href="https://github.com/mixoftix/decent_tallybox_android"&gt;github.com/mixoftix/decent_tallybox_android&lt;/a&gt;
     </string>
 

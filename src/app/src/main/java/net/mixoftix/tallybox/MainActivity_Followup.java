@@ -118,13 +118,9 @@ public class MainActivity_Followup extends BaseActivity {
         String payment_moment = Access_time.getTimeDifference(currentLang,refresh_utc_unix_now,followup_key.replace("followup_",""));
         textview_followup.setText(getString(R.string.follow_graph) + ": " + payment_graph_from + "\n" +
                                   getString(R.string.follow_moment) + ": " + payment_moment + "\n" +
-                                  getString(R.string.follow_amount) + ": " + payment_amount + " (" + payment_currency + ")"
+                                  getString(R.string.follow_amount) + ": " + payment_amount + " (" + payment_currency + ")\n\n" +
+                                  getString(R.string.follow_note)
                                  );
-
-        if (is_sign_broadcatable)
-        {
-            //buttonBroadcast.setEnabled(true);
-        }
 
         // Set a click listener for the broadcast button
         button_offline_Sign.setOnClickListener(new View.OnClickListener() {
@@ -156,14 +152,25 @@ public class MainActivity_Followup extends BaseActivity {
                                                   getString(R.string.parcel_order_pubkey) + ": " + payment_pubkey
                     );
 
-                    String the_offline_url = MainActivity.spinner_options_address_ods[getGraphIndex(str_graph_domain_from)];
+                    //String the_offline_url = MainActivity.spinner_options_address_ods[getGraphIndex(str_graph_domain_from)];
+                    String the_offline_url = "";
+
+                    if (MainActivity.graph_address_in_ods.startsWith("http"))
+                    {
+                        the_offline_url = MainActivity.graph_address_in_ods;
+                    }
+                    else
+                    {
+                        the_offline_url = MainActivity.setting_network_protocol +
+                                          "://" +
+                                          MainActivity.graph_address_in_ods
+                                          ;
+                    }
 
                     String offline_url_guide = getString(R.string.offline_url_guide);
                     textview_offline_url.setText(HtmlCompat.fromHtml(
                             offline_url_guide + ": <br>" +
                                     "<a href='" +
-                                    MainActivity.setting_network_protocol +
-                                    "://" +
                                     the_offline_url + "' target=_blank>" +
                                     the_offline_url +
                                     "</a>",
@@ -178,7 +185,7 @@ public class MainActivity_Followup extends BaseActivity {
         textview_offline_Send.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                copy_to_clipboard(followup_raw_tx);
+                copy_to_clipboard(followup_raw_tx.replace("\n","").replace("\r","").replace(" ",""));
                 Toast.makeText(MainActivity_Followup.this, "copied..", Toast.LENGTH_SHORT).show();
             }
         });
@@ -202,8 +209,8 @@ public class MainActivity_Followup extends BaseActivity {
                 ImageView_offline_qr.setVisibility(View.GONE);
                 textview_offline_Send.setVisibility(View.GONE);
                 textview_offline_url.setVisibility(View.GONE);
-                textview_broadcast_report.setVisibility(View.GONE);
 
+                //textview_broadcast_report.setVisibility(View.GONE);
                 binding.progressBar2.setVisibility(View.VISIBLE);
                 textview_broadcast_report.setVisibility(View.VISIBLE);
                 textview_broadcast_report.setText(HtmlCompat.fromHtml(
@@ -212,7 +219,7 @@ public class MainActivity_Followup extends BaseActivity {
 
                 if (button_broadcast_Sign.isEnabled())
                 {
-                    //button_broadcast_Sign.setEnabled(false);
+                    button_broadcast_Sign.setEnabled(false);
 
                     // set progressbar
                     progressbar_stat = true;
@@ -220,10 +227,14 @@ public class MainActivity_Followup extends BaseActivity {
 
                     // config internet connection
                     String server_url_query =
-                            "app_name=" + URLEncoder.encode(MainActivity.app_name)
-                                    + "&app_version=" + URLEncoder.encode(MainActivity.app_version)
-                                    + "&order_csv=" + URLEncoder.encode(followup_raw_tx.replace("\n","").replace("\r",""))
-                            ;
+                                            "app_name=" + URLEncoder.encode(MainActivity.app_name)
+                                            + "&app_version=" + URLEncoder.encode(MainActivity.app_version)
+                                            + "&order_csv=" + URLEncoder.encode(
+                                                                                followup_raw_tx.replace("\n","")
+                                                                                .replace("\r","")
+                                                                                .replace(" ","")
+                                                                               )
+                                            ;
 
                     String result = MainActivity.browse_url_POST(
                             MainActivity.server_url_ods +
@@ -235,15 +246,16 @@ public class MainActivity_Followup extends BaseActivity {
                     if (result.startsWith("pending~200~"))
                     {
                         textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                                "<font color='#32CD32'>" + result + "</font>"
+                                "<font color='#32CD32'>" + result + "</font>\n<br>" +
+                                "<font color='cyan'>" + getString(R.string.follow_ods_pending) + "</font>"
                                 ,HtmlCompat.FROM_HTML_MODE_LEGACY));
 
                     }
-                    else if (result.equals("error~207~double spending error~the_sign"))
+                    else if (result.equals("error~207~double spending error~the_sign_md5"))
                     {
                         Access_file.followup_keys_remove(getApplicationContext(), followup_key);
                         textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                                "<font color='#FF4500'>" + result + "</font>\n" +
+                                "<font color='#FF4500'>" + result + "</font>\n<br>" +
                                        "<font color='cyan'>" + getString(R.string.follow_ledger_exists) + "</font>"
                                 ,HtmlCompat.FROM_HTML_MODE_LEGACY));
 
@@ -255,10 +267,10 @@ public class MainActivity_Followup extends BaseActivity {
                                 ,HtmlCompat.FROM_HTML_MODE_LEGACY));
                     }
 
-                    // reset buttom
-                    is_sign_broadcatable = false;
                     // reset progressbar
                     progressbar_stat = false;
+                    // reset buttom
+                    button_broadcast_Sign.setEnabled(true);
                 }
                 else
                 {

@@ -298,6 +298,7 @@ public class MainActivity_Send extends BaseActivity {
                         my_order
                         ,net.mixoftix.tallybox.MainActivity.retrieve_private_key());
 
+                my_sign = my_sign.replace("\n","").replace("\r","").replace(" ","");
                 Access_log.log_it("i","shahin","sign: " + my_sign);
 
                 boolean my_sign_verify = net.mixoftix.tallybox.MainActivity.sign_verify(
@@ -330,6 +331,7 @@ public class MainActivity_Send extends BaseActivity {
                         "~publicKey_xy_compressed~" + publicKey_xy_compressed
                         ;
 
+                result = result.replace("\n","").replace("\r","").replace(" ","");
                 Access_log.log_it("i","shahin","broadcast_result: " + result);
 
                 // BGN: write followup here

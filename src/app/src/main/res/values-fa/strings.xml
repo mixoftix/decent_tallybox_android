@@ -59,7 +59,12 @@
     <!-- MainActivity / Followup -->
     <string name="follow_offline_sign">آفلاین</string>
     <string name="follow_online_sign">آنلاین</string>
-    <string name="follow_ledger_exists">این تراکنش در لجر موجود است</string>
+    <string name="follow_ods_pending">تراکنش خام در صف پردازش قرار گرفت</string>
+    <string name="follow_ledger_exists">این تراکنش در لجر ثبت شده است</string>
+    <string name="follow_note">
+        توجه: تراکنش خام شما امضا شده و آماده ارسال یا پیگیری است.
+        روش مناسب خود را انتخاب کنید:
+    </string>
 
     <string name="parcel_graph_from">از گراف</string>
     <string name="parcel_graph_to">به گراف</string>

@@ -64,7 +64,12 @@
     <!-- MainActivity / Followup -->
     <string name="follow_offline_sign">Offline</string>
     <string name="follow_online_sign">Online</string>
-    <string name="follow_ledger_exists">This transaction exists in ledger</string>
+    <string name="follow_ods_pending">The raw transaction depended in queue</string>
+    <string name="follow_ledger_exists">This transaction has registered in ledger</string>
+    <string name="follow_note">
+        Note: Your raw transaction has been signed and is ready to upload or follow up.
+        Just select your proper method:
+    </string>
 
     <string name="parcel_graph_from">Graph from</string>
     <string name="parcel_graph_to">Graph to</string>

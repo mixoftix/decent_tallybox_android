@@ -3,9 +3,12 @@ package net.mixoftix.tallybox;
 import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +31,12 @@ public class MainActivity_Setting extends BaseActivity {
     private static ActivityMainSettingBinding binding;
     private RadioButton radioConnection, radioPQC;
     private RadioGroup RadioGroupConnection, RadioGroupPQC;
+
+    // BGN: browse http
+    private static Handler handler = new Handler();
+    private static boolean progressbar_stat = false;
+    // END: browse http
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -274,6 +283,43 @@ public class MainActivity_Setting extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private static void doStartProgressBar2()  {
+        binding.progressBar2.setIndeterminate(true);
+
+        Thread thread = new Thread(new Runnable()  {
+            @Override
+            public void run() {
+
+                // Update interface
+                handler.post(new Runnable() {
+                    @SuppressLint("SetTextI18n")
+                    public void run() {
+                        //binding.textviewWhatsUp.setText("Working...");
+                        //buttonStart2.setEnabled(false);
+                    }
+                });
+
+                while (progressbar_stat)
+                {
+                    // Do something ... (Update database,..)
+                    SystemClock.sleep(500); // Sleep 1 seconds.
+                }
+
+                binding.progressBar2.setIndeterminate(false);
+                binding.progressBar2.setMax(1);
+                binding.progressBar2.setProgress(1);
+
+                // Update interface
+                handler.post(new Runnable() {
+                    public void run() {
+                        //textViewInfo2.setText("Completed!");
+                        //buttonStart2.setEnabled(true);
+                    }
+                });
+            }
+        });
+        thread.start();
+    }
 
     private void addDynamicTextView(LinearLayout parent,
                                     String graph_name,
@@ -290,7 +336,7 @@ public class MainActivity_Setting extends BaseActivity {
         textView.setLayoutParams(params);
 
         String settings_serial = getString(R.string.settings_serial);
-        textView.setText(graph_name  + "\n" + settings_serial + ": " +  pqc_serial);
+        textView.setText(graph_name + "\n" + settings_serial + ": " + pqc_serial);
         textView.setTextSize(17);
         textView.setGravity(Gravity.CENTER_VERTICAL);
 
@@ -305,14 +351,127 @@ public class MainActivity_Setting extends BaseActivity {
         }
         textView.setCompoundDrawablePadding(dpToPx(4));
 
-        // Click Listener
+        // Click Listener with Progress Bar
         textView.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onClick(textView, graph_name, pqc_serial);
+                // Show progress
+                progressbar_stat = true;
+                doStartProgressBar2();
+
+                // Disable the TextView while loading
+                textView.setEnabled(false);
+
+                new Thread(() -> {
+                    // This is the original logic you had, now running in background
+                    String server_url_query =
+                            "app_name=" + URLEncoder.encode(MainActivity.app_name) +
+                                    "&app_version=" + URLEncoder.encode(MainActivity.app_version);
+
+                    String my_server_url = "";
+
+                    for (int j = 0; j < MainActivity.spinner_options.length; j++) {
+                        if (MainActivity.spinner_options[j].equals(graph_name)) {
+                            if (MainActivity.spinner_options_address_dw[j].startsWith("http")) {
+                                my_server_url = MainActivity.spinner_options_address_dw[j] + "/dmz_dw.asmx/";
+                            } else {
+                                my_server_url = MainActivity.setting_network_protocol + "://" +
+                                        MainActivity.spinner_options_address_dw[j] + "/dmz_dw.asmx/";
+                            }
+                        }
+                    }
+
+                    String result = MainActivity.browse_url(my_server_url + "app_pqc_pk?" + server_url_query);
+                    Access_log.log_it("i", "shahin", "app_pqc_pk - result: " + result);
+
+                    final String finalResult = result;
+
+                    runOnUiThread(() -> {
+                        progressbar_stat = false;
+
+                        String settings_network = getString(R.string.settings_network);
+                        String settings_uptodate = getString(R.string.settings_uptodate);
+                        String settings_updated = getString(R.string.settings_updated);
+                        String settings_checksum = getString(R.string.settings_checksum);
+
+                        String network_msg = " / " + settings_network + ": <font color=red>Er</font>";
+
+                        if (finalResult.equals("Failed")) {
+                            textView.setText(HtmlCompat.fromHtml(
+                                    graph_name + "<br>" + settings_serial + ": " + pqc_serial + network_msg,
+                                    HtmlCompat.FROM_HTML_MODE_LEGACY));
+                        }
+                        else if (finalResult.equals("no_record")) {
+                            updatePQCInStorage(graph_name, "", "");
+                            network_msg = " / " + settings_network + ": <font color=cyan>OK</font>";
+                            textView.setText(HtmlCompat.fromHtml(
+                                    graph_name + "<br>" + settings_serial + ": " + finalResult + network_msg,
+                                    HtmlCompat.FROM_HTML_MODE_LEGACY));
+                        }
+                        else {
+                            processPQCResponse(textView, graph_name, pqc_serial, finalResult);
+                        }
+
+                        textView.setEnabled(true);
+                    });
+                }).start();
             }
         });
 
         parent.addView(textView);
+    }
+
+    private void updatePQCInStorage(String graph, String serial, String pk) {
+        for (int j = 0; j < MainActivity.spinner_options.length; j++) {
+            if (MainActivity.spinner_options[j].equals(graph)) {
+                Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, serial, "write");
+                Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, pk, "write");
+
+                MainActivity.spinner_options_pqc_serial[j] = serial;
+                MainActivity.spinner_options_pqc_pk[j] = pk;
+            }
+        }
+    }
+
+    private void processPQCResponse(TextView textView, String graph, String oldSerial, String result) {
+        String[] split_output = result.split("\\^");
+        String pqc_serial = split_output[0];
+        String pqc_sha256 = split_output[1];
+        String pqc_pk = split_output[2];
+
+        String local_pqc_sha256 = "";
+        try {
+            local_pqc_sha256 = hash_functions.Hash_SHA_256(pqc_pk);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String settings_serial = getString(R.string.settings_serial);
+        String settings_network = getString(R.string.settings_network);
+        String settings_uptodate = getString(R.string.settings_uptodate);
+        String settings_updated = getString(R.string.settings_updated);
+        String settings_checksum = getString(R.string.settings_checksum);
+
+        String network_msg = settings_network + ": <font color=cyan>OK</font>";
+
+        if (local_pqc_sha256.equals(pqc_sha256)) {
+            updatePQCInStorage(graph, pqc_serial, pqc_pk);
+
+            if (pqc_serial.equals(oldSerial)) {
+                network_msg = " / <font color=green>" + settings_uptodate + "</font> / " + network_msg;
+            } else {
+                network_msg = " / <font color=cyan>" + settings_updated + "</font> / " + network_msg;
+            }
+
+            textView.setText(HtmlCompat.fromHtml(
+                    graph + "<br>" + settings_serial + ": " + pqc_serial + network_msg,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY));
+        } else {
+            updatePQCInStorage(graph, "", "");
+            network_msg = " / <font color=magenta>" + settings_checksum + "</font> / " + network_msg;
+            textView.setText(HtmlCompat.fromHtml(
+                    graph + "<br>" + settings_serial + ": - " + network_msg,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY));
+        }
     }
 
     private interface OnItemClickListener {

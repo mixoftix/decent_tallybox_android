@@ -16,6 +16,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.text.method.LinkMovementMethod;
 
 import android.view.Gravity;
@@ -79,9 +81,9 @@ public class MainActivity extends BaseActivity {
 
     //region constants
 
-    public static final boolean log_is_enable = false;
+    public static final boolean log_is_enable = true;
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.971";
+    public static final String app_version = "2.974";
     public static final String file_name_path = "net_mixoftix_tallybox";
     public static final String[] spinner_options = {
             "gpp_mars.mixoftix.net",
@@ -155,6 +157,8 @@ public class MainActivity extends BaseActivity {
     // variables - connection
     public static String server_url_dw = "";
     public static String server_url_ods = "";
+    private static boolean progressbar_stat = false;
+    private static Handler handler = new Handler();
 
     //endregion
 
@@ -344,35 +348,41 @@ public class MainActivity extends BaseActivity {
         //region followup
 
         String follow_up = getString(R.string.follow_up);
-        String follow_ignore = getString(R.string.follow_ignore);
+        String follow_archive = getString(R.string.follow_archive);
 
         String currentLang = LocaleHelper.getCurrentLanguage(this);
         String refresh_utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
-        List<String> followup_keys_list = Access_file.followup_keys_list(getApplicationContext());
+        List<String> archive_keys_list = Access_file.followup_keys_list(getApplicationContext(),"archive");
 
-        for (String key : followup_keys_list) {
-            String followup_raw_tx = Access_file.followup_keys_read(getApplicationContext(), key);
+        /*
+        "tallybox~parcel_of_transaction~" +
+        "graph_from~gpp_mars.mixoftix.net~" +
+        "graph_to~gpp_mars.mixoftix.net~" +
+        "wallet_from~boxB3d60b7f32966MuJqnEpqFwKD5gk7CGbfuKG9q3t7GFxiBvXnmg3B9LH~" +
+        "wallet_to~boxB3d60b7f32966MuJqnEpqFwKD5gk7CGbfuKG9q3t7GFxiBvXnmg3B9LH~" +
+        "order_currency~2ZR~" +
+        "order_amount~450000.00000000~" +
+        "order_id~~" +
+        "order_utc_unix~1783410580~" +
+        "the_sign~MEUCIQCKaLnYLne423FkhiQs+iNEh/nZm8w4Fq96+03/auvEnAIgKgyD8PzbXi7zRzjrNp1acsdYthz4wlyLoFviRiSKHaM=~" +
+        "publicKey_xy_compressed~FGnWVEefuuB3iN4MBGgSWiAzCuCJMdAttp2qZcSqhaJQ*1"
+
+        String payment_graphName = "";
+        String payment_moment = "";
+        String payment_currency = "";
+        String payment_amount = "";
+        */
+
+        for (String archive_key : archive_keys_list) {
+            String followup_key = archive_key.replace("archive_","followup_");
+            String followup_raw_tx = Access_file.followup_keys_read(getApplicationContext(), followup_key);
             Access_log.log_it("i","shahin","followup_raw_tx: " + followup_raw_tx);
-
-            /*
-            "tallybox~parcel_of_transaction~" +
-            "graph_from~gpp_mars.mixoftix.net~" +
-            "graph_to~gpp_mars.mixoftix.net~" +
-            "wallet_from~boxB3d60b7f32966MuJqnEpqFwKD5gk7CGbfuKG9q3t7GFxiBvXnmg3B9LH~" +
-            "wallet_to~boxB3d60b7f32966MuJqnEpqFwKD5gk7CGbfuKG9q3t7GFxiBvXnmg3B9LH~" +
-            "order_currency~2ZR~" +
-            "order_amount~450000.00000000~" +
-            "order_id~~" +
-            "order_utc_unix~1783410580~" +
-            "the_sign~MEUCIQCKaLnYLne423FkhiQs+iNEh/nZm8w4Fq96+03/auvEnAIgKgyD8PzbXi7zRzjrNp1acsdYthz4wlyLoFviRiSKHaM=~" +
-            "publicKey_xy_compressed~FGnWVEefuuB3iN4MBGgSWiAzCuCJMdAttp2qZcSqhaJQ*1"
-            */
 
             String[] split_followup_tx;
             split_followup_tx = followup_raw_tx.split("~");
-
             String payment_graphName = split_followup_tx[3];
-            String payment_moment = key.replace("followup_","");
+            //String payment_moment = followup_key.replace("followup_","");
+            String payment_moment = archive_key.replace("archive_","");
             payment_moment = Access_time.getTimeDifference(currentLang,refresh_utc_unix_now,payment_moment);
             String payment_currency = split_followup_tx[11];
             String payment_amount = split_followup_tx[13];
@@ -384,19 +394,18 @@ public class MainActivity extends BaseActivity {
                     payment_currency,
                     payment_amount,
                     follow_up,               // Button 1 text
-                    follow_ignore,           // Button 2 text
+                    follow_archive,           // Button 2 text
                     v -> {
                         // ← Button 1 Clicked (e.g. Check Network / PQC)
                         //checkPqcStatus(graphName, serial);
                         Intent i = new Intent(getApplicationContext(),MainActivity_Followup.class);
-                        i.putExtra("followup_key", key);
+                        i.putExtra("followup_key", followup_key);
                         startActivity(i);
                     },
                     v -> {
                         // ← Button 2 Clicked (e.g. Another action)
                         //doAnotherAction(graphName, serial);
-                        String followup_ignore_result = Access_file.followup_keys_remove(getApplicationContext(), key);
-                        Toast.makeText(this, "Followup " + followup_ignore_result + "..", Toast.LENGTH_SHORT).show();
+                        Access_file.followup_keys_remove(getApplicationContext(), archive_key);
 
                         Intent intent = getIntent();
                         finish();
@@ -1012,6 +1021,15 @@ public class MainActivity extends BaseActivity {
             return true;
         }
 
+        if (id == R.id.action_archive) {
+
+            Intent i = new Intent(getApplicationContext(),MainActivity_Archive.class);
+            //finishAffinity();
+            startActivity(i);
+
+            return true;
+        }
+
         if (id == R.id.action_private_key) {
 
             Intent i = new Intent(getApplicationContext(),MainActivity_PrivateKey.class);
@@ -1105,6 +1123,43 @@ public class MainActivity extends BaseActivity {
 
     //region functions_of_Internet
 
+    private static void doStartProgressBar2()  {
+        binding.progressBar2.setIndeterminate(true);
+
+        Thread thread = new Thread(new Runnable()  {
+            @Override
+            public void run() {
+
+                // Update interface
+                handler.post(new Runnable() {
+                    @SuppressLint("SetTextI18n")
+                    public void run() {
+                        //binding.textviewWhatsUp.setText("Working...");
+                        //buttonStart2.setEnabled(false);
+                    }
+                });
+
+                while (progressbar_stat)
+                {
+                    // Do something ... (Update database,..)
+                    SystemClock.sleep(500); // Sleep 1 seconds.
+                }
+
+                binding.progressBar2.setIndeterminate(false);
+                binding.progressBar2.setMax(1);
+                binding.progressBar2.setProgress(1);
+
+                // Update interface
+                handler.post(new Runnable() {
+                    public void run() {
+                        //textViewInfo2.setText("Completed!");
+                        //buttonStart2.setEnabled(true);
+                    }
+                });
+            }
+        });
+        thread.start();
+    }
     @SuppressLint("SetTextI18n")
     public static String browse_url(String the_url)  {
 
@@ -1221,34 +1276,51 @@ public class MainActivity extends BaseActivity {
     // Show spinners
     private void refresh_general()
     {
-        // config internet connection
-        String server_url_query =
-                "?app_name=" + URLEncoder.encode(app_name)
-                        + "&app_version=" + URLEncoder.encode(app_version)
-                        + "&in_graph=" + URLEncoder.encode(graph_domain_in)
-                        + "&wallet_address=" + URLEncoder.encode(wallet_address);
+        // Show progress immediately
+        progressbar_stat = true;
+        doStartProgressBar2();
 
-        String result = browse_url(server_url_dw + "ledger_history" + server_url_query);
-        //String result = browse_url_POST(server_url_order_history + server_file_order_history, server_url_query);
-        Access_log.log_it("i","shahin","ledger_history" + " - result: " + result);
+        // Signal SwipeRefreshLayout
+        swipeContainer.setRefreshing(true);
 
-        String network_msg = "Er";
+        new Thread(() -> {
+            String result = "Failed";
 
-        // update refresh datetime
-        if (!result.equals("Failed") && !result.equals("no_record"))
-        {
-            refresh_update(graph_domain_in);
-            //network_msg = "Net: <font color=cyan>OK</font> / ";
-            network_msg = "OK";
-        }
+            try {
+                String server_url_query =
+                        "?app_name=" + URLEncoder.encode(app_name) +
+                                "&app_version=" + URLEncoder.encode(app_version) +
+                                "&in_graph=" + URLEncoder.encode(graph_domain_in) +
+                                "&wallet_address=" + URLEncoder.encode(wallet_address);
 
-        // show refresh datetime
-        crypto_list_label(graph_domain_in, result);
-        refresh_label(graph_domain_in, network_msg);
+                result = browse_url(server_url_dw + "ledger_history" + server_url_query);
 
-        // Now we call setRefreshing(false) to signal refresh has finished
-        swipeContainer.setRefreshing(false);
-        Access_log.log_it("i","shahin","swipeContainer.setRefreshing(false)");
+                Access_log.log_it("i", "shahin", "ledger_history - result: " + result);
+
+            } catch (Exception e) {
+                result = "Failed~" + e.getMessage();
+                e.printStackTrace();
+            }
+
+            final String finalResult = result;
+
+            runOnUiThread(() -> {
+
+                progressbar_stat = false;           // Stop progress bar
+                swipeContainer.setRefreshing(false);
+
+                String network_msg = "Er";
+
+                if (!finalResult.equals("Failed") && !finalResult.equals("no_record")) {
+                    refresh_update(graph_domain_in);
+                    network_msg = "OK";
+                }
+
+                // Update UI
+                crypto_list_label(graph_domain_in, finalResult);
+                refresh_label(graph_domain_in, network_msg);
+            });
+        }).start();
     }
     private void refresh_label(String my_graph_in, String my_msg)
     {
@@ -1609,7 +1681,7 @@ public class MainActivity extends BaseActivity {
 
         // Non-clickable TextView
         TextView textView = new TextView(this);
-        textView.setText(getString(R.string.follow_moment) + ": " + payment_moment + "\n" +
+        textView.setText(getString(R.string.follow_moment_1) + " (" + payment_moment + ") " + getString(R.string.follow_moment_2) + "\n" +
                          getString(R.string.follow_amount) + ": " + payment_amount + " (" + payment_currency + ")"
         );
         textView.setTextSize(17);
@@ -1650,7 +1722,7 @@ public class MainActivity extends BaseActivity {
         button2.setLayoutParams(btnParams);
         button2.setTextSize(16);
         setVazirmatnFont(button2);
-        button2.setIcon(ContextCompat.getDrawable(this, R.drawable.baseline_visibility_off_24));
+        button2.setIcon(ContextCompat.getDrawable(this, R.drawable.baseline_bookmark_24));
         button2.setIconGravity(MaterialButton.ICON_GRAVITY_END);
         button2.setIconSize(dpToPx(24));
         button2.setOnClickListener(button2Listener);

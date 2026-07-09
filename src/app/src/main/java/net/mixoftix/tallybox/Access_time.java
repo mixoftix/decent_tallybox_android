@@ -45,15 +45,15 @@ public class Access_time {
             if (diffInMinutes < 1) {
                 return "حالا";
             } else if (diffInMinutes < 60) {
-                return diffInMinutes + " دقیقه قبل ";
+                return diffInMinutes + " دقیقه قبل";
             } else if (diffInHours < 24) {
-                return diffInHours + " ساعت قبل ";
+                return diffInHours + " ساعت قبل";
             } else if (diffInDays < 7) {
-                return diffInDays + " روز قبل ";
+                return diffInDays + " روز قبل";
             } else if (diffInWeeks < 4) {
-                return diffInWeeks + " هفته قبل ";
+                return diffInWeeks + " هفته قبل";
             } else {
-                return diffInMonths + " ماه قبل ";
+                return diffInMonths + " ماه قبل";
             }
         }
         else

@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom|withText" />
 
     <item
+        android:id="@+id/action_archive"
+        android:icon="@drawable/baseline_bookmarks_24"
+        android:title="@string/action_refresh"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
         android:id="@+id/action_language"
         android:title="@string/action_language"
         app:showAsAction="never" />

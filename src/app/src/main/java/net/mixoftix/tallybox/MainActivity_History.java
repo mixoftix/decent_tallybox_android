@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -48,6 +49,8 @@ public class MainActivity_History extends BaseActivity {
     private MyAdapter adapter;
     private List<ItemData> dataList;
     private SwipeRefreshLayout swipeContainer;
+    private static boolean progressbar_stat = false;
+    private static Handler handler = new Handler();
 
     private static ActivityMainHistoryBinding binding;
 
@@ -182,44 +185,102 @@ public class MainActivity_History extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void order_history_refresh(String detail_of_currency_name){
+    private static void doStartProgressBar2()  {
+        binding.progressBar2.setIndeterminate(true);
 
-        // Now we call setRefreshing(true) to signal refresh has begun
+        Thread thread = new Thread(new Runnable()  {
+            @Override
+            public void run() {
+
+                // Update interface
+                handler.post(new Runnable() {
+                    @SuppressLint("SetTextI18n")
+                    public void run() {
+                        //binding.textviewWhatsUp.setText("Working...");
+                        //buttonStart2.setEnabled(false);
+                    }
+                });
+
+                while (progressbar_stat)
+                {
+                    // Do something ... (Update database,..)
+                    SystemClock.sleep(500); // Sleep 1 seconds.
+                }
+
+                binding.progressBar2.setIndeterminate(false);
+                binding.progressBar2.setMax(1);
+                binding.progressBar2.setProgress(1);
+
+                // Update interface
+                handler.post(new Runnable() {
+                    public void run() {
+                        //textViewInfo2.setText("Completed!");
+                        //buttonStart2.setEnabled(true);
+                    }
+                });
+            }
+        });
+        thread.start();
+    }
+    private void order_history_refresh(String detail_of_currency_name) {
+
+        progressbar_stat = true;
+        doStartProgressBar2();
+
+        // Show swipe refresh indicator
         swipeContainer.setRefreshing(true);
-        Access_log.log_it("i","shahin","swipeContainer.setRefreshing(true)");
+        Access_log.log_it("i", "shahin", "swipeContainer.setRefreshing(true)");
 
-        // config internet connection
-        String server_url_query =
-                "?app_name=" + MainActivity.app_name
-                        + "&app_version=" + MainActivity.app_version
-                        + "&in_graph=" + URLEncoder.encode(MainActivity.graph_domain_in)
-                        + "&wallet_address=" + MainActivity.wallet_address
-                        + "&currency_name=" + detail_of_currency_name;
+        new Thread(() -> {
+            String result = "Failed";
 
-        String result_history_wallet_currency = MainActivity.browse_url(
-                MainActivity.server_url_dw +
-                        "ledger_history_detail" +
-                        server_url_query);
+            try {
+                String server_url_query =
+                        "?app_name=" + MainActivity.app_name +
+                                "&app_version=" + MainActivity.app_version +
+                                "&in_graph=" + URLEncoder.encode(MainActivity.graph_domain_in) +
+                                "&wallet_address=" + MainActivity.wallet_address +
+                                "&currency_name=" + detail_of_currency_name;
 
-        // update datetime
-        String currentLang = LocaleHelper.getCurrentLanguage(this);
-        String utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
-        String cmd_tnx_id_moment = Access_time.back_from_utc(utc_unix_now);
-        if (currentLang.equals("fa"))
-        {
-            cmd_tnx_id_moment = Access_time.back_from_utc_persian(utc_unix_now);
-        }
+                result = MainActivity.browse_url(
+                        MainActivity.server_url_dw +
+                                "ledger_history_detail" +
+                                server_url_query);
 
-        textview_history_last_update.setText(HtmlCompat.fromHtml(
-                "( " + cmd_tnx_id_moment + " )",
-                HtmlCompat.FROM_HTML_MODE_LEGACY));
+                Access_log.log_it("i", "shahin", "ledger_history_detail - result: " + result);
 
-        // generate views of history
-        generate_history_views(result_history_wallet_currency);
+            } catch (Exception e) {
+                result = "Failed~" + e.getMessage();
+                e.printStackTrace();
+            }
 
-        // Now we call setRefreshing(false) to signal refresh has finished
-        swipeContainer.setRefreshing(false);
-        Access_log.log_it("i","shahin","swipeContainer.setRefreshing(false)");
+            final String finalResult = result;
+
+            runOnUiThread(() -> {
+
+                // Update last refresh time
+                String currentLang = LocaleHelper.getCurrentLanguage(this);
+                String utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
+                String cmd_tnx_id_moment = Access_time.back_from_utc(utc_unix_now);
+
+                if (currentLang.equals("fa")) {
+                    cmd_tnx_id_moment = Access_time.back_from_utc_persian(utc_unix_now);
+                }
+
+                textview_history_last_update.setText(HtmlCompat.fromHtml(
+                        "( " + cmd_tnx_id_moment + " )",
+                        HtmlCompat.FROM_HTML_MODE_LEGACY));
+
+                // Generate history views
+                generate_history_views(finalResult);
+
+                // Hide progress indicators
+                progressbar_stat = false;
+                swipeContainer.setRefreshing(false);
+
+                Access_log.log_it("i", "shahin", "swipeContainer.setRefreshing(false)");
+            });
+        }).start();
     }
     @SuppressLint("SetTextI18n")
     private void generate_history_views_old(String result) {

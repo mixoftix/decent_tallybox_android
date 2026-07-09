@@ -34,7 +34,6 @@ public class MainActivity_About extends BaseActivity {
     // BGN: browse http
     private static Handler handler = new Handler();
     private static boolean progressbar_stat = false;
-    private String submit_txt = "";
     // END: browse http
 
 
@@ -99,45 +98,59 @@ public class MainActivity_About extends BaseActivity {
         }
 
         // Set a click listener for textview_about_update
-        textview_about_update.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
+        textview_about_update.setOnClickListener(view -> {
 
-                //String tallybox_update = "version: " + MainActivity.app_version + " / connecting..";
-                //textview_about_update.setText(HtmlCompat.fromHtml(tallybox_update,HtmlCompat.FROM_HTML_MODE_LEGACY));
+            // Show progress immediately
+            progressbar_stat = true;
+            doStartProgressBar2();
 
-                // set progressbar
-                progressbar_stat = true;
-                doStartProgressBar2();
+            // Disable interaction while loading (optional but recommended)
+            textview_about_update.setEnabled(false);
 
-                // config internet connection
-                String server_url_wallet =  "https://wallet.mixoftix.net/VersionString.txt";
+            new Thread(() -> {
+                String result = "error";
 
-                String result = MainActivity.browse_url(server_url_wallet);
-                Access_log.log_it("i","shahin",server_url_wallet + " - result: " + result);
-                //result = result.replace ("http://","https://");
-                //result = result.replace ("http://",MainActivity.setting_network_protocol + "://");
-                //Access_log.log_it("i","shahin",MainActivity.server_url + " - result: " + result);
+                try {
+                    String server_url_wallet = "https://wallet.mixoftix.net/VersionString.txt";
+                    result = MainActivity.browse_url(server_url_wallet);
 
-                if (isNewerVersion(result, MainActivity.app_version)) {
-                    // New version is available
-                    result = result.replace (".","_");
-                    String server_url_wallet_dl = "https://wallet.mixoftix.net" +
-                                                  "/dlx" +
-                                                  "/android" +
-                                                  "/" + MainActivity.app_name + "_" + result + ".apk"
-                                                  ;
+                    Access_log.log_it("i", "shahin", server_url_wallet + " - result: " + result);
 
-                    textview_about_update.setText(HtmlCompat.fromHtml("<a href=" + server_url_wallet_dl + ">" + tallybox_about_version_new + ": " + result + "</a>",HtmlCompat.FROM_HTML_MODE_LEGACY));
-                }
-                else
-                {
-                    textview_about_update.setText(HtmlCompat.fromHtml(tallybox_about_version + ": " + MainActivity.app_version + " / " + tallybox_about_result,HtmlCompat.FROM_HTML_MODE_LEGACY));
+                } catch (Exception e) {
+                    result = "error~" + e.getMessage();
+                    e.printStackTrace();
                 }
 
-                // reset progressbar
-                progressbar_stat = false;
-            }
+                final String finalResult = result;   // Needed for lambda
+
+                // Update UI on main thread
+                runOnUiThread(() -> {
+
+                    progressbar_stat = false;           // Stop progress bar
+                    textview_about_update.setEnabled(true);
+
+                    if (isNewerVersion(finalResult, MainActivity.app_version)) {
+                        // New version available
+                        String versionClean = finalResult.replace(".", "_");
+                        String server_url_wallet_dl = "https://wallet.mixoftix.net" +
+                                "/dlx/android/" +
+                                MainActivity.app_name + "_" + versionClean + ".apk";
+
+                        textview_about_update.setText(HtmlCompat.fromHtml(
+                                "<a href=\"" + server_url_wallet_dl + "\">" +
+                                        getString(R.string.about_version_new) + ": " + finalResult +
+                                        "</a>",
+                                HtmlCompat.FROM_HTML_MODE_LEGACY));
+
+                    } else {
+                        // No update
+                        textview_about_update.setText(HtmlCompat.fromHtml(
+                                tallybox_about_version + ": " + MainActivity.app_version +
+                                        " / " + tallybox_about_result,
+                                HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    }
+                });
+            }).start();
         });
 
     }
@@ -146,6 +159,9 @@ public class MainActivity_About extends BaseActivity {
         try {
             double s = Double.parseDouble(serverVer.trim());
             double l = Double.parseDouble(localVer.trim());
+            Access_log.log_it("i","shahin","serverVer: " + s);
+            Access_log.log_it("i","shahin","localVer: " + l);
+
             return s > l;
         } catch (Exception e) {
             Access_log.log_it("e", "shahin", "Version compare error: " + e.getMessage());

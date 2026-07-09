@@ -28,9 +28,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import net.mixoftix.tallybox.databinding.ActivityMainHistoryDetailBinding;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.security.NoSuchAlgorithmException;
 
 public class MainActivity_History_Detail extends BaseActivity {
 
@@ -55,14 +53,14 @@ public class MainActivity_History_Detail extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MaterialToolbar toolbar = findViewById(R.id.toolbar_home);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home_back);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_history_detail);
         setContentView(R.layout.activity_main_history_detail);
 
         binding = ActivityMainHistoryDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbarHome);
+        setSupportActionBar(binding.toolbarHomeBack);
 
         detail_of_currency_name = getIntent().getStringExtra("detail_of_currency_name");
         tnx_tally_hash = getIntent().getStringExtra("tnx_tally_hash");
@@ -153,7 +151,7 @@ public class MainActivity_History_Detail extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_history_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_home_back, menu);
         return true;
     }
     @Override
@@ -219,156 +217,107 @@ public class MainActivity_History_Detail extends BaseActivity {
 
     //endregion
 
-    private void order_history_browser(String detail_of_tnx_tally_hash) throws Exception {
+    private void order_history_browser(String detail_of_tnx_tally_hash) {
 
-        String the_log_str = "";
-        String pqc_cipher_serial = "";
-        String the_pqc_cipher = "";
-        String the_pqc_psk = "";
+        progressbar_stat = true;
+        doStartProgressBar2();
 
-        String is_pqc = MainActivity.setting_safeguard_pqc;
+        new Thread(() -> {
+            String result_history_by_tally_hash = "Failed";
+            String the_log_str = "";
 
-        Access_log.log_it("i","shahin","is_pqc: " + is_pqc);
-        the_log_str = "PQC - Status: " + is_pqc + "d" + "\n";
-
-        Access_log.log_it("i","shahin","333 - app_pqc_serial: " + MainActivity.app_pqc_serial);
-        Access_log.log_it("i","shahin","333 - app_pqc_pk: " + MainActivity.app_pqc_pk);
-
-        if (is_pqc.equals("enable") && MainActivity.app_pqc_serial.equals("-"))
-        {
-            Access_log.log_it("i","shahin","app_pqc_serial: not found! procedure bypassed.. (" + MainActivity.app_pqc_serial + ")");
-            the_log_str += "PQC - Serial: not found! procedure bypassed..\n";
-        }
-        if (is_pqc.equals("enable") && !MainActivity.app_pqc_serial.equals("-"))
-        {
-            Access_log.log_it("i","shahin","app_pqc_serial: " + MainActivity.app_pqc_serial);
-            the_log_str += "PQC - Serial: " + MainActivity.app_pqc_serial + "\n";
-
-            // make the local privacy
-            String local_pqc_sha256 = null;
             try {
-                local_pqc_sha256 = hash_functions.Hash_SHA_256(MainActivity.app_pqc_pk);
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                String is_pqc = MainActivity.setting_safeguard_pqc;
+                String pqc_cipher_serial = "";
+                String the_pqc_cipher = "";
+                String the_pqc_psk = "";
+
+                the_log_str = "PQC - Status: " + is_pqc + "d\n";
+
+                if (is_pqc.equals("enable") && !MainActivity.app_pqc_serial.equals("-")) {
+                    the_log_str += "PQC - Serial: " + MainActivity.app_pqc_serial + "\n";
+
+                    String local_pqc_sha256 = hash_functions.Hash_SHA_256(MainActivity.app_pqc_pk);
+                    the_log_str += "PQC - Checksum:\n" + local_pqc_sha256 + "\n\n";
+
+                    pqc_mlkem.pqc_psk_pk();
+
+                    pqc_cipher_serial = MainActivity.app_pqc_serial;
+                    the_pqc_cipher = MainActivity.app_pqc_psk_cipher;
+                    the_pqc_psk = MainActivity.app_pqc_psk;
+
+                    the_log_str += "PQC - Cipher:\n" + the_pqc_cipher + "\n\n";
+                    the_log_str += "PQC - PSK:\n" + the_pqc_psk + "\n\n";
+                }
+
+                // Build query
+                String server_url_query =
+                        "?app_name=" + MainActivity.app_name +
+                                "&app_version=" + MainActivity.app_version +
+                                "&in_graph=" + URLEncoder.encode(MainActivity.graph_domain_in) +
+                                "&wallet_address=" + MainActivity.wallet_address +
+                                "&my_tally_hash=" + URLEncoder.encode(detail_of_tnx_tally_hash) +
+                                "&pqc_cipher_serial=" + URLEncoder.encode(pqc_cipher_serial) +
+                                "&pqc_cipher_base64=" + URLEncoder.encode(the_pqc_cipher);
+
+                the_log_str += "Request - Wallet: " + MainActivity.wallet_address + "\n\n";
+                the_log_str += "Request - TallyHash: " + detail_of_tnx_tally_hash + "\n\n";
+
+                // Network call
+                result_history_by_tally_hash = MainActivity.browse_url(
+                        MainActivity.server_url_dw +
+                                "ledger_history_tally_hash" +
+                                server_url_query);
+
+                Access_log.log_it("i", "shahin", "ledger_history_tally_hash: " + result_history_by_tally_hash);
+
+                // Decrypt if PQC is enabled
+                if (is_pqc.equals("enable") && !MainActivity.app_pqc_serial.equals("-")) {
+                    the_log_str += "Response - Encrypted:\n" + result_history_by_tally_hash + "\n\n";
+
+                    result_history_by_tally_hash = crypto_symm_aes.AES_Decrypt_by_secret_with_custom_padding(
+                            result_history_by_tally_hash, the_pqc_psk);
+
+                    the_log_str += "Response - Decrypted:\n" + result_history_by_tally_hash + "\n";
+                } else {
+                    the_log_str += "Response:\n" + result_history_by_tally_hash + "\n";
+                }
+
+            } catch (Exception e) {
+                result_history_by_tally_hash = "Failed~" + e.getMessage();
+                the_log_str += "Error: " + e.getMessage() + "\n";
+                e.printStackTrace();
             }
 
-            the_log_str += "PQC - Checksum: \n" + local_pqc_sha256 + "\n\n";
+            final String finalResult = result_history_by_tally_hash;
+            final String finalLog = the_log_str;
 
-            // initial pqc connection
-            pqc_mlkem.pqc_psk_pk();
+            runOnUiThread(() -> {
 
-            pqc_cipher_serial = MainActivity.app_pqc_serial;
-            the_pqc_cipher = MainActivity.app_pqc_psk_cipher;
-            the_pqc_psk = MainActivity.app_pqc_psk;
+                progressbar_stat = false;
 
-            Access_log.log_it("i","shahin","the_pqc_cipher: " + the_pqc_cipher);
-            Access_log.log_it("i","shahin","the_pqc_psk: " + the_pqc_psk);
+                if (finalResult.equals("Failed")) {
+                    onBackPressed();
+                    return;
+                }
 
-            the_log_str += "PQC - Cipher: " + "\n" + the_pqc_cipher + "\n\n";
-            the_log_str += "PQC - PSK: " + "\n" + the_pqc_psk + "\n\n";
-        }
+                // Update UI
+                textview_network.setVisibility(View.GONE);
+                textview_history_hash_tnxid.setVisibility(View.VISIBLE);
+                textview_history_hash_orderid.setVisibility(View.VISIBLE);
+                textview_history_hash_channel.setVisibility(View.VISIBLE);
+                path_interactive_views.setVisibility(View.VISIBLE);
+                textview_history_log_monitor.setVisibility(View.VISIBLE);
+                textview_history_log.setVisibility(View.VISIBLE);
 
-        Access_log.log_it("i","shahin","in_graph: " + MainActivity.graph_domain_in);
-        Access_log.log_it("i","shahin","wallet_address: " + MainActivity.wallet_address);
-        Access_log.log_it("i","shahin","my_tally_hash: " + detail_of_tnx_tally_hash);
-        Access_log.log_it("i","shahin","pqc_cipher_base64: " + the_pqc_cipher);
+                // Show log
+                textview_history_log.setText(finalLog);
 
-        // config internet connection
-        String server_url_query =
-                "?app_name=" + MainActivity.app_name
-                        + "&app_version=" + MainActivity.app_version
-                        + "&in_graph=" + URLEncoder.encode(MainActivity.graph_domain_in)
-                        + "&wallet_address=" + MainActivity.wallet_address
-                        + "&my_tally_hash=" + URLEncoder.encode(detail_of_tnx_tally_hash)
-                        + "&pqc_cipher_serial=" + URLEncoder.encode(pqc_cipher_serial)
-                        + "&pqc_cipher_base64=" + URLEncoder.encode(the_pqc_cipher)
-                        ;
-
-        the_log_str += "Request - Wallet: " + "\n" + MainActivity.wallet_address + "\n\n";
-        the_log_str += "Request - TallyHash: " + "\n" + detail_of_tnx_tally_hash + "\n\n";
-        the_log_str += "Url: " + "\n" + MainActivity.server_url_dw + "\n\n";
-
-        String result_history_by_tally_hash = MainActivity.browse_url(
-                MainActivity.server_url_dw +
-                        "ledger_history_tally_hash" +
-                        server_url_query);
-
-        Access_log.log_it("i","shahin","ledger_history_tally_hash: " + result_history_by_tally_hash);
-
-        if (result_history_by_tally_hash.equals("Failed"))
-        {
-            onBackPressed();
-        }
-        else
-        {
-            textview_network.setVisibility(View.GONE);
-            textview_history_hash_tnxid.setVisibility(View.VISIBLE);
-            textview_history_hash_orderid.setVisibility(View.VISIBLE);
-            textview_history_hash_channel.setVisibility(View.VISIBLE);
-            path_interactive_views.setVisibility(View.VISIBLE);
-            textview_history_log_monitor.setVisibility(View.VISIBLE);
-            textview_history_log.setVisibility(View.VISIBLE);
-        }
-
-        if (is_pqc.equals("enable") && !MainActivity.app_pqc_serial.equals("-"))
-        {
-            the_log_str += "Response - Encrypted: " + "\n" + result_history_by_tally_hash + "\n\n";
-
-            // decrypt the server response..
-            result_history_by_tally_hash = crypto_symm_aes.AES_Decrypt_by_secret_with_custom_padding(result_history_by_tally_hash,the_pqc_psk);
-
-            the_log_str += "Response - Decrypted: " + "\n" + result_history_by_tally_hash + "\n";
-        }
-        else
-        {
-            the_log_str += "Response: " + "\n" + result_history_by_tally_hash + "\n";
-        }
-
-        Access_log.log_it("i","shahin","result_history_by_tally_hash: " + result_history_by_tally_hash);
-
-        // simulate server response
-        /*
-        result_history_by_tally_hash = "my_graph^" +
-                "my_wallet^" +
-                "my_order^" +
-                "tnx_id^" +
-                "0^" +
-                "tallybox.mixoftix.net^" +
-                "boxB2e7517135fa2awY4VXxrhjVMEvyz8HZV8fTotJHf4aX5nHzpEiPJuPb^" +
-                "1741769698.1000000^" +
-                "2PN^" +
-                "0.75000000^" +
-                "99897.00000000^" +
-                "8330850afce66a7859c3e9a0f19a2d2f876b1a4cf13af713168ac33931ed88ca^" +
-                "1^" +
-                "tallybox.mixoftix.net^" +
-                "boxB2e7517135fa2awY4VXxrhjVMEvyz8HZV8fTotJHf4aX5nHzpEiPJuPb^" +
-                "1741769618.1000000^" +
-                "2PN^" +
-                "100.00000000^" +
-                "99797.00000000^" +
-                "a578912e0498bc8ddbe739e62117f3c25c1c60a8ba0b80c69612d2ec509750cb^" +
-                "2^" +
-                "tallybox.mixoftix.net^" +
-                "boxB2e7517135fa2awY4VXxrhjVMEvyz8HZV8fTotJHf4aX5nHzpEiPJuPb^" +
-                "1741769744.1000000^" +
-                "2PN^" +
-                "100.00000000^" +
-                "2400.00000000^" +
-                "81b6e0167092fdb04018cd9faa61fa00ac2e20f67142a0a077ff856de9f26862"
-        ;
-        */
-
-        // cache the result
-        browse_by_tally_hash = result_history_by_tally_hash;
-
-        // write the log
-        textview_history_log.setText(the_log_str);
-
-        // generate views of history
-        redraw_history_views();
+                // Cache and redraw
+                browse_by_tally_hash = finalResult;
+                redraw_history_views();
+            });
+        }).start();
     }
     private void redraw_history_views()
     {

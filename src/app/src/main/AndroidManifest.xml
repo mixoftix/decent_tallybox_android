@@ -34,6 +34,10 @@
             </intent-filter>
         </activity> <!-- Other Activities -->
         <activity
+            android:name=".MainActivity_Archive"
+            android:exported="false"
+            android:label="@string/title_archive" />
+        <activity
             android:name=".MainActivity_Followup"
             android:exported="false"
             android:label="@string/title_followup" />

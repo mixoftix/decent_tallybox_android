@@ -59,14 +59,14 @@ public class MainActivity_Followup extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        MaterialToolbar toolbar = findViewById(R.id.toolbar_home);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home_back);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_followup);
         setContentView(R.layout.activity_main_followup);
 
         binding = ActivityMainFollowupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbarHome);
+        setSupportActionBar(binding.toolbarHomeBack);
 
         layout_send_offline = findViewById(R.id.layout_send_offline);
         textview_followup = findViewById(R.id.textview_followup);
@@ -190,96 +190,84 @@ public class MainActivity_Followup extends BaseActivity {
             }
         });
         // Set a click listener for the broadcast button
-        button_broadcast_Sign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        button_broadcast_Sign.setOnClickListener(view -> {
 
-                // tallybox~
-                // graph_from~tallybox.mixoftix.net~
-                // graph_to~tallybox.mixoftix.net~
-                // wallet_from~boxB2bbc15c8c135W8PzPEZf98cEu2h2muhkeJQS3MwTYUaTHVkFTgihcS7~
-                // wallet_to~boxB2bbc15c8c135W8PzPEZf98cEu2h2muhkeJQS3MwTYUaTHVkFTgihcS7~
-                // order_currency~2ZR~
-                // order_amount~3500.00000000~
-                // order_id~778844~
-                // order_utc_unix~1741675583~
-                // the_sign~MEYCIQCxzNKhOUXijLr+z2mI9npu/+KZijiEv3//W7Ya3VpvzgIhAI1m7wJLJ9ldP2m5jmYfUreuvoKTjoZmFQmt5e6foakp~
-                // publicKey_xy_compressed~2C7SVvEj45VMWwbd8UQNoYYWMeCMeyKm6qfDNQXhHkKK*1
+            layout_send_offline.setVisibility(View.GONE);
+            ImageView_offline_qr.setVisibility(View.GONE);
+            textview_offline_Send.setVisibility(View.GONE);
+            textview_offline_url.setVisibility(View.GONE);
 
-                ImageView_offline_qr.setVisibility(View.GONE);
-                textview_offline_Send.setVisibility(View.GONE);
-                textview_offline_url.setVisibility(View.GONE);
-
-                //textview_broadcast_report.setVisibility(View.GONE);
-                binding.progressBar2.setVisibility(View.VISIBLE);
-                textview_broadcast_report.setVisibility(View.VISIBLE);
-                textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                        "<font color='cyan'>" + "broadcasting is in progress.." + "</font>"
-                        ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-
-                if (button_broadcast_Sign.isEnabled())
-                {
-                    button_broadcast_Sign.setEnabled(false);
-
-                    // set progressbar
-                    progressbar_stat = true;
-                    doStartProgressBar2();
-
-                    // config internet connection
-                    String server_url_query =
-                                            "app_name=" + URLEncoder.encode(MainActivity.app_name)
-                                            + "&app_version=" + URLEncoder.encode(MainActivity.app_version)
-                                            + "&order_csv=" + URLEncoder.encode(
-                                                                                followup_raw_tx.replace("\n","")
-                                                                                .replace("\r","")
-                                                                                .replace(" ","")
-                                                                               )
-                                            ;
-
-                    String result = MainActivity.browse_url_POST(
-                            MainActivity.server_url_ods +
-                                    "order_accept", server_url_query);
-
-                    Access_log.log_it("i","shahin","order_accept" + " - result: " + result);
-
-
-                    if (result.startsWith("pending~200~"))
-                    {
-                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                                "<font color='#32CD32'>" + result + "</font>\n<br>" +
-                                "<font color='cyan'>" + getString(R.string.follow_ods_pending) + "</font>"
-                                ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-
-                    }
-                    else if (result.equals("error~207~double spending error~the_sign_md5"))
-                    {
-                        Access_file.followup_keys_remove(getApplicationContext(), followup_key);
-                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                                "<font color='#FF4500'>" + result + "</font>\n<br>" +
-                                       "<font color='cyan'>" + getString(R.string.follow_ledger_exists) + "</font>"
-                                ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-
-                    }
-                    else
-                    {
-                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                                "<font color='#FF4500'>" + result + "</font>"
-                                ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-                    }
-
-                    // reset progressbar
-                    progressbar_stat = false;
-                    // reset buttom
-                    button_broadcast_Sign.setEnabled(true);
-                }
-                else
-                {
-                    textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                            "<font color='#FF4500'>broadcasting is in progress..</font>"
-                            ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-                }
-
+            if (!button_broadcast_Sign.isEnabled()) {
+                return;
             }
+
+            button_broadcast_Sign.setEnabled(false);
+            binding.progressBar2.setVisibility(View.VISIBLE);
+            textview_broadcast_report.setVisibility(View.VISIBLE);
+
+            String followup_broadcast_msg = getString(R.string.followup_broadcast_msg);
+            textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                    "<font color='cyan'>" + followup_broadcast_msg + "</font>",
+                    HtmlCompat.FROM_HTML_MODE_LEGACY));
+
+            progressbar_stat = true;
+            doStartProgressBar2();
+
+            // === Background Thread ===
+            new Thread(() -> {
+                String result = "error~0~Unknown error";   // default value
+
+                try {
+                    String server_url_query =
+                            "app_name=" + URLEncoder.encode(MainActivity.app_name) +
+                                    "&app_version=" + URLEncoder.encode(MainActivity.app_version) +
+                                    "&order_csv=" + URLEncoder.encode(
+                                    followup_raw_tx.replace("\n", "")
+                                            .replace("\r", "")
+                                            .replace(" ", "")
+                            );
+
+                    result = MainActivity.browse_url_POST(
+                            MainActivity.server_url_ods + "order_accept",
+                            server_url_query);
+
+                    Access_log.log_it("i", "shahin", "order_accept - result: " + result);
+
+                } catch (Exception e) {
+                    result = "error~0~" + e.getMessage();
+                    e.printStackTrace();
+                }
+
+                // Final variable for lambda
+                final String finalResult = result;
+
+                // Update UI on main thread
+                runOnUiThread(() -> {
+                    progressbar_stat = false;
+                    button_broadcast_Sign.setEnabled(true);
+
+                    if (finalResult.startsWith("pending~200~")) {
+                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                                "<font color='#32CD32'>" + finalResult + "</font><br>" +
+                                        "<font color='cyan'>" + getString(R.string.follow_ods_pending) + "</font>",
+                                HtmlCompat.FROM_HTML_MODE_LEGACY));
+
+                    } else if (finalResult.equals("error~207~double spending error~the_sign_md5")) {
+                        Access_file.followup_keys_remove(getApplicationContext(), followup_key);
+                        Access_file.followup_keys_remove(getApplicationContext(), followup_key.replace("followup_","archive_"));
+
+                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                                "<font color='#FF4500'>" + finalResult + "</font><br>" +
+                                        "<font color='cyan'>" + getString(R.string.follow_ledger_exists) + "</font>",
+                                HtmlCompat.FROM_HTML_MODE_LEGACY));
+
+                    } else {
+                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                                "<font color='#FF4500'>" + finalResult + "</font>",
+                                HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    }
+                });
+            }).start();
         });
 
     }
@@ -287,7 +275,7 @@ public class MainActivity_Followup extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_home_back, menu);
         return true;
     }
     @Override
@@ -296,11 +284,20 @@ public class MainActivity_Followup extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        String server_url_query = "";
+        String result = "";
 
         if (id == R.id.action_home) {
-            //onBackPressed();
-            Intent i = new Intent(getApplicationContext(),MainActivity.class);
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            finishAffinity();
             startActivity(i);
+
+            return true;
+        }
+
+        if (id == R.id.action_back) {
+
+            onBackPressed();
 
             return true;
         }

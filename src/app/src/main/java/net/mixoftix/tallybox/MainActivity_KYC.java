@@ -72,133 +72,150 @@ public class MainActivity_KYC extends BaseActivity {
                     ,HtmlCompat.FROM_HTML_MODE_LEGACY));
         }
 
-        // Set a click listener for the broadcast button
-        buttonBroadcast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+// ==================== buttonBroadcast (KYC Generate) ====================
+        buttonBroadcast.setOnClickListener(view -> {
 
-                // set progressbar
-                progressbar_stat = true;
-                doStartProgressBar2();
+            if (!buttonBroadcast.isEnabled()) return;
 
-                // config internet connection
-                String server_url_query =
-                        "app_name=" + URLEncoder.encode(net.mixoftix.tallybox.MainActivity.app_name)
-                                + "&app_version=" + URLEncoder.encode(net.mixoftix.tallybox.MainActivity.app_version)
-                                + "&national_id=" + URLEncoder.encode(editText_KYC_National_ID.getText().toString().replace("\n","").replace("\r",""))
-                                + "&mobile_number=" + URLEncoder.encode(editText_KYC_Mobile_Number.getText().toString().replace("\n","").replace("\r",""))
-                        ;
+            buttonBroadcast.setEnabled(false);
 
-                String result = MainActivity.browse_url_POST(
-                                                     MainActivity.server_url_ods +
-                                                            "kyc_generate", server_url_query);
+            progressbar_stat = true;
+            doStartProgressBar2();
 
-                Access_log.log_it("i","shahin","kyc_generate" + " - result: " + result);
+            String kyc_request_msg = getString(R.string.kyc_request_msg);
+            textview_broadcast_report.setVisibility(View.VISIBLE);
+            textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                    "<font color='cyan'>" + kyc_request_msg + "</font>",
+                    HtmlCompat.FROM_HTML_MODE_LEGACY));
 
-                if (result.startsWith("error~") || result.startsWith("info~"))
-                {
-                    textview_broadcast_report.setVisibility(View.VISIBLE);
-                    textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                            "<font color='#FF4500'>" + result + "</font>"
-                            ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-                }
-                else
-                {
-                    layout_of_kyc_request.setEnabled(false);
-                    editText_KYC_National_ID.setEnabled(false);
-                    editText_KYC_Mobile_Number.setEnabled(false);
-                    buttonBroadcast.setEnabled(false);
+            new Thread(() -> {
+                String result = "error~0~Unknown error";
 
-                    textview_broadcast_report.setVisibility(View.GONE);
-                    layout_of_kyc_sign.setVisibility(View.VISIBLE);
-                    EditText_KYC_MSG.setText(result);
+                try {
+                    String server_url_query =
+                            "app_name=" + URLEncoder.encode(MainActivity.app_name) +
+                                    "&app_version=" + URLEncoder.encode(MainActivity.app_version) +
+                                    "&national_id=" + URLEncoder.encode(
+                                    editText_KYC_National_ID.getText().toString().trim()) +
+                                    "&mobile_number=" + URLEncoder.encode(
+                                    editText_KYC_Mobile_Number.getText().toString().trim());
+
+                    result = MainActivity.browse_url_POST(
+                            MainActivity.server_url_ods + "kyc_generate",
+                            server_url_query);
+
+                    Access_log.log_it("i", "shahin", "kyc_generate - result: " + result);
+
+                } catch (Exception e) {
+                    result = "error~0~" + e.getMessage();
+                    e.printStackTrace();
                 }
 
-                // reset progressbar
-                progressbar_stat = false;
+                final String finalResult = result;
 
-            }
+                runOnUiThread(() -> {
+                    progressbar_stat = false;
+                    buttonBroadcast.setEnabled(true);
+
+                    if (finalResult.startsWith("error~") || finalResult.startsWith("info~")) {
+                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                                "<font color='#FF4500'>" + finalResult + "</font>",
+                                HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    } else {
+                        // Success - show signing section
+                        layout_of_kyc_request.setEnabled(false);
+                        editText_KYC_National_ID.setEnabled(false);
+                        editText_KYC_Mobile_Number.setEnabled(false);
+                        buttonBroadcast.setEnabled(false);
+
+                        textview_broadcast_report.setVisibility(View.GONE);
+                        layout_of_kyc_sign.setVisibility(View.VISIBLE);
+                        EditText_KYC_MSG.setText(finalResult);
+                    }
+                });
+            }).start();
         });
 
-        // Set a click listener for the sign button
-        buttonSign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                String national_id = editText_KYC_National_ID.getText().toString();
-                String wallet_2_kyc = wallet_address;
-                String kyc_pin = editText_KYC_PIN.getText().toString();
-                String the_kyc_order = national_id + "~" + wallet_2_kyc + "~" + kyc_pin;
+// ==================== buttonSign (KYC Accept) ====================
+        buttonSign.setOnClickListener(view -> {
 
-                String my_sign = net.mixoftix.tallybox.MainActivity.sign_order(
-                        the_kyc_order
-                        ,net.mixoftix.tallybox.MainActivity.retrieve_private_key());
+            if (!buttonSign.isEnabled()) return;
 
-                Access_log.log_it("i","shahin","sign: " + my_sign);
+            buttonSign.setEnabled(false);
 
-                boolean my_sign_verify = net.mixoftix.tallybox.MainActivity.sign_verify(
-                        the_kyc_order,
-                        my_sign,
-                        MainActivity.publicKey_x_HEX,
-                        MainActivity.publicKey_y_HEX
-                );
+            progressbar_stat = true;
+            doStartProgressBar2();
 
-                Access_log.log_it("i","shahin","my_sign_verify: " + my_sign_verify);
+            String kyc_submit_msg = getString(R.string.kyc_submit_msg);
+            textview_broadcast_report.setVisibility(View.VISIBLE);
+            textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                    "<font color='cyan'>" + kyc_submit_msg + "</font>",
+                    HtmlCompat.FROM_HTML_MODE_LEGACY));
 
-                String publicKey_xy_compressed = crypto_asym_keys_compress.PublicKeyCompression(
-                        MainActivity.publicKey_x_HEX,
-                        MainActivity.publicKey_y_HEX,
-                        "B58"
-                );
+            new Thread(() -> {
+                String result = "error~0~Unknown error";
 
-                // set progressbar
-                progressbar_stat = true;
-                doStartProgressBar2();
+                try {
+                    String national_id = editText_KYC_National_ID.getText().toString().trim();
+                    String wallet_2_kyc = wallet_address;
+                    String kyc_pin = editText_KYC_PIN.getText().toString().trim();
+                    String the_kyc_order = national_id + "~" + wallet_2_kyc + "~" + kyc_pin;
 
-                // config internet connection
-                String server_url_query =
-                        "app_name=" + URLEncoder.encode(net.mixoftix.tallybox.MainActivity.app_name)
-                                + "&app_version=" + URLEncoder.encode(net.mixoftix.tallybox.MainActivity.app_version)
-                                + "&national_id=" + URLEncoder.encode(editText_KYC_National_ID.getText().toString().replace("\n","").replace("\r",""))
-                                + "&wallet_2_kyc=" + URLEncoder.encode(wallet_2_kyc.replace("\n","").replace("\r",""))
-                                + "&wallet_pubkey=" + URLEncoder.encode(publicKey_xy_compressed.replace("\n","").replace("\r",""))
-                                + "&sign_4_kyc=" + URLEncoder.encode(my_sign.replace("\n","").replace("\r",""))
-                        ;
+                    String my_sign = MainActivity.sign_order(
+                            the_kyc_order,
+                            MainActivity.retrieve_private_key());
 
-                String result = MainActivity.browse_url_POST(
-                                                    MainActivity.server_url_ods +
-                                                           "kyc_accept", server_url_query);
+                    String publicKey_xy_compressed = crypto_asym_keys_compress.PublicKeyCompression(
+                            MainActivity.publicKey_x_HEX,
+                            MainActivity.publicKey_y_HEX,
+                            "B58");
 
-                Access_log.log_it("i","shahin","kyc_accept" + " - result: " + result);
+                    String server_url_query =
+                            "app_name=" + URLEncoder.encode(MainActivity.app_name) +
+                                    "&app_version=" + URLEncoder.encode(MainActivity.app_version) +
+                                    "&national_id=" + URLEncoder.encode(national_id) +
+                                    "&wallet_2_kyc=" + URLEncoder.encode(wallet_2_kyc) +
+                                    "&wallet_pubkey=" + URLEncoder.encode(publicKey_xy_compressed) +
+                                    "&sign_4_kyc=" + URLEncoder.encode(my_sign);
 
-                if (result.startsWith("error~"))
-                {
-                    textview_broadcast_report.setVisibility(View.VISIBLE);
-                    textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                            "<font color='#FF4500'>" + result + "</font>"
-                            ,HtmlCompat.FROM_HTML_MODE_LEGACY));
-                }
-                else
-                {
-                    layout_of_kyc_sign.setEnabled(false);
-                    EditText_KYC_MSG.setEnabled(false);
-                    editText_KYC_PIN.setEnabled(false);
-                    buttonSign.setEnabled(false);
+                    result = MainActivity.browse_url_POST(
+                            MainActivity.server_url_ods + "kyc_accept",
+                            server_url_query);
 
-                    Access_file.access_file_func_write(getApplicationContext(), "kyc_result", result, "write");
+                    Access_log.log_it("i", "shahin", "kyc_accept - result: " + result);
 
-                    textview_broadcast_report.setVisibility(View.VISIBLE);
-                    textview_broadcast_report.setText(HtmlCompat.fromHtml(
-                            "<font color='#32CD32'>" + result + "</font>"
-                            ,HtmlCompat.FROM_HTML_MODE_LEGACY));
+                } catch (Exception e) {
+                    result = "error~0~" + e.getMessage();
+                    e.printStackTrace();
                 }
 
-                // reset progressbar
-                progressbar_stat = false;
+                final String finalResult = result;
 
-            }
+                runOnUiThread(() -> {
+                    progressbar_stat = false;
+                    buttonSign.setEnabled(true);
+
+                    if (finalResult.startsWith("error~")) {
+                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                                "<font color='#FF4500'>" + finalResult + "</font>",
+                                HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    } else {
+                        // Success
+                        layout_of_kyc_sign.setEnabled(false);
+                        EditText_KYC_MSG.setEnabled(false);
+                        editText_KYC_PIN.setEnabled(false);
+                        buttonSign.setEnabled(false);
+
+                        Access_file.access_file_func_write(getApplicationContext(), "kyc_result", finalResult, "write");
+
+                        textview_broadcast_report.setText(HtmlCompat.fromHtml(
+                                "<font color='#32CD32'>" + finalResult + "</font>",
+                                HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    }
+                });
+            }).start();
         });
-
     }
 
     @Override

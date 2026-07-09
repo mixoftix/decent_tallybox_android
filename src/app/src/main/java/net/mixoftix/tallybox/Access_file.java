@@ -54,7 +54,7 @@ public class Access_file {
         // END: handling file for path saving in client side
     }
 
-    public static List<String> followup_keys_list(Context context)
+    public static List<String> followup_keys_list(Context context, String followup_type)
     {
         // BGN: handling file for path saving in client side
         SharedPreferences prefs = context.getSharedPreferences("followups", Context.MODE_PRIVATE);
@@ -64,7 +64,7 @@ public class Access_file {
 
         for (String key : all.keySet())
         {
-            if (key.startsWith("followup_"))
+            if (key.startsWith(followup_type + "_"))
             {
                 keys.add(key);
             }
@@ -81,13 +81,13 @@ public class Access_file {
 
         // END: handling file for path saving in client side
     }
-    public static String followup_keys_write(Context context, String followup_timestamp, String followup_text)
+    public static String followup_keys_write(Context context, String followup_type, String followup_timestamp, String followup_text)
     {
         // BGN: handling file for path saving in client side
         SharedPreferences prefs = context.getSharedPreferences("followups", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        String key = "followup_" + followup_timestamp;
+        String key = followup_type + "_" + followup_timestamp;
         editor.putString(key, followup_text);
         editor.apply();
 

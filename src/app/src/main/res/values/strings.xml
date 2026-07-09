@@ -13,13 +13,12 @@
     <string name="previous">Previous</string>
 
     <string name="lorem_ipsum">Lorem ipsum.</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Manifest -->
     <string name="app_name">TallyBox</string>
-    <string name="title_followup">Followup Transaction</string>
+    <string name="title_archive">Raw Transaction Archive</string>
+    <string name="title_followup">Transaction Process</string>
     <string name="title_about">About</string>
     <string name="title_history">Transactions History</string>
     <string name="title_history_detail">Transaction Detail</string>
@@ -49,10 +48,13 @@
     <string name="app_is_up_to_date">Message: App is up-to-date...</string>
     <string name="advertise_text">-</string>
 
-    <string name="follow_up">Follow Up</string>
+    <string name="follow_up">Process</string>
+    <string name="follow_archive">Archive</string>
     <string name="follow_ignore">Ignore</string>
     <string name="follow_graph">Graph of Sign</string>
     <string name="follow_moment">Time of Sign</string>
+    <string name="follow_moment_1">One raw transaction</string>
+    <string name="follow_moment_2">has signed.</string>
     <string name="follow_currency">Token</string>
     <string name="follow_amount">Amount</string>
 
@@ -61,15 +63,24 @@
     <string name="network_status_ok">Net: </string>
     <string name="network_status_error">Net: </string>
 
+    <!-- MainActivity / Archive -->
+    <string name="archive_note">
+        These raw transactions are still remaining in your wallet and
+        require processing and then follow‑up, unless you choose to ignore them.
+        \n\n
+        Archived raw transactions will be removed automatically after 7 days.
+    </string>
+
     <!-- MainActivity / Followup -->
     <string name="follow_offline_sign">Offline</string>
     <string name="follow_online_sign">Online</string>
     <string name="follow_ods_pending">The raw transaction depended in queue</string>
     <string name="follow_ledger_exists">This transaction has registered in ledger</string>
     <string name="follow_note">
-        Note: Your raw transaction has been signed and is ready to upload or follow up.
-        Just select your proper method:
+        Your raw transaction has been signed, is ready to upload and then follow up online.
+        Just select your proper method.
     </string>
+    <string name="followup_broadcast_msg">Broadcasting is in progress..</string>
 
     <string name="parcel_graph_from">Graph from</string>
     <string name="parcel_graph_to">Graph to</string>
@@ -105,7 +116,7 @@
     <string name="qr_code">QR Code</string>
     <string name="offline_raw_transaction_placeholder">---</string>
     <string name="offline_url_placeholder">---</string>
-    <string name="offline_url_guide">Submit transaction here manually</string>
+    <string name="offline_url_guide">Submit raw transaction here manually</string>
 
     <!-- MainActivity / History Detail -->
     <string name="history_network">Network: Connecting..</string>
@@ -162,6 +173,8 @@
     <string name="kyc_pin_hint">KYC PIN</string>
     <string name="kyc_sign_button">Sign</string>
     <string name="kyc_report_placeholder">---</string>
+    <string name="kyc_request_msg">Requesting KYC code..</string>
+    <string name="kyc_submit_msg">Submitting signed KYC..</string>
 
     <!-- MainActivity / About-->
     <string name="about_version">version</string>

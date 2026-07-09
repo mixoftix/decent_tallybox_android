@@ -20,7 +20,7 @@
             android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar_home"
+                android:id="@+id/toolbar_home_back"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
 

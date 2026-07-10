@@ -85,16 +85,18 @@ public class MainActivity_Send extends BaseActivity {
         setSupportActionBar(binding.toolbarHomeqr);
 
         textview_graph_in = findViewById(R.id.textview_graph_in);
-        //editTextGraphDomainTo = findViewById(R.id.editTextGraphDomainTo);
 
         // BGN: spinner of graph_to
         dropdownSpinner_GraphDomainTo = findViewById(R.id.dropdownSpinner_GraphDomainTo);
 
-        GraphSpinnerAdapter adapter = new GraphSpinnerAdapter(
-                this,
-                MainActivity.spinner_options
-        );
+        // Read zone filter from settings
+        String zoneFilter = Access_file.access_file_func_read(getApplicationContext(), "setting_zone_filter");
+        Access_log.log_it("i", "shahin", "GraphDomainTo Spinner - Loaded zone filter: " + zoneFilter);
 
+        // Get filtered domains based on zone setting
+        List<String> filteredDomains = MainActivity.getFilteredDomainsForZone(zoneFilter);
+
+        GraphSpinnerAdapter adapter = new GraphSpinnerAdapter(this, filteredDomains);
         dropdownSpinner_GraphDomainTo.setAdapter(adapter);
         // END: spinner of graph_to
 
@@ -395,21 +397,22 @@ public class MainActivity_Send extends BaseActivity {
 
         //region activity_initialization
 
-        //editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
-        // Find the index of the target domain
+        // Set default selection to match graph_domain_in (if it's in the filtered list)
         int targetIndex = -1;
-        for (int i = 0; i < spinner_options.length; i++) {
-            if (spinner_options[i].equals(MainActivity.graph_domain_in)) {
+        String currentGraph = MainActivity.graph_domain_in;
+
+        for (int i = 0; i < dropdownSpinner_GraphDomainTo.getCount(); i++) {
+            if (dropdownSpinner_GraphDomainTo.getItemAtPosition(i).toString().equals(currentGraph)) {
                 targetIndex = i;
                 break;
             }
         }
-        // Set the selection if found
+
         if (targetIndex != -1) {
             dropdownSpinner_GraphDomainTo.setSelection(targetIndex);
+        } else if (dropdownSpinner_GraphDomainTo.getCount() > 0) {
+            dropdownSpinner_GraphDomainTo.setSelection(0); // fallback
         }
-
-        //editTextWalletTo.requestFocus();
 
         //endregion
 
@@ -680,9 +683,10 @@ public class MainActivity_Send extends BaseActivity {
         return zoneFrom.equals(zoneTo);
     }
     // Custom Adapter to show domain + zones using your existing layout
+// Custom Adapter for Graph Domain Spinner (with Zone Filter Support)
     private class GraphSpinnerAdapter extends ArrayAdapter<String> {
 
-        public GraphSpinnerAdapter(Context context, String[] domains) {
+        public GraphSpinnerAdapter(Context context, List<String> domains) {
             super(context, 0, domains);
         }
 
@@ -705,16 +709,25 @@ public class MainActivity_Send extends BaseActivity {
 
             TextView textView = view.findViewById(R.id.spinnerText);
 
-            String domain = MainActivity.spinner_options[position];
-            String zones = getZoneForGraph(position);
+            String domain = getItem(position);
+            String zone = getZoneForDomain(domain);
 
-            String zonesText = (zones.length() > 0)
-                    ? " [" + String.join(", ", zones) + "]"
+            String zonesText = (zone != null && !zone.isEmpty())
+                    ? " [" + zone + "]"
                     : " [no zone]";
 
             textView.setText(domain + zonesText);
 
             return view;
+        }
+
+        private String getZoneForDomain(String domain) {
+            for (int i = 0; i < MainActivity.spinner_options.length; i++) {
+                if (MainActivity.spinner_options[i].equals(domain)) {
+                    return MainActivity.spinner_options_zones[i];
+                }
+            }
+            return "";
         }
     }
 

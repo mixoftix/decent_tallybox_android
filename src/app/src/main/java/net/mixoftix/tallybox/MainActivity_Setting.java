@@ -1,20 +1,28 @@
 package net.mixoftix.tallybox;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +33,15 @@ import net.mixoftix.tallybox.databinding.ActivityMainSettingBinding;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class MainActivity_Setting extends BaseActivity {
 
     private static ActivityMainSettingBinding binding;
     private RadioButton radioConnection, radioPQC;
     private RadioGroup RadioGroupConnection, RadioGroupPQC;
+    private Spinner dropdownSpinner_Zone;
+    private LinearLayout layoutDynamicPQC;
 
     // BGN: browse http
     private static Handler handler = new Handler();
@@ -50,210 +61,46 @@ public class MainActivity_Setting extends BaseActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbarHome);
 
-        // In your Activity
-        LinearLayout layoutSettings = findViewById(R.id.layout_settings);
+        // Initialize views
         RadioGroupConnection = findViewById(R.id.RadioGroupConnection);
         RadioGroupPQC = findViewById(R.id.RadioGroupPQC);
+        dropdownSpinner_Zone = findViewById(R.id.dropdownSpinner_Zone);
 
-        // load last settings
-        Access_log.log_it("i","shahin","connection_" + MainActivity.setting_network_protocol.toLowerCase());
-        int selectedId = getResources().getIdentifier("connection_" + MainActivity.setting_network_protocol.toLowerCase(), "id", this.getPackageName());
-        Access_log.log_it("i","shahin","selectedId: " + selectedId);
-        radioConnection = (RadioButton) findViewById(selectedId);
-        radioConnection.setChecked(true);
+        // IMPORTANT: Use the dedicated container
+        layoutDynamicPQC = findViewById(R.id.layout_dynamic_pqc);
 
-        Access_log.log_it("i","shahin","pqc_" + MainActivity.setting_safeguard_pqc.toLowerCase());
-        int selectedId2 = getResources().getIdentifier("pqc_" + MainActivity.setting_safeguard_pqc.toLowerCase(), "id", this.getPackageName());
-        Access_log.log_it("i","shahin","selectedId2: " + selectedId2);
-        radioPQC = (RadioButton) findViewById(selectedId2);
-        radioPQC.setChecked(true);
-
-        // Set a click listener for the RadioGroupConnection button
-        RadioGroupConnection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                radioConnection = (RadioButton) findViewById(checkedId);
-                String str_connection_protocol = (String) radioConnection.getText();
-
-                Access_file.access_file_func_write(getApplicationContext(), "setting_network_protocol", str_connection_protocol, "write");
-                MainActivity.setting_connection(str_connection_protocol);
-
-                Toast.makeText(MainActivity_Setting.this, "Network Protocol: " + str_connection_protocol, Toast.LENGTH_SHORT).show();
-                Access_log.log_it("i","shahin","Network Protocol: " + str_connection_protocol);
-            }
-        });
-
-        // Set a click listener for the RadioGroupPQC button
-        RadioGroupPQC.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                radioPQC = (RadioButton) findViewById(checkedId);
-                String str_radioPQC = (String) radioPQC.getText();
-
-                Access_file.access_file_func_write(getApplicationContext(), "setting_safeguard_pqc", str_radioPQC, "write");
-
-                Toast.makeText(MainActivity_Setting.this, "Safeguard by PQC: " + str_radioPQC + "d", Toast.LENGTH_SHORT).show();
-                Access_log.log_it("i","shahin","Safeguard by PQC: " + str_radioPQC);
-            }
-        });
-
-        String settings_serial = getString(R.string.settings_serial);
-        String settings_network = getString(R.string.settings_network);
-        String settings_uptodate = getString(R.string.settings_uptodate);
-        String settings_updated = getString(R.string.settings_updated);
-        String settings_checksum = getString(R.string.settings_checksum);
-
-        // Dynamic TextViews:
-        for (int i = 0; i < MainActivity.spinner_options.length; i++) {
-
-            String graphName = MainActivity.spinner_options[i];
-            String serial = MainActivity.spinner_options_pqc_serial[i];
-
-            addDynamicTextView(layoutSettings,
-                                graphName,
-                                serial,
-                                (textView, graph, pqcSerial) -> // Correct lambda
-                                {
-                                    // config internet connection
-                                    String server_url_query =
-                                            "app_name=" + URLEncoder.encode(MainActivity.app_name)
-                                                    + "&app_version=" + URLEncoder.encode(MainActivity.app_version);
-
-                                    String my_server_url = "";
-
-                                    for (int j = 0; j < MainActivity.spinner_options.length; j++)
-                                    {
-                                        if (MainActivity.spinner_options[j].equals(graph))
-                                        {
-                                            if (MainActivity.spinner_options_address_dw[j].startsWith("http"))
-                                            {
-                                                my_server_url = MainActivity.spinner_options_address_dw[j] +
-                                                                "/dmz_dw.asmx/"; // "://192.168.88.111:701/";
-                                            }
-                                            else
-                                            {
-                                                my_server_url = MainActivity.setting_network_protocol + "://" +
-                                                                MainActivity.spinner_options_address_dw[j] +
-                                                                "/dmz_dw.asmx/"; // "://192.168.88.111:701/";
-                                            }
-                                        }
-                                    }
-
-                                    String result = net.mixoftix.tallybox.MainActivity.browse_url(my_server_url + "app_pqc_pk?" + server_url_query);
-                                    Access_log.log_it("i","shahin",MainActivity.server_url_dw + " - result: " + result);
-
-                                    String network_msg = " / " + settings_network + ": <font color=red>Er</font>";
-
-                                    if (result.equals("Failed"))
-                                    {
-                                        // set the text
-                                        textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": " + pqcSerial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
-                                    }
-                                    else if (result.equals("no_record"))
-                                    {
-                                        for (int j = 0; j < MainActivity.spinner_options.length; j++)
-                                        {
-                                            if (MainActivity.spinner_options[j].equals(graph))
-                                            {
-                                                Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, "", "write");
-                                                Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, "", "write");
-
-                                                MainActivity.spinner_options_pqc_serial[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + j);
-                                                MainActivity.spinner_options_pqc_pk[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + j);
-
-                                                Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + j + "]: " + MainActivity.spinner_options_pqc_serial[j]);
-                                                Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ j + "]: " + MainActivity.spinner_options_pqc_pk[j]);
-                                            }
-                                        }
-
-                                        // set the text
-                                        network_msg = " / " + settings_network + ": <font color=cyan>OK</font>";
-                                        textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": " + result + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
-
-                                    }
-                                    else
-                                    {
-                                        // interpret server's CSV data
-                                        String[] split_output;
-                                        split_output = result.split("\\^");
-
-                                        String pqc_serial = split_output[0];
-                                        String pqc_sha256 = split_output[1];
-                                        String pqc_pk = split_output[2];
-
-                                        // make the local privacy
-                                        String local_pqc_sha256 = null;
-                                        try {
-                                            local_pqc_sha256 = hash_functions.Hash_SHA_256(pqc_pk);
-                                        } catch (NoSuchAlgorithmException e) {
-                                            throw new RuntimeException(e);
-                                        } catch (UnsupportedEncodingException e) {
-                                            throw new RuntimeException(e);
-                                        }
-
-                                        Access_log.log_it("i","shahin","333 - pqc_sha256: " + pqc_sha256);
-                                        Access_log.log_it("i","shahin","333 - local_pqc_sha256: " + local_pqc_sha256);
-
-                                        if (local_pqc_sha256.equals(pqc_sha256))
-                                        {
-                                            for (int j = 0; j < MainActivity.spinner_options.length; j++)
-                                            {
-                                                if (MainActivity.spinner_options[j].equals(graph))
-                                                {
-                                                    Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, pqc_serial, "write");
-                                                    Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, pqc_pk, "write");
-
-                                                    MainActivity.spinner_options_pqc_serial[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + j);
-                                                    MainActivity.spinner_options_pqc_pk[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + j);
-
-                                                    Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + j + "]: " + MainActivity.spinner_options_pqc_serial[j]);
-                                                    Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ j + "]: " + MainActivity.spinner_options_pqc_pk[j]);
-                                                }
-                                            }
-
-                                            if (pqc_serial.equals(pqcSerial))
-                                            {
-                                                // set the text
-                                                network_msg = " / <font color=green>" + settings_uptodate + "</font> / " + settings_network + ": <font color=cyan>OK</font>";
-                                                textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
-                                            }
-                                            else
-                                            {
-                                                // set the text
-                                                network_msg = " / <font color=cyan>" + settings_updated + "</font> / " + settings_network + ": <font color=cyan>OK</font>";
-                                                textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": " + pqc_serial + network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
-                                            }
-                                        }
-                                        else
-                                        {
-                                            for (int j = 0; j < MainActivity.spinner_options.length; j++)
-                                            {
-                                                if (MainActivity.spinner_options[j].equals(graph))
-                                                {
-                                                    Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, "", "write");
-                                                    Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, "", "write");
-
-                                                    MainActivity.spinner_options_pqc_serial[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + j);
-                                                    MainActivity.spinner_options_pqc_pk[j] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + j);
-
-                                                    Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + j + "]: " + MainActivity.spinner_options_pqc_serial[j]);
-                                                    Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ j + "]: " + MainActivity.spinner_options_pqc_pk[j]);
-                                                }
-                                            }
-
-                                            // set the text
-                                            network_msg = " / <font color=magenta>" + settings_checksum + "</font> / " + settings_network + ": <font color=cyan>OK</font>";
-                                            textView.setText(HtmlCompat.fromHtml(graph + "<br>" + settings_serial + ": -" +  network_msg, HtmlCompat.FROM_HTML_MODE_LEGACY));
-                                        }
-                                    }
-                                }
-                                );
+        if (layoutDynamicPQC == null) {
+            Access_log.log_it("e", "shahin", "layout_dynamic_pqc not found in XML!");
         }
 
+        // Spinner setup
+        List<String> validZones = MainActivity.getValidUniqueZones();
+        GraphSpinnerAdapter adapter = new GraphSpinnerAdapter(this, validZones);
+        dropdownSpinner_Zone.setAdapter(adapter);
+
+        loadLastSelectedZone();
+        loadLastNetworkAndPQCSettings();
+
+        // Zone change listener
+        dropdownSpinner_Zone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedZone = (String) parent.getItemAtPosition(position);
+                Access_log.log_it("i", "shahin", "Selected Zone: " + selectedZone);
+
+                Access_file.access_file_func_write(getApplicationContext(),
+                        "setting_zone_filter", selectedZone.toLowerCase(), "write");
+
+                redrawDynamicPQCList(selectedZone);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // Initial draw
+        String initialZone = Access_file.access_file_func_read(getApplicationContext(), "setting_zone_filter");
+        redrawDynamicPQCList(initialZone);
     }
 
     @Override
@@ -321,6 +168,7 @@ public class MainActivity_Setting extends BaseActivity {
         thread.start();
     }
 
+    //region dynamic_pqc_settings
     private void addDynamicTextView(LinearLayout parent,
                                     String graph_name,
                                     String pqc_serial,
@@ -480,6 +328,154 @@ public class MainActivity_Setting extends BaseActivity {
 
     private int dpToPx(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
+    }
+
+    //endregion
+
+    //region Graph Zone Spinner Adapter
+    private class GraphSpinnerAdapter extends ArrayAdapter<String> {
+
+        public GraphSpinnerAdapter(Context context, List<String> zones) {
+            super(context, 0, zones);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return createCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return createCustomView(position, convertView, parent);
+        }
+
+        private View createCustomView(int position, View convertView, ViewGroup parent) {
+            View view = convertView;
+            if (view == null) {
+                view = LayoutInflater.from(getContext()).inflate(
+                        R.layout.items_activity_spinner, parent, false);
+            }
+
+            TextView textView = view.findViewById(R.id.spinnerText);
+            String zone = getItem(position);
+
+            textView.setText(zone);
+            return view;
+        }
+    }
+    //endregion
+
+    private void loadLastSelectedZone() {
+        // Read saved setting
+        String savedZone = Access_file.access_file_func_read(getApplicationContext(), "setting_zone_filter");
+
+        Access_log.log_it("i", "shahin", "Loading saved zone filter: " + savedZone);
+
+        if (savedZone == null || savedZone.equals("-") || savedZone.isEmpty()) {
+            // Select first item as default if nothing is saved
+            if (dropdownSpinner_Zone.getCount() > 0) {
+                dropdownSpinner_Zone.setSelection(0);
+            }
+            return;
+        }
+
+        // Find matching zone (case insensitive)
+        for (int i = 0; i < dropdownSpinner_Zone.getCount(); i++) {
+            String displayedZone = (String) dropdownSpinner_Zone.getItemAtPosition(i);
+
+            if (displayedZone.equalsIgnoreCase(savedZone)) {
+                dropdownSpinner_Zone.setSelection(i);
+                Access_log.log_it("i", "shahin", "Zone spinner set to position " + i + " (" + displayedZone + ")");
+                return;
+            }
+        }
+
+        // If no exact match found, try partial match (e.g. "mars" should match "Mars")
+        for (int i = 0; i < dropdownSpinner_Zone.getCount(); i++) {
+            String displayedZone = (String) dropdownSpinner_Zone.getItemAtPosition(i);
+            if (displayedZone.toLowerCase().contains(savedZone.toLowerCase()) ||
+                    savedZone.toLowerCase().contains(displayedZone.toLowerCase())) {
+                dropdownSpinner_Zone.setSelection(i);
+                Access_log.log_it("i", "shahin", "Zone spinner set using partial match: " + displayedZone);
+                return;
+            }
+        }
+
+        // Fallback: select first item
+        if (dropdownSpinner_Zone.getCount() > 0) {
+            dropdownSpinner_Zone.setSelection(0);
+        }
+    }
+
+    // Redraw PQC TextViews based on selected zone
+    private void redrawDynamicPQCList(String selectedZone) {
+        if (layoutDynamicPQC == null) return;
+
+        layoutDynamicPQC.removeAllViews();
+
+        List<String> filteredDomains = MainActivity.getFilteredDomainsForZone(selectedZone);
+
+        for (String domain : filteredDomains) {
+            String serial = getPqcSerialForDomain(domain);
+            addDynamicTextView(layoutDynamicPQC, domain, serial,
+                    (textView, graph, pqcSerial) -> refreshPQCForGraph(textView, graph, pqcSerial));
+        }
+    }
+
+    private void refreshPQCForGraph(TextView textView, String graph, String oldSerial) {
+        // Your existing full logic for fetching PQC can go here
+        // (I kept it similar to what you had)
+
+        String server_url_query = "app_name=" + URLEncoder.encode(MainActivity.app_name) +
+                "&app_version=" + URLEncoder.encode(MainActivity.app_version);
+
+        String my_server_url = getServerUrlForGraph(graph);
+
+        String result = MainActivity.browse_url(my_server_url + "app_pqc_pk?" + server_url_query);
+
+        // ... rest of your result processing (you can call processPQCResponse if you want)
+        // For now, just call the existing one you already have:
+        processPQCResponse(textView, graph, oldSerial, result);
+    }
+
+    private String getServerUrlForGraph(String graph) {
+        for (int j = 0; j < MainActivity.spinner_options.length; j++) {
+            if (MainActivity.spinner_options[j].equals(graph)) {
+                if (MainActivity.spinner_options_address_dw[j].startsWith("http")) {
+                    return MainActivity.spinner_options_address_dw[j] + "/dmz_dw.asmx/";
+                } else {
+                    return MainActivity.setting_network_protocol + "://" +
+                            MainActivity.spinner_options_address_dw[j] + "/dmz_dw.asmx/";
+                }
+            }
+        }
+        return "";
+    }
+
+    // Helper to get current PQC serial for a domain
+    private String getPqcSerialForDomain(String domain) {
+        for (int i = 0; i < MainActivity.spinner_options.length; i++) {
+            if (MainActivity.spinner_options[i].equals(domain)) {
+                return MainActivity.spinner_options_pqc_serial[i] != null ?
+                        MainActivity.spinner_options_pqc_serial[i] : "";
+            }
+        }
+        return "";
+    }
+
+    // Load network & PQC radio buttons
+    private void loadLastNetworkAndPQCSettings() {
+        // load last network protocol
+        Access_log.log_it("i","shahin","connection_" + MainActivity.setting_network_protocol.toLowerCase());
+        int selectedId = getResources().getIdentifier("connection_" + MainActivity.setting_network_protocol.toLowerCase(), "id", this.getPackageName());
+        radioConnection = (RadioButton) findViewById(selectedId);
+        if (radioConnection != null) radioConnection.setChecked(true);
+
+        // load last pqc
+        Access_log.log_it("i","shahin","pqc_" + MainActivity.setting_safeguard_pqc.toLowerCase());
+        int selectedId2 = getResources().getIdentifier("pqc_" + MainActivity.setting_safeguard_pqc.toLowerCase(), "id", this.getPackageName());
+        radioPQC = (RadioButton) findViewById(selectedId2);
+        if (radioPQC != null) radioPQC.setChecked(true);
     }
 
 }

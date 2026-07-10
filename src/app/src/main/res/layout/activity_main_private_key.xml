@@ -55,6 +55,8 @@
                 android:hint="@string/password_hint"
                 android:drawablePadding="2dp"
                 android:drawableEnd="@drawable/baseline_key_24"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
                 android:inputType="textPassword" />
 
         </LinearLayout>

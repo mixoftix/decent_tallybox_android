@@ -59,14 +59,14 @@ public class MainActivity_Followup extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        MaterialToolbar toolbar = findViewById(R.id.toolbar_home_back);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home_archive);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_followup);
         setContentView(R.layout.activity_main_followup);
 
         binding = ActivityMainFollowupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbarHomeBack);
+        setSupportActionBar(binding.toolbarHomeArchive);
 
         layout_send_offline = findViewById(R.id.layout_send_offline);
         textview_followup = findViewById(R.id.textview_followup);
@@ -275,7 +275,7 @@ public class MainActivity_Followup extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home_back, menu);
+        getMenuInflater().inflate(R.menu.menu_home_archive, menu);
         return true;
     }
     @Override
@@ -295,9 +295,10 @@ public class MainActivity_Followup extends BaseActivity {
             return true;
         }
 
-        if (id == R.id.action_back) {
-
-            onBackPressed();
+        if (id == R.id.action_archive) {
+            Intent i = new Intent(getApplicationContext(), MainActivity_Archive.class);
+            finishAffinity();
+            startActivity(i);
 
             return true;
         }

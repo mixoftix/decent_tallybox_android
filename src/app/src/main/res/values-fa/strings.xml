@@ -135,6 +135,7 @@
     <string name="history_detail_me">خودم!</string>
 
     <!-- MainActivity / Settings-->
+    <string name="settings_zone">فیلتر ناحیه:</string>
     <string name="settings_serial">سریال</string>
     <string name="settings_network">شبکه</string>
     <string name="settings_uptodate">معتبر</string>
@@ -148,7 +149,7 @@
     <string name="pqc_disable">disable</string>
     <string name="pqc_enable">enable</string>
     <string name="pqc_info_note">
-    *توجه: تالی‌باکس الگوریتم ML-KEM، یکی از پیشرفته‌ترین روش‌های رمزنگاری پساکوانتومی (PQC)، را در این برنامه ادغام کرده است تا کارایی آن را ارزیابی کند. این قابلیت با جلوگیری از حملات مرد میانی (MITM) و تقلب در رسید، از داده‌های حساس تراکنش‌ها محافظت می‌کند.
+    *توجه: کیف پول تالی الگوریتم ML-KEM، یکی از پیشرفته‌ترین روش‌های رمزنگاری پساکوانتومی (PQC) را در این برنامه ادغام کرده است تا کارایی آن را ارزیابی کند. این قابلیت از حملات مرد میانی (MITM) و تقلب در رسید محافظت می‌کند.
     </string>
 
     <!-- MainActivity / Private Key-->

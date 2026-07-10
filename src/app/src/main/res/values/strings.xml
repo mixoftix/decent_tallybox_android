@@ -138,6 +138,7 @@
     <string name="history_detail_me">Me!</string>
 
     <!-- MainActivity / Settings-->
+    <string name="settings_zone">zone filter:</string>
     <string name="settings_serial">serial</string>
     <string name="settings_network">net</string>
     <string name="settings_uptodate">valid</string>
@@ -151,7 +152,7 @@
     <string name="pqc_disable">disable</string>
     <string name="pqc_enable">enable</string>
     <string name="pqc_info_note">
-    *Note: TallyBox has integrated ML-KEM, a cutting-edge Post-Quantum Cryptography (PQC) algorithm, into this app to evaluate its effectiveness. This feature protects sensitive transaction data by preventing Man-in-the-Middle (MITM) attacks and receipt fraud.
+    *Note: TallyBox has integrated ML-KEM, a cutting edge Post-Quantum Cryptography (PQC) algorithm into this app to evaluate its effectiveness. This feature prevents Man-in-the-Middle (MITM) attacks and receipt fraud.
     </string>
 
     <!-- MainActivity / Private Key-->

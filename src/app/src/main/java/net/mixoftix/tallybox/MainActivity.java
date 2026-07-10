@@ -50,6 +50,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.ECPoint;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -108,7 +109,7 @@ public class MainActivity extends BaseActivity {
     };
     public static final String[] spinner_options_zones = {
             "Mars",      // index 0 - gpp_mars
-            "Venus",     // index 1 - gpp_venus
+            "Mars",     // index 1 - gpp_venus
             "Pluto"      // index 2 - gpp_pluto
     };
 
@@ -146,6 +147,7 @@ public class MainActivity extends BaseActivity {
 
     // variables - settings
     public static String setting_network_protocol = "";
+    public static String setting_zone_filter = "";
     public static String setting_safeguard_pqc = "";
     public static String setting_graph_domain_in = "";
 
@@ -231,18 +233,7 @@ public class MainActivity extends BaseActivity {
 
         textview_main_whatsup = findViewById(R.id.textview_main_whatsup);
         textview_main_advertise = findViewById(R.id.textview_main_advertise);
-
         textview_balance_wallet  = findViewById(R.id.textview_balance_wallet);
-
-        // BGN: spinner of graph_in
-
-        dropdownSpinner = findViewById(R.id.dropdownSpinner);
-        // String[] spinner_options = {"tehran.dag.tejaratbank.ir", "tabriz.dag.tejaratbank.ir", "shiraz.dag.tejaratbank.ir"};
-
-        GraphSpinnerAdapter adapter = new GraphSpinnerAdapter(this, spinner_options);
-        dropdownSpinner.setAdapter(adapter);
-
-        // END: spinner of graph_in
 
         //endregion
 
@@ -429,6 +420,83 @@ public class MainActivity extends BaseActivity {
             setting_network_protocol = Access_file.access_file_func_read(getApplicationContext(), "setting_network_protocol");
         }
 
+        // set filter of zone in the first run
+        setting_zone_filter = Access_file.access_file_func_read(getApplicationContext(), "setting_zone_filter");
+        Access_log.log_it("i","shahin","333 - setting_zone_filter: " + setting_zone_filter);
+
+        if (setting_zone_filter.equals("-"))
+        {
+            Access_file.access_file_func_write(getApplicationContext(), "setting_zone_filter", spinner_options_zones[0].toLowerCase(), "write");
+            setting_zone_filter = Access_file.access_file_func_read(getApplicationContext(), "setting_zone_filter");
+            Access_log.log_it("i","shahin","333 - setting_zone_filter: " + setting_zone_filter);
+        }
+
+        // BGN: spinner of graph_in
+
+        dropdownSpinner = findViewById(R.id.dropdownSpinner);
+
+        // Read current zone filter
+        String zoneFilter = Access_file.access_file_func_read(getApplicationContext(), "setting_zone_filter");
+        Access_log.log_it("i", "shahin", "Graph spinner - zone filter: " + zoneFilter);
+
+        // Get filtered domains based on zone setting
+        List<String> filteredDomains = MainActivity.getFilteredDomainsForZone(zoneFilter);
+
+        GraphSpinnerAdapter adapter = new GraphSpinnerAdapter(this, filteredDomains);
+        dropdownSpinner.setAdapter(adapter);
+
+        // === IMPORTANT: Safe selection after filtering ===
+        if (!filteredDomains.isEmpty()) {
+            String currentGraph = graph_domain_in; // or setting_graph_domain_in
+            int newPosition = -1;
+
+            // Try to find previous selection in the new filtered list
+            for (int i = 0; i < filteredDomains.size(); i++) {
+                if (filteredDomains.get(i).equals(currentGraph)) {
+                    newPosition = i;
+                    break;
+                }
+            }
+
+            if (newPosition == -1) {
+                newPosition = 0; // fallback to first item
+            }
+
+            dropdownSpinner.setSelection(newPosition);
+            Access_log.log_it("i", "shahin", "Spinner set to position: " + newPosition + " -> " + filteredDomains.get(newPosition));
+        } else {
+            Access_log.log_it("e", "shahin", "Filtered domains list is empty!");
+        }
+
+        // END: spinner of graph_in
+
+        // set the graph_domain_in
+        setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
+        Access_log.log_it("i","shahin","111 - setting_graph_domain_in: " + setting_graph_domain_in);
+
+        if (setting_graph_domain_in.equals("-") || setting_graph_domain_in.isEmpty())
+        {
+            if (!filteredDomains.isEmpty()) {
+                String firstDomain = filteredDomains.get(0);
+                Access_log.log_it("i", "shahin", "First domain in filtered list: " + firstDomain);
+
+                Access_file.access_file_func_write(getApplicationContext(), "setting_graph_domain_in", firstDomain, "write");
+                setting_graph_domain_in = firstDomain;
+                graph_domain_in = firstDomain;
+            } else {
+                // Ultimate fallback
+                graph_domain_in = spinner_options[0];
+                setting_graph_domain_in = graph_domain_in;
+                Access_file.access_file_func_write(getApplicationContext(), "setting_graph_domain_in", graph_domain_in, "write");
+            }
+            Access_log.log_it("w","shahin","Graph_in_domain Setup: " + graph_domain_in);
+        }
+        else
+        {
+            graph_domain_in = setting_graph_domain_in;
+            Access_log.log_it("w","shahin","Graph_in_domain Reloaded: " + graph_domain_in);
+        }
+
         // set PQC protocol in the first run
         setting_safeguard_pqc = Access_file.access_file_func_read(getApplicationContext(), "setting_safeguard_pqc");
         Access_log.log_it("i","shahin","333 - setting_safeguard_pqc: " + setting_safeguard_pqc);
@@ -437,24 +505,6 @@ public class MainActivity extends BaseActivity {
         {
             Access_file.access_file_func_write(getApplicationContext(), "setting_safeguard_pqc", "disable", "write");
             setting_safeguard_pqc = Access_file.access_file_func_read(getApplicationContext(), "setting_safeguard_pqc");
-        }
-
-        // set the graph_domain_in
-        setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
-        Access_log.log_it("i","shahin","111 - setting_graph_domain_in: " + setting_graph_domain_in);
-
-        if (setting_graph_domain_in.equals("-"))
-        {
-            Access_file.access_file_func_write(getApplicationContext(), "setting_graph_domain_in", spinner_options[0], "write");
-            setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
-            graph_domain_in = setting_graph_domain_in;
-
-            Access_log.log_it("w","shahin","Graph_in_domain Setup: " + graph_domain_in);
-        }
-        else
-        {
-            graph_domain_in = setting_graph_domain_in;
-            Access_log.log_it("w","shahin","Graph_in_domain Reloaded: " + graph_domain_in);
         }
 
         // set all PQC serial and pk including graph_address_in
@@ -497,86 +547,43 @@ public class MainActivity extends BaseActivity {
             }
         });
         // Set a selected listener for graph_in_spinner
-        final Boolean[] spinner_isFirstSelection = {true};
         dropdownSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            private boolean isFirstSelection = true;
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position < 0 || position >= parent.getCount()) {
+                    Access_log.log_it("e", "shahin", "Invalid spinner position: " + position);
+                    return;
+                }
 
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
-                // BGN: graph settings
-                setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
-                Access_log.log_it("i","shahin","111 - spinner setting_graph_domain_in: " + setting_graph_domain_in);
+                // Save selected graph
+                Access_file.access_file_func_write(getApplicationContext(), "setting_graph_domain_in", selectedItem, "write");
+                setting_graph_domain_in = selectedItem;
+                graph_domain_in = selectedItem;
 
-                if (spinner_isFirstSelection[0])
-                {
-                    spinner_isFirstSelection[0] = false;
+                Access_log.log_it("w","shahin","Spinner selected: " + graph_domain_in);
 
-                    if (setting_graph_domain_in.equals("-"))
-                    {
-                        Access_file.access_file_func_write(getApplicationContext(), "setting_graph_domain_in", selectedItem, "write");
-                        setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
-                        graph_domain_in = setting_graph_domain_in;
-
-                        Access_log.log_it("w","shahin","111 - spinner set graph_domain_in: " + graph_domain_in);
-                    }
-                    else
-                    {
-                        graph_domain_in = setting_graph_domain_in;
-                        Access_log.log_it("w","shahin","111 - spinner reload graph_domain_in: " + graph_domain_in);
-                    }
-                }
-                else
-                {
-                    if (selectedItem.equals(setting_graph_domain_in))
-                    {
-                        Access_log.log_it("w","shahin","111 - spinner select graph_domain_in: " + graph_domain_in);
-                    }
-                    else
-                    {
-                        Access_file.access_file_func_write(getApplicationContext(), "setting_graph_domain_in", selectedItem, "write");
-                        setting_graph_domain_in = Access_file.access_file_func_read(getApplicationContext(), "setting_graph_domain_in");
-                        graph_domain_in = setting_graph_domain_in;
-
-                        Access_log.log_it("w","shahin","111 - spinner re-wrote graph_domain_in: " + graph_domain_in);
-                    }
-
-                }
-
-                // END: graph settings
-
-                // Find the position of selection
+                // Find original index for network settings
                 int matchedIndex = -1;
                 for (int i = 0; i < spinner_options.length; i++) {
                     if (spinner_options[i].equals(graph_domain_in)) {
                         matchedIndex = i;
-                        break;  // Stop at first match
+                        break;
                     }
                 }
 
-                // Find the position of selection parallel
-                if (matchedIndex != -1)
-                {
-                    // reconfig all network settings
+                if (matchedIndex != -1) {
                     setting_connection_values(matchedIndex);
                     setting_connection(setting_network_protocol);
 
-                    // redraw_views
                     crypto_list_label(graph_domain_in, spinner_options_crypto_list[matchedIndex]);
                     refresh_label(graph_domain_in, "");
-
-                    // Set the selection
-                    dropdownSpinner.setSelection(matchedIndex);
+                } else {
+                    Access_log.log_it("e","shahin","Could not find original index for: " + graph_domain_in);
                 }
-                else
-                {
-                    graph_domain_in = "unknown!!";
-                    graph_address_in_dw = "127.0.0.1";
-                    graph_address_in_ods = "127.0.0.1";
-                    Access_log.log_it("w","shahin","Fatal Error graph_in_address: " + graph_domain_in);
-                }
-
-                Access_log.log_it("w","shahin","new spinner graph_in_domain: " + graph_domain_in);
             }
 
             @Override
@@ -1633,8 +1640,6 @@ public class MainActivity extends BaseActivity {
 
         return String.join(",", set1);
     }
-
-    // Put this in your Activity or a utility class
     public static int getIconForToken(String token) {
         switch (token.toUpperCase().trim()) {
             case "2ZR":
@@ -1648,6 +1653,46 @@ public class MainActivity extends BaseActivity {
             default:
                 return R.drawable.baseline_fingerprint_24; // fallback
         }
+    }
+
+
+    public static List<String> getValidUniqueZones() {
+        List<String> validZones = new ArrayList<>();
+        Set<String> seen = new HashSet<>();
+
+        for (String zone : spinner_options_zones) {
+            if (zone != null && !zone.trim().isEmpty() && !seen.contains(zone)) {
+                validZones.add(zone.trim());   // trim extra spaces
+                seen.add(zone);
+            }
+        }
+        return validZones;
+    }
+    public static List<String> getFilteredDomainsForZone(String zoneFilter) {
+        List<String> filtered = new ArrayList<>();
+
+        if (zoneFilter == null || zoneFilter.equals("-") || zoneFilter.isEmpty()) {
+            // Return all if no filter
+            return new ArrayList<>(Arrays.asList(spinner_options));
+        }
+
+        String filterLower = zoneFilter.toLowerCase();
+
+        for (int i = 0; i < spinner_options.length; i++) {
+            String zone = spinner_options_zones[i];
+
+            if (zone != null && !zone.trim().isEmpty() &&
+                    zone.toLowerCase().contains(filterLower)) {
+                filtered.add(spinner_options[i]);
+            }
+        }
+
+        // Fallback: if nothing matches, return all
+        if (filtered.isEmpty()) {
+            return new ArrayList<>(Arrays.asList(spinner_options));
+        }
+
+        return filtered;
     }
 
     //endregion
@@ -1848,10 +1893,9 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    // Custom Adapter to show Graph + Zones
     private class GraphSpinnerAdapter extends ArrayAdapter<String> {
 
-        public GraphSpinnerAdapter(Context context, String[] domains) {
+        public GraphSpinnerAdapter(Context context, List<String> domains) {
             super(context, 0, domains);
         }
 
@@ -1874,17 +1918,36 @@ public class MainActivity extends BaseActivity {
 
             TextView textView = view.findViewById(R.id.spinnerText);
 
-            String domain = spinner_options[position];
-            String zones = spinner_options_zones[position];
+            // === SAFETY CHECK ===
+            if (position < 0 || position >= getCount()) {
+                textView.setText("Invalid selection");
+                return view;
+            }
 
-            String zonesText = (zones.length() > 0)
-                    ? " [" + String.join(", ", zones) + "]"
+            String domain = getItem(position);
+            String zone = getZoneForDomain(domain);
+
+            String zonesText = (zone != null && !zone.isEmpty())
+                    ? " [" + zone + "]"
                     : " [no zone]";
 
             textView.setText(domain + zonesText);
 
             return view;
         }
+
+        // Helper to find zone from domain
+        private String getZoneForDomain(String domain) {
+            if (domain == null) return "";
+
+            for (int i = 0; i < MainActivity.spinner_options.length; i++) {
+                if (MainActivity.spinner_options[i].equals(domain)) {
+                    return MainActivity.spinner_options_zones[i];
+                }
+            }
+            return "";
+        }
     }
+
 }
 

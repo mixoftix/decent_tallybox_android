@@ -84,7 +84,9 @@ public class MainActivity_History_Detail extends BaseActivity {
         textview_network.setText(HtmlCompat.fromHtml(
                 "<font color='#FFD700'>" + history_network + "</font>",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
+
         textview_graph_in.setText("( " + history_wait + " )");
+        //updateGraphFromDisplay();
 
         // Trigger code after 1 second (1000 milliseconds)
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -185,17 +187,22 @@ public class MainActivity_History_Detail extends BaseActivity {
 
     // Show Graph From + Zones
     private void updateGraphFromDisplay() {
+
+        String history_in_graph = getString(R.string.history_in_graph);
         int index = getGraphIndex(MainActivity.graph_domain_in);
+
         String zones = (index != -1) ? getZoneForGraph(index) : " [no zone]";
 
         String zonesText = (zones.length() > 0)
-                ? " [" + String.join(", ", zones) + "]"
-                : " [no zone]";
+                ? String.join(", ", zones)
+                : "no zone";
 
         //textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + zonesText + ")");
         textview_graph_in.setText(HtmlCompat.fromHtml(
-                "(in graph: <b>" + MainActivity.graph_domain_in + "</b>" +
-                        "<font color='cyan'>" + zonesText + "</font>)",
+                "(" +
+                        "<font color='cyan'>" + zonesText + "</font> / " +
+                        "<b>" + MainActivity.graph_domain_in + "</b>" +
+                        ")",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
     }
     // Get zones for a graph by index
@@ -269,6 +276,9 @@ public class MainActivity_History_Detail extends BaseActivity {
                                 "ledger_history_tally_hash" +
                                 server_url_query);
 
+                the_log_str += "Request - URL: " + MainActivity.server_url_dw + "ledger_history_tally_hash" + "\n\n";
+
+                Access_log.log_it("i", "shahin", "Request - URL: " + MainActivity.server_url_dw + "ledger_history_tally_hash");
                 Access_log.log_it("i", "shahin", "ledger_history_tally_hash: " + result_history_by_tally_hash);
 
                 // Decrypt if PQC is enabled
@@ -380,7 +390,9 @@ public class MainActivity_History_Detail extends BaseActivity {
         String history_detail_receive = getString(R.string.history_detail_receive);
         String history_detail_me = getString(R.string.history_detail_me);
 
-        textview_graph_in.setText("(" + history_in_graph + ": " + split_output[0] + ")");
+        //textview_graph_in.setText("(" + history_in_graph + ": " + split_output[0] + ")");
+        updateGraphFromDisplay();
+
         textview_history_hash_tnxid.setText(HtmlCompat.fromHtml(
                  history_transaction + ": " +
                         "<font color='#7851A9'>" +

@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity {
 
     //region constants
 
-    public static final boolean log_is_enable = true;
+    public static final boolean log_is_enable = false;
     public static final String app_name = "tallybox";
     public static final String app_version = "2.974";
     public static final String file_name_path = "net_mixoftix_tallybox";
@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity {
     };
     public static final String[] spinner_options_zones = {
             "Mars",      // index 0 - gpp_mars
-            "Mars",     // index 1 - gpp_venus
+            "Venus",     // index 1 - gpp_venus
             "Pluto"      // index 2 - gpp_pluto
     };
 
@@ -1110,7 +1110,7 @@ public class MainActivity extends BaseActivity {
                 .show();
     }
 
-    // New Method - Recommended
+    // Language Method
     private void changeLanguage(String newLang) {
         // Save and apply new language
         LocaleHelper.setLocale(this, newLang);
@@ -1120,10 +1120,17 @@ public class MainActivity extends BaseActivity {
     }
 
     private void restartApplication() {
+        /*
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finishAffinity();        // Close all old activities
+        */
+
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+
     }
 
     //endregion
@@ -1931,7 +1938,8 @@ public class MainActivity extends BaseActivity {
                     ? " [" + zone + "]"
                     : " [no zone]";
 
-            textView.setText(domain + zonesText);
+            //textView.setText(domain + zonesText);
+            textView.setText(domain);
 
             return view;
         }

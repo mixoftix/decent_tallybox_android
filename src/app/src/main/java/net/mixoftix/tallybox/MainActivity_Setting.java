@@ -81,6 +81,42 @@ public class MainActivity_Setting extends BaseActivity {
         loadLastSelectedZone();
         loadLastNetworkAndPQCSettings();
 
+        // Set a click listener for the RadioGroupConnection button
+        RadioGroupConnection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                radioConnection = (RadioButton) findViewById(checkedId);
+                String str_connection_protocol = (String) radioConnection.getText();
+                if (layoutDynamicPQC == null) {
+                    Access_log.log_it("e", "shahin", "layout_dynamic_pqc not found in XML!");
+                }
+
+                Access_file.access_file_func_write(getApplicationContext(), "setting_network_protocol", str_connection_protocol, "write");
+                MainActivity.setting_connection(str_connection_protocol);
+
+                Toast.makeText(MainActivity_Setting.this, "Network Protocol: " + str_connection_protocol, Toast.LENGTH_SHORT).show();
+                Access_log.log_it("i","shahin","Network Protocol: " + str_connection_protocol);
+            }
+        });
+
+        // Set a click listener for the RadioGroupPQC button
+        RadioGroupPQC.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                radioPQC = (RadioButton) findViewById(checkedId);
+                String str_radioPQC = (String) radioPQC.getText();
+
+                Access_file.access_file_func_write(getApplicationContext(), "setting_safeguard_pqc", str_radioPQC, "write");
+
+                Toast.makeText(MainActivity_Setting.this, "Safeguard by PQC: " + str_radioPQC + "d", Toast.LENGTH_SHORT).show();
+                Access_log.log_it("i","shahin","Safeguard by PQC: " + str_radioPQC);
+            }
+        });
+
         // Zone change listener
         dropdownSpinner_Zone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -365,48 +401,6 @@ public class MainActivity_Setting extends BaseActivity {
     }
     //endregion
 
-    private void loadLastSelectedZone() {
-        // Read saved setting
-        String savedZone = Access_file.access_file_func_read(getApplicationContext(), "setting_zone_filter");
-
-        Access_log.log_it("i", "shahin", "Loading saved zone filter: " + savedZone);
-
-        if (savedZone == null || savedZone.equals("-") || savedZone.isEmpty()) {
-            // Select first item as default if nothing is saved
-            if (dropdownSpinner_Zone.getCount() > 0) {
-                dropdownSpinner_Zone.setSelection(0);
-            }
-            return;
-        }
-
-        // Find matching zone (case insensitive)
-        for (int i = 0; i < dropdownSpinner_Zone.getCount(); i++) {
-            String displayedZone = (String) dropdownSpinner_Zone.getItemAtPosition(i);
-
-            if (displayedZone.equalsIgnoreCase(savedZone)) {
-                dropdownSpinner_Zone.setSelection(i);
-                Access_log.log_it("i", "shahin", "Zone spinner set to position " + i + " (" + displayedZone + ")");
-                return;
-            }
-        }
-
-        // If no exact match found, try partial match (e.g. "mars" should match "Mars")
-        for (int i = 0; i < dropdownSpinner_Zone.getCount(); i++) {
-            String displayedZone = (String) dropdownSpinner_Zone.getItemAtPosition(i);
-            if (displayedZone.toLowerCase().contains(savedZone.toLowerCase()) ||
-                    savedZone.toLowerCase().contains(displayedZone.toLowerCase())) {
-                dropdownSpinner_Zone.setSelection(i);
-                Access_log.log_it("i", "shahin", "Zone spinner set using partial match: " + displayedZone);
-                return;
-            }
-        }
-
-        // Fallback: select first item
-        if (dropdownSpinner_Zone.getCount() > 0) {
-            dropdownSpinner_Zone.setSelection(0);
-        }
-    }
-
     // Redraw PQC TextViews based on selected zone
     private void redrawDynamicPQCList(String selectedZone) {
         if (layoutDynamicPQC == null) return;
@@ -463,7 +457,48 @@ public class MainActivity_Setting extends BaseActivity {
         return "";
     }
 
-    // Load network & PQC radio buttons
+    // Load zone, network & PQC radio buttons
+    private void loadLastSelectedZone() {
+        // Read saved setting
+        String savedZone = Access_file.access_file_func_read(getApplicationContext(), "setting_zone_filter");
+
+        Access_log.log_it("i", "shahin", "Loading saved zone filter: " + savedZone);
+
+        if (savedZone == null || savedZone.equals("-") || savedZone.isEmpty()) {
+            // Select first item as default if nothing is saved
+            if (dropdownSpinner_Zone.getCount() > 0) {
+                dropdownSpinner_Zone.setSelection(0);
+            }
+            return;
+        }
+
+        // Find matching zone (case insensitive)
+        for (int i = 0; i < dropdownSpinner_Zone.getCount(); i++) {
+            String displayedZone = (String) dropdownSpinner_Zone.getItemAtPosition(i);
+
+            if (displayedZone.equalsIgnoreCase(savedZone)) {
+                dropdownSpinner_Zone.setSelection(i);
+                Access_log.log_it("i", "shahin", "Zone spinner set to position " + i + " (" + displayedZone + ")");
+                return;
+            }
+        }
+
+        // If no exact match found, try partial match (e.g. "mars" should match "Mars")
+        for (int i = 0; i < dropdownSpinner_Zone.getCount(); i++) {
+            String displayedZone = (String) dropdownSpinner_Zone.getItemAtPosition(i);
+            if (displayedZone.toLowerCase().contains(savedZone.toLowerCase()) ||
+                    savedZone.toLowerCase().contains(displayedZone.toLowerCase())) {
+                dropdownSpinner_Zone.setSelection(i);
+                Access_log.log_it("i", "shahin", "Zone spinner set using partial match: " + displayedZone);
+                return;
+            }
+        }
+
+        // Fallback: select first item
+        if (dropdownSpinner_Zone.getCount() > 0) {
+            dropdownSpinner_Zone.setSelection(0);
+        }
+    }
     private void loadLastNetworkAndPQCSettings() {
         // load last network protocol
         Access_log.log_it("i","shahin","connection_" + MainActivity.setting_network_protocol.toLowerCase());

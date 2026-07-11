@@ -20,7 +20,7 @@
             android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar_home"
+                android:id="@+id/toolbar_language"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
 
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:padding="10dp"
-            android:text="Local password:"
+            android:text="@string/wallet_password_local"
             android:textSize="17sp"
             />
 
@@ -52,7 +52,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:padding="10dp"
-                android:hint="Password"
+                android:gravity="left"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:hint="@string/wallet_password"
                 android:drawablePadding="2dp"
                 android:drawableEnd="@drawable/baseline_key_24"
                 android:inputType="textPassword" />
@@ -62,8 +65,11 @@
                 android:id="@+id/editTextPassword2"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:gravity="left"
                 android:padding="10dp"
-                android:hint="Password Re-enter"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:hint="@string/wallet_password_2"
                 android:drawablePadding="2dp"
                 android:drawableEnd="@drawable/baseline_key_off_24"
                 android:inputType="textPassword" />
@@ -76,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:padding="10dp"
-            android:text="Wallet Type:"
+            android:text="@string/wallet_type"
             android:textSize="17sp"
             />
 
@@ -86,11 +92,13 @@
             android:orientation="vertical"
             android:gravity="center|top"
             android:padding="10dp"
+            android:textDirection="locale"
+            android:layoutDirection="locale"
             android:layout_marginBottom="10dp"
             android:background="@drawable/frame_white"
             >
 
-            <!-- Currency RadioGroup -->
+            <!-- Wallet type RadioGroup -->
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,12 +110,12 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:id="@+id/wallet_new"
-                    android:text="New wallet"/>
+                    android:text="@string/wallet_new"/>
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/wallet_restore"
-                    android:text="Restore wallet"/>
+                    android:text="@string/wallet_restore"/>
 
             </RadioGroup>
 
@@ -119,7 +127,10 @@
             android:padding="10dp"
             android:enabled="false"
             android:visibility="gone"
-            android:hint="Private Key"
+            android:gravity="left"
+            android:textDirection="locale"
+            android:layoutDirection="locale"
+            android:hint="@string/wallet_private_key"
             android:drawablePadding="2dp"
             android:drawableEnd="@drawable/baseline_lock_24"
             android:inputType="text" />
@@ -134,7 +145,7 @@
             android:padding="10dp"
             android:drawablePadding="2dp"
             android:drawableEnd="@drawable/baseline_account_balance_wallet_24"
-            android:text="Create Wallet">
+            android:text="@string/wallet_create">
         </Button>
 
     </LinearLayout>

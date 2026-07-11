@@ -42,6 +42,17 @@
     <string name="action_terms">Terms</string>
     <string name="action_about">About</string>
 
+    <!-- MainActivity / Wallet -->
+    <string name="wallet_password_local">Local password:</string>
+    <string name="wallet_password">Password</string>
+    <string name="wallet_password_2">Password re-enter</string>
+    <string name="wallet_type">Wallet type:</string>
+    <string name="wallet_new">New wallet</string>
+    <string name="wallet_restore">Restore wallet</string>
+    <string name="wallet_private_key">Private key</string>
+    <string name="wallet_create">Create wallet</string>
+
+
     <!-- MainActivity -->
     <string name="receive">Receive</string>
     <string name="send">Pay</string>

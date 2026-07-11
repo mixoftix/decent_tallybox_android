@@ -32,11 +32,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 import net.mixoftix.tallybox.databinding.ActivityMainHistoryBinding;
 
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity_History extends BaseActivity {
 
@@ -58,14 +55,14 @@ public class MainActivity_History extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MaterialToolbar toolbar = findViewById(R.id.toolbar_home_refresh);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_home_back_refresh);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_history);
         setContentView(R.layout.activity_main_history);
 
         binding = ActivityMainHistoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbarHomeRefresh);
+        setSupportActionBar(binding.toolbarHomeBackRefresh);
 
         textview_graph_in = findViewById(R.id.textview_graph_in);
         image_view_coin = findViewById(R.id.image_view_coin);
@@ -151,7 +148,7 @@ public class MainActivity_History extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home_refresh, menu);
+        getMenuInflater().inflate(R.menu.menu_home_back_refresh, menu);
         return true;
     }
     @Override
@@ -618,13 +615,15 @@ public class MainActivity_History extends BaseActivity {
         String zones = (index != -1) ? getZoneForGraph(index) : " [no zone]";
 
         String zonesText = (zones.length() > 0)
-                ? " [" + String.join(", ", zones) + "]"
-                : " [no zone]";
+                ? String.join(", ", zones)
+                : "no zone";
 
         //textview_graph_in.setText("(in graph: " + MainActivity.graph_domain_in + zonesText + ")");
         textview_graph_in.setText(HtmlCompat.fromHtml(
-                "(" + history_in_graph + ": <b>" + MainActivity.graph_domain_in + "</b>" +
-                        "<font color='cyan'>" + zonesText + "</font>)",
+                "(" +
+                        "<font color='cyan'>" + zonesText + "</font> / " +
+                        "<b>" + MainActivity.graph_domain_in + "</b>" +
+                        ")",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
     }
     // Get zones for a graph by index

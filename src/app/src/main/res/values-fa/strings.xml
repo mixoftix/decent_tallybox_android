@@ -40,6 +40,17 @@
     <string name="action_terms">مقررات</string>
     <string name="action_about">معرفی</string>
 
+    <!-- MainActivity / Wallet -->
+    <string name="wallet_password_local">رمز عبور محلی:</string>
+    <string name="wallet_password">رمز عبور</string>
+    <string name="wallet_password_2">تکرار رمز عبور</string>
+    <string name="wallet_type">نوع کیف پول:</string>
+    <string name="wallet_new">کیف پول جدید</string>
+    <string name="wallet_restore">بازیابی کیف پول</string>
+    <string name="wallet_private_key">کلید خصوصی</string>
+    <string name="wallet_create">ساخت کیف پول</string>
+
+
     <!-- MainActivity -->
     <string name="receive">دریافت</string>
     <string name="send">پرداخت</string>

@@ -1,10 +1,12 @@
 package net.mixoftix.tallybox;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,8 +14,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import net.mixoftix.tallybox.R;
 import com.google.android.material.appbar.MaterialToolbar;
-
 import net.mixoftix.tallybox.databinding.ActivityMainWalletConfigBinding;
 
 import java.io.UnsupportedEncodingException;
@@ -22,7 +24,6 @@ import java.security.NoSuchAlgorithmException;
 public class MainActivity_Wallet_config extends BaseActivity {
 
     private EditText editTextPassword1,editTextPassword2,editTextRestore_Privatekey;
-    private RadioButton radioWalletType;
     private RadioGroup RadioGroupWalletType;
     private Button buttonPasswordSave;
     private static ActivityMainWalletConfigBinding binding;
@@ -30,14 +31,14 @@ public class MainActivity_Wallet_config extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MaterialToolbar toolbar = findViewById(R.id.toolbar_home);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_language);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_wallet_config);
         setContentView(R.layout.activity_main_wallet_config);
 
         binding = ActivityMainWalletConfigBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbarHome);
+        setSupportActionBar(binding.toolbarLanguage);
 
         editTextPassword1 = findViewById(R.id.editTextPassword1);
         editTextPassword2 = findViewById(R.id.editTextPassword2);
@@ -45,29 +46,23 @@ public class MainActivity_Wallet_config extends BaseActivity {
         editTextRestore_Privatekey = findViewById(R.id.editTextRestore_Privatekey);
         buttonPasswordSave = findViewById(R.id.buttonPasswordSave);
 
-        // Set a click listener for the wallet address
-        RadioGroupWalletType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
+        RadioGroupWalletType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                // get selected radio button from radioGroup
-                int selectedId = RadioGroupWalletType.getCheckedRadioButtonId();
-                radioWalletType = (RadioButton) findViewById(selectedId);
-                String str_wallet_type = (String) radioWalletType.getText();
-
-                if (str_wallet_type.contains("Restore")) {
+                if (checkedId == R.id.wallet_new)
+                {
+                    editTextRestore_Privatekey.setText("");
+                    editTextRestore_Privatekey.setEnabled(false);
+                    editTextRestore_Privatekey.setVisibility(View.GONE);
+                }
+                else if (checkedId == R.id.wallet_restore)
+                {
                     editTextRestore_Privatekey.setVisibility(View.VISIBLE);
                     editTextRestore_Privatekey.setText("");
                     editTextRestore_Privatekey.setEnabled(true);
                     editTextRestore_Privatekey.requestFocus();
                 }
-                if (str_wallet_type.contains("New")) {
-                    editTextRestore_Privatekey.setText("");
-                    editTextRestore_Privatekey.setEnabled(false);
-                    editTextRestore_Privatekey.setVisibility(View.GONE);
-                }
-
-                //Toast.makeText(MainActivity_Wallet_config.this, String.valueOf(editTextRestore_Privatekey.isEnabled()), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -136,8 +131,62 @@ public class MainActivity_Wallet_config extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.empty_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_language, menu);
         return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        String server_url_query = "";
+        String result = "";
+
+        if (id == R.id.action_language) {
+
+            showLanguageSelector();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Inside your Settings Activity
+    private void showLanguageSelector() {
+        String[] languageNames = {"English", "فارسی (Persian)"};
+        String[] languageCodes = {"en", "fa"};
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.select_language)   // Better to use string resource
+                .setSingleChoiceItems(languageNames, -1, (dialog, which) -> {
+                    String selectedCode = languageCodes[which];
+
+                    dialog.dismiss();
+
+                    // Use the new method
+                    changeLanguage(selectedCode);
+                })
+                .show();
+    }
+
+    // Language Method
+    private void changeLanguage(String newLang) {
+        // Save and apply new language
+        LocaleHelper.setLocale(this, newLang);
+
+        // Restart the app cleanly (best for full direction refresh)
+        restartApplication();
+    }
+
+    private void restartApplication() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+
     }
 
 }

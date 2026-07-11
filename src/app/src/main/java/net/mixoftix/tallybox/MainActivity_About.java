@@ -130,6 +130,8 @@ public class MainActivity_About extends BaseActivity {
                     textview_about_update.setEnabled(true);
 
                     if (isNewerVersion(finalResult, MainActivity.app_version)) {
+
+                        Access_log.log_it("i","shahin","New version available..");
                         // New version available
                         String versionClean = finalResult.replace(".", "_");
                         String server_url_wallet_dl = "https://wallet.mixoftix.net" +
@@ -142,7 +144,10 @@ public class MainActivity_About extends BaseActivity {
                                         "</a>",
                                 HtmlCompat.FROM_HTML_MODE_LEGACY));
 
-                    } else {
+                    }
+                    else
+                    {
+                        Access_log.log_it("i","shahin","No update..");
                         // No update
                         textview_about_update.setText(HtmlCompat.fromHtml(
                                 tallybox_about_version + ": " + MainActivity.app_version +

@@ -181,8 +181,14 @@ public class MainActivity_Send extends BaseActivity {
                 String str_graph_domain_from = MainActivity.graph_domain_in;
                 String str_graph_domain_to = dropdownSpinner_GraphDomainTo.getSelectedItem().toString();
 
+                Access_log.log_it("i","shahin","str_graph_domain_from: " + str_graph_domain_from);
+                Access_log.log_it("i","shahin","str_graph_domain_to: " + str_graph_domain_to);
+
                 int fromIdx = getGraphIndex(str_graph_domain_from);
                 int toIdx   = getGraphIndex(str_graph_domain_to);
+
+                Access_log.log_it("i","shahin","fromIdx: " + fromIdx);
+                Access_log.log_it("i","shahin","toIdx: " + toIdx);
 
                 if (!haveSameZone(fromIdx, toIdx)) {
                     Toast.makeText(MainActivity_Send.this, "Transfer not allowed: Different zones", Toast.LENGTH_LONG).show();
@@ -371,7 +377,7 @@ public class MainActivity_Send extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                onGraphDomainChanged(position);
+                onGraphDomainChanged(dropdownSpinner_GraphDomainTo.getItemAtPosition(position).toString());
             }
 
             @Override
@@ -573,15 +579,17 @@ public class MainActivity_Send extends BaseActivity {
             //editTextGraphDomainTo.setText(MainActivity.graph_domain_in);
             // Find the index of the target domain
             int targetIndex = -1;
-            for (int i = 0; i < spinner_options.length; i++) {
-                if (spinner_options[i].equals(MainActivity.graph_domain_in)) {
+            for (int i = 0; i < dropdownSpinner_GraphDomainTo.getCount(); i++) {
+                if (dropdownSpinner_GraphDomainTo.getItemAtPosition(i).toString().equals(MainActivity.graph_domain_in)) {
                     targetIndex = i;
                     break;
                 }
             }
-            // Set the selection if found
+
             if (targetIndex != -1) {
                 dropdownSpinner_GraphDomainTo.setSelection(targetIndex);
+            } else if (dropdownSpinner_GraphDomainTo.getCount() > 0) {
+                dropdownSpinner_GraphDomainTo.setSelection(0); // fallback
             }
 
             editTextWalletTo.setText("");
@@ -589,7 +597,7 @@ public class MainActivity_Send extends BaseActivity {
             editTextOrder.setText("");
 
             is_parcel_processing = false;        // Manually trigger
-            onGraphDomainChanged(targetIndex);   // Manually trigger
+            onGraphDomainChanged(MainActivity.graph_domain_in);   // Manually trigger
 
             Toast.makeText(MainActivity_Send.this, "invalid tally-parcel..", Toast.LENGTH_SHORT).show();
         }
@@ -678,7 +686,11 @@ public class MainActivity_Send extends BaseActivity {
         String zoneFrom = getZoneForGraph(fromIndex);
         String zoneTo   = getZoneForGraph(toIndex);
 
-        if (zoneFrom.isEmpty() || zoneTo.isEmpty()) {
+        Access_log.log_it("i","shahin","zoneFrom: " + zoneFrom);
+        Access_log.log_it("i","shahin","zoneTo: " + zoneTo);
+
+        if (zoneFrom.isEmpty() || zoneTo.isEmpty())
+        {
             return fromIndex == toIndex;   // fallback: only same graph
         }
 
@@ -738,12 +750,16 @@ public class MainActivity_Send extends BaseActivity {
 
     //region functions_of_graph_token
 
-    private void onGraphDomainChanged(int position) {
-        if (position < 0 || position >= MainActivity.spinner_options.length) return;
+    private void onGraphDomainChanged(String selectedServer2) {
+        //if (position < 0 || position >= MainActivity.spinner_options.length) return;
+        //         dropdownSpinner_GraphDomainTo.getItemAtPosition(i).toString()
 
         String selectedServer1 = MainActivity.graph_domain_in;   // Graph From
         int fromIndex = getGraphIndex(selectedServer1);
-        int toIndex   = position;
+        int toIndex   = getGraphIndex(selectedServer2);
+
+        Access_log.log_it("i","shahin","onGraphDomainChanged - fromIdx: " + fromIndex);
+        Access_log.log_it("i","shahin","onGraphDomainChanged - toIdx: " + toIndex);
 
         // === Zone Validation (Same Zone Only) ===
         if (!haveSameZone(fromIndex, toIndex)) {
@@ -753,7 +769,7 @@ public class MainActivity_Send extends BaseActivity {
 
         }
 
-        updateCommonTokensDropdown(selectedServer1, MainActivity.spinner_options[position]);
+        updateCommonTokensDropdown(selectedServer1, selectedServer2);
 
         if (!is_parcel_processing) {
             // popupWindow.show();

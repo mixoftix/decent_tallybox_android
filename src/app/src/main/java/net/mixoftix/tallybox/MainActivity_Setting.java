@@ -205,6 +205,7 @@ public class MainActivity_Setting extends BaseActivity {
     }
 
     //region dynamic_pqc_settings
+
     private void addDynamicTextView(LinearLayout parent,
                                     String graph_name,
                                     String pqc_serial,
@@ -307,8 +308,16 @@ public class MainActivity_Setting extends BaseActivity {
     private void updatePQCInStorage(String graph, String serial, String pk) {
         for (int j = 0; j < MainActivity.spinner_options.length; j++) {
             if (MainActivity.spinner_options[j].equals(graph)) {
-                Access_file.access_file_func_write(getApplicationContext(), "app_pqc_serial_" + j, serial, "write");
-                Access_file.access_file_func_write(getApplicationContext(), "app_pqc_pk_" + j, pk, "write");
+                Access_file.access_file_func_write(getApplicationContext(),
+                                            "app_pqc_serial_" + MainActivity.spinner_options[j].replace(".","_"),
+                                                    serial,
+                              "write"
+                                                    );
+                Access_file.access_file_func_write(getApplicationContext(),
+                                            "app_pqc_pk_" + MainActivity.spinner_options[j].replace(".","_"),
+                                                    pk,
+                              "write"
+                                                    );
 
                 MainActivity.spinner_options_pqc_serial[j] = serial;
                 MainActivity.spinner_options_pqc_pk[j] = pk;

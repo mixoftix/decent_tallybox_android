@@ -28,8 +28,40 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <!-- Layout Setting -->
-        <!-- Network -->
+        <!-- Zone of graphs -->
+        <LinearLayout
+            android:id="@+id/layout_of_extra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center|top"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/frame_white"
+            android:visibility="visible">
 
+            <!-- Zone -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="@string/settings_zone"
+                android:textSize="16sp"
+                android:gravity="start"
+                android:paddingEnd="8dp" />
+
+            <Spinner
+                android:id="@+id/dropdownSpinner_Zone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:textSize="17sp"
+                android:background="@drawable/frame_white"
+                android:spinnerMode="dropdown" />
+
+        </LinearLayout>
+
+        <!-- Network -->
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,39 +103,6 @@
                     android:text="@string/connection_https" />
 
             </RadioGroup>
-
-        </LinearLayout>
-
-        <!-- Zone of graphs -->
-        <LinearLayout
-            android:id="@+id/layout_of_extra"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center|top"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/frame_white"
-            android:visibility="visible">
-
-            <!-- Zone -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/settings_zone"
-                android:textSize="16sp"
-                android:gravity="start"
-                android:paddingEnd="8dp" />
-
-            <Spinner
-                android:id="@+id/dropdownSpinner_Zone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textDirection="locale"
-                android:layoutDirection="locale"
-                android:textSize="17sp"
-                android:background="@drawable/frame_white"
-                android:spinnerMode="dropdown" />
 
         </LinearLayout>
 

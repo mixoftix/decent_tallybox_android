@@ -29,7 +29,7 @@ import java.util.List;
 public class MainActivity_Archive extends BaseActivity {
 
     private static ActivityMainArchiveBinding binding;
-    private TextView textview_archive;
+    private TextView textview_archive, textview_archive_empty;
 
 
     @Override
@@ -44,6 +44,7 @@ public class MainActivity_Archive extends BaseActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbarHomeRefresh);
 
+        textview_archive_empty = findViewById(R.id.textview_archive_empty);
         LinearLayout layoutArchive = findViewById(R.id.layout_archive);
         textview_archive = findViewById(R.id.textview_archive);
         textview_archive.setText(getString(R.string.archive_note));
@@ -57,9 +58,19 @@ public class MainActivity_Archive extends BaseActivity {
         String refresh_utc_unix_now = String.valueOf(Access_time.getUnixTimestampSeconds());
         List<String> followup_keys_list = Access_file.followup_keys_list(getApplicationContext(),"followup");
 
-        for (String followup_key : followup_keys_list) {
-            String followup_raw_tx = Access_file.followup_keys_read(getApplicationContext(), followup_key);
-            Access_log.log_it("i","shahin","followup_raw_tx: " + followup_raw_tx);
+        layoutArchive.removeAllViewsInLayout();
+
+        if (followup_keys_list.size() <= 0)
+        {
+            textview_archive_empty.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            textview_archive_empty.setVisibility(View.GONE);
+
+            for (String followup_key : followup_keys_list) {
+                String followup_raw_tx = Access_file.followup_keys_read(getApplicationContext(), followup_key);
+                Access_log.log_it("i","shahin","followup_raw_tx: " + followup_raw_tx);
 
             /*
             "tallybox~parcel_of_transaction~" +
@@ -75,42 +86,43 @@ public class MainActivity_Archive extends BaseActivity {
             "publicKey_xy_compressed~FGnWVEefuuB3iN4MBGgSWiAzCuCJMdAttp2qZcSqhaJQ*1"
             */
 
-            String[] split_followup_tx;
-            split_followup_tx = followup_raw_tx.split("~");
+                String[] split_followup_tx;
+                split_followup_tx = followup_raw_tx.split("~");
 
-            String payment_graphName = split_followup_tx[3];
-            String payment_moment = followup_key.replace("followup_","");
-            payment_moment = Access_time.getTimeDifference(currentLang,refresh_utc_unix_now,payment_moment);
-            String payment_currency = split_followup_tx[11];
-            String payment_amount = split_followup_tx[13];
+                String payment_graphName = split_followup_tx[3];
+                String payment_moment = followup_key.replace("followup_","");
+                payment_moment = Access_time.getTimeDifference(currentLang,refresh_utc_unix_now,payment_moment);
+                String payment_currency = split_followup_tx[11];
+                String payment_amount = split_followup_tx[13];
 
-            addDynamicItemLayout(
-                    layoutArchive,
-                    payment_graphName,
-                    payment_moment,
-                    payment_currency,
-                    payment_amount,
-                    follow_up,               // Button 1 text
-                    follow_ignore,           // Button 2 text
-                    v -> {
-                        // ← Button 1 Clicked (e.g. Check Network / PQC)
-                        //checkPqcStatus(graphName, serial);
-                        Intent i = new Intent(getApplicationContext(),MainActivity_Followup.class);
-                        i.putExtra("followup_key", followup_key);
-                        startActivity(i);
-                    },
-                    v -> {
-                        // ← Button 2 Clicked (e.g. Another action)
-                        //doAnotherAction(graphName, serial);
-                        Access_file.followup_keys_remove(getApplicationContext(), followup_key);
-                        Access_file.followup_keys_remove(getApplicationContext(), followup_key.replace("followup_","archive_"));
+                addDynamicItemLayout(
+                        layoutArchive,
+                        payment_graphName,
+                        payment_moment,
+                        payment_currency,
+                        payment_amount,
+                        follow_up,               // Button 1 text
+                        follow_ignore,           // Button 2 text
+                        v -> {
+                            // ← Button 1 Clicked (e.g. Check Network / PQC)
+                            //checkPqcStatus(graphName, serial);
+                            Intent i = new Intent(getApplicationContext(),MainActivity_Followup.class);
+                            i.putExtra("followup_key", followup_key);
+                            startActivity(i);
+                        },
+                        v -> {
+                            // ← Button 2 Clicked (e.g. Another action)
+                            //doAnotherAction(graphName, serial);
+                            Access_file.followup_keys_remove(getApplicationContext(), followup_key);
+                            Access_file.followup_keys_remove(getApplicationContext(), followup_key.replace("followup_","archive_"));
 
-                        Intent intent = getIntent();
-                        finish();
-                        startActivity(intent);
-                    }
-            );
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                        }
+                );
 
+            }
         }
 
         //endregion

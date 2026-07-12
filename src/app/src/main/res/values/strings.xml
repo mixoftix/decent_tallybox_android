@@ -76,11 +76,12 @@
 
     <!-- MainActivity / Archive -->
     <string name="archive_note">
-        These raw transactions are still remaining in your wallet and
+        Raw transactions remain in your wallet and
         require processing and then follow‑up, unless you choose to ignore them.
         \n\n
-        Archived raw transactions will be removed automatically after 7 days.
+        Archived raw transactions will be ignored automatically after 7 days.
     </string>
+    <string name="archive_empty">No archived transaction found.</string>
 
     <!-- MainActivity / Followup -->
     <string name="follow_offline_sign">Offline</string>
@@ -141,7 +142,7 @@
     <string name="history_channel_safe">Safe</string>
     <string name="history_channel_caution">Caution</string>
     <string name="history_channel_dangerous">Dangerous</string>
-    <string name="history_monitor">Monitor</string>
+    <string name="history_monitor">Secure Channel Monitor</string>
 
     <string name="history_detail_fee">Fee</string>
     <string name="history_detail_send">Sender</string>

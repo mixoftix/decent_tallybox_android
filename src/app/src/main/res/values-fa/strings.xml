@@ -73,11 +73,12 @@
 
     <!-- MainActivity / Archive -->
     <string name="archive_note">
-    این تراکنش‌های خام همچنان در کیف پول شما باقی مانده‌اند
+    تراکنش‌های خام در کیف پول شما باقی می مانند
     و نیاز به پردازش و سپس پیگیری دارند، مگر اینکه تصمیم بگیرید آن‌ها را نادیده بگیرید.
     \n\n
-    تراکنش‌های خام بایگانی‌شده پس از ۷ روز به‌صورت خودکار حذف خواهند شد.
+    تراکنش‌های خام بایگانی‌شده پس از ۷ روز به‌صورت خودکار نادیده گرفته خواهند شد.
     </string>
+    <string name="archive_empty">هیچ تراکنش آرشیوی پیدا نشد.</string>
 
     <!-- MainActivity / Followup -->
     <string name="follow_offline_sign">آفلاین</string>
@@ -138,7 +139,7 @@
     <string name="history_channel_safe">ایمن</string>
     <string name="history_channel_caution">احتیاط</string>
     <string name="history_channel_dangerous">خطرناک</string>
-    <string name="history_monitor">مشاهده</string>
+    <string name="history_monitor">مشاهده کانال امن</string>
 
     <string name="history_detail_fee">کارمزد</string>
     <string name="history_detail_send">فرستنده</string>

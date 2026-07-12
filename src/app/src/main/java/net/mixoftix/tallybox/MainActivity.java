@@ -1,6 +1,7 @@
 package net.mixoftix.tallybox;
 
 import static net.mixoftix.tallybox.Access_file.followup_keys_list;
+import net.mixoftix.tallybox.BuildConfig;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -40,6 +41,7 @@ import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+//import com.google.zxing.client.android.BuildConfig;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -60,8 +62,6 @@ import java.util.stream.Collectors;
 
 /*
 Decent TallyBox (Android Wallet)
-Version: 2.935 (MVP)
-Updated: 2026-06-20
 
 This is Tallybox wallet (https://wallet.mixoftix.net) for secure management of
 tokens on a DAG network. It both generates and recovers a private-public key pair of ecc secp256r1,
@@ -82,9 +82,9 @@ public class MainActivity extends BaseActivity {
 
     //region constants
 
-    public static final boolean log_is_enable = false;
+    public static final boolean log_is_enable = BuildConfig.LOG_IS_ENABLE;
     public static final String app_name = "tallybox";
-    public static final String app_version = "2.975";
+    public static final String app_version = BuildConfig.APP_VERSION_NAME;
     public static final String file_name_path = "net_mixoftix_tallybox";
     public static final String[] spinner_options = {
             "gpp_mars.mixoftix.net",
@@ -131,9 +131,9 @@ public class MainActivity extends BaseActivity {
 
     //region variables_of_spinners
 
-    public static String[] spinner_options_crypto_list = new String[3];
-    public static String[] spinner_options_pqc_serial = new String[3];
-    public static String[] spinner_options_pqc_pk = new String[3];
+    public static String[] spinner_options_crypto_list = new String[spinner_options.length];
+    public static String[] spinner_options_pqc_serial = new String[spinner_options.length];
+    public static String[] spinner_options_pqc_pk = new String[spinner_options.length];
 
     //endregion
 
@@ -236,6 +236,8 @@ public class MainActivity extends BaseActivity {
         textview_balance_wallet  = findViewById(R.id.textview_balance_wallet);
 
         //endregion
+
+        Toast.makeText(MainActivity.this, "log_is_enable: " + log_is_enable, Toast.LENGTH_SHORT).show();
 
         stringHelper = new StringHelper(this);
 
@@ -510,8 +512,15 @@ public class MainActivity extends BaseActivity {
         // set all PQC serial and pk including graph_address_in
         for (int i = 0; i < spinner_options.length; i++)
         {
-            spinner_options_pqc_serial[i] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + i);
-            spinner_options_pqc_pk[i] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + i);
+            //spinner_options_pqc_serial[i] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_serial_" + i);
+            //spinner_options_pqc_pk[i] = Access_file.access_file_func_read(getApplicationContext(), "app_pqc_pk_" + i);
+
+            spinner_options_pqc_serial[i] = Access_file.access_file_func_read(getApplicationContext(),
+                                                                        "app_pqc_serial_" + spinner_options[i].replace(".","_")
+                                                                                );
+            spinner_options_pqc_pk[i] = Access_file.access_file_func_read(getApplicationContext(),
+                                                                        "app_pqc_pk_" + spinner_options[i].replace(".","_")
+                                                                                );
 
             Access_log.log_it("i","shahin","333 - spinner_options_pqc_serial[" + i + "]: " + spinner_options_pqc_serial[i]);
             Access_log.log_it("i","shahin","333 - spinner_options_pqc_pk["+ i + "]: " + spinner_options_pqc_pk[i]);
@@ -549,7 +558,6 @@ public class MainActivity extends BaseActivity {
         // Set a selected listener for graph_in_spinner
         dropdownSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             private boolean isFirstSelection = true;
-
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position < 0 || position >= parent.getCount()) {
@@ -585,7 +593,6 @@ public class MainActivity extends BaseActivity {
                     Access_log.log_it("e","shahin","Could not find original index for: " + graph_domain_in);
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
@@ -620,7 +627,10 @@ public class MainActivity extends BaseActivity {
         // set all crypto_lists
         for (int i = 0; i < spinner_options.length; i++)
         {
-            spinner_options_crypto_list[i] = Access_file.access_file_func_read(getApplicationContext(), "crypto_list_last_" + i);
+            //spinner_options_crypto_list[i] = Access_file.access_file_func_read(getApplicationContext(), "crypto_list_last_" + i);
+            spinner_options_crypto_list[i] = Access_file.access_file_func_read(getApplicationContext(),
+                                     "crypto_list_last_" + spinner_options[i].replace(".","_")
+                                            );
             Access_log.log_it("i","shahin","444 - spinner_options_crypto_list[" + i + "]: " + spinner_options_crypto_list[i]);
 
             if (spinner_options[i].equals(graph_domain_in))
@@ -1470,12 +1480,22 @@ public class MainActivity extends BaseActivity {
                 }
             }
 
-            Access_file.access_file_func_write(getApplicationContext(), "crypto_list_last_" + spinner_matchedIndex, crypto_list, "write");
+            //Access_file.access_file_func_write(getApplicationContext(), "crypto_list_last_" + spinner_matchedIndex, crypto_list, "write");
+            Access_file.access_file_func_write(getApplicationContext(),
+                                        "crypto_list_last_" + spinner_options[spinner_matchedIndex].replace(".","_"),
+                                                crypto_list,
+                                                "write"
+                                                );
+
             Access_log.log_it("i","shahin","crypto_list: write");
         }
         else
         {
-            crypto_list = Access_file.access_file_func_read(getApplicationContext(), "crypto_list_last_" + spinner_matchedIndex);
+            //crypto_list = Access_file.access_file_func_read(getApplicationContext(), "crypto_list_last_" + spinner_matchedIndex);
+            crypto_list = Access_file.access_file_func_read(getApplicationContext(),
+                                                    "crypto_list_last_" + spinner_options[spinner_matchedIndex].replace(".","_")
+                                                );
+
             if (crypto_list.equals("-"))
             {
                 crypto_list = my_graph_in + "~~msg~null~adv~null";

@@ -276,7 +276,7 @@ public class MainActivity_History_Detail extends BaseActivity {
                                 "ledger_history_tally_hash" +
                                 server_url_query);
 
-                the_log_str += "Request - URL: " + MainActivity.server_url_dw + "ledger_history_tally_hash" + "\n\n";
+                the_log_str += "Request - URL:\n" + MainActivity.server_url_dw + "\n\n";
 
                 Access_log.log_it("i", "shahin", "Request - URL: " + MainActivity.server_url_dw + "ledger_history_tally_hash");
                 Access_log.log_it("i", "shahin", "ledger_history_tally_hash: " + result_history_by_tally_hash);
@@ -289,7 +289,14 @@ public class MainActivity_History_Detail extends BaseActivity {
                             result_history_by_tally_hash, the_pqc_psk);
 
                     the_log_str += "Response - Decrypted:\n" + result_history_by_tally_hash + "\n";
-                } else {
+                }
+                else if (is_pqc.equals("enable") && MainActivity.app_pqc_serial.equals("-"))
+                {
+                    the_log_str += "Info: no valid PQC serial found!\n\n";
+                    the_log_str += "Response:\n" + result_history_by_tally_hash + "\n";
+                }
+                else
+                {
                     the_log_str += "Response:\n" + result_history_by_tally_hash + "\n";
                 }
 

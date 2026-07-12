@@ -6,32 +6,54 @@ android {
     namespace 'net.mixoftix.tallybox'
     compileSdk 34
 
+    // --- TallyBox Automatic Versioning ---
+    def vn = "2.981"                                     // Your versionName
+    def parts = vn.split("\\.")                         // ["2", "977"]
+    def major = parts[0].toInteger()                    // 2
+    def minor = parts[1].substring(0,1).toInteger()     // 9
+    def patch = parts[1].substring(1).toInteger()       // 77
+
+    def autoVersionCode = major * 10000 + minor * 100 + patch // Result: 20977
+
     defaultConfig {
         applicationId "net.mixoftix.tallybox"
         minSdk 26
         targetSdk 34
-        versionCode 1
-        versionName "2.975"
+
+        versionName vn
+        versionCode autoVersionCode
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Add this line:
+        // language config:
         resConfigs "en", "fa"
+        // version config:
+        buildConfigField "String", "APP_VERSION_NAME", "\"${vn}\""
+        buildConfigField "int", "APP_VERSION_CODE", "${autoVersionCode}"
     }
 
     buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_IS_ENABLE", "true"
+        }
         release {
+            buildConfigField "boolean", "LOG_IS_ENABLE", "false"
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
     }
+
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
+
 }
 
 dependencies {

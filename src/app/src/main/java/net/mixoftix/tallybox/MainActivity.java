@@ -237,8 +237,6 @@ public class MainActivity extends BaseActivity {
 
         //endregion
 
-        Toast.makeText(MainActivity.this, "log_is_enable: " + log_is_enable, Toast.LENGTH_SHORT).show();
-
         stringHelper = new StringHelper(this);
 
         //region keypair_variables
@@ -643,6 +641,13 @@ public class MainActivity extends BaseActivity {
 
         //endregion
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        refresh_label(graph_domain_in, "");
     }
 
     //region functions_of_cryptography

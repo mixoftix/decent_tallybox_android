@@ -117,7 +117,7 @@ public class MainActivity_KYC extends BaseActivity {
                     progressbar_stat = false;
                     buttonBroadcast.setEnabled(true);
 
-                    if (finalResult.startsWith("error~") || finalResult.startsWith("info~")) {
+                    if (finalResult.startsWith("error~") || finalResult.startsWith("info~") || finalResult.startsWith("Failed")) {
                         textview_broadcast_report.setText(HtmlCompat.fromHtml(
                                 "<font color='#FF4500'>" + finalResult + "</font>",
                                 HtmlCompat.FROM_HTML_MODE_LEGACY));
@@ -196,7 +196,7 @@ public class MainActivity_KYC extends BaseActivity {
                     progressbar_stat = false;
                     buttonSign.setEnabled(true);
 
-                    if (finalResult.startsWith("error~")) {
+                    if (finalResult.startsWith("error~") || finalResult.startsWith("Failed")) {
                         textview_broadcast_report.setText(HtmlCompat.fromHtml(
                                 "<font color='#FF4500'>" + finalResult + "</font>",
                                 HtmlCompat.FROM_HTML_MODE_LEGACY));

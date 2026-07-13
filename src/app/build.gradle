@@ -7,7 +7,7 @@ android {
     compileSdk 34
 
     // --- TallyBox Automatic Versioning ---
-    def vn = "2.981"                                     // Your versionName
+    def vn = "2.988"                                     // Your versionName
     def parts = vn.split("\\.")                         // ["2", "977"]
     def major = parts[0].toInteger()                    // 2
     def minor = parts[1].substring(0,1).toInteger()     // 9

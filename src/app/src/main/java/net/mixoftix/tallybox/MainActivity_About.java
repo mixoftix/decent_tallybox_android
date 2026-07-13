@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -100,6 +101,9 @@ public class MainActivity_About extends BaseActivity {
         // Set a click listener for textview_about_update
         textview_about_update.setOnClickListener(view -> {
 
+            // General information
+            Toast.makeText(MainActivity_About.this, "log_is_enable: " + MainActivity.log_is_enable, Toast.LENGTH_SHORT).show();
+
             // Show progress immediately
             progressbar_stat = true;
             doStartProgressBar2();
@@ -115,7 +119,6 @@ public class MainActivity_About extends BaseActivity {
                     result = MainActivity.browse_url(server_url_wallet);
 
                     Access_log.log_it("i", "shahin", server_url_wallet + " - result: " + result);
-
                 } catch (Exception e) {
                     result = "error~" + e.getMessage();
                     e.printStackTrace();
@@ -140,17 +143,19 @@ public class MainActivity_About extends BaseActivity {
 
                         textview_about_update.setText(HtmlCompat.fromHtml(
                                 "<a href=\"" + server_url_wallet_dl + "\">" +
-                                        getString(R.string.about_version_new) + ": " + finalResult +
+                                        getString(R.string.about_version_new) +
+                                        ": *" +
+                                        finalResult +
                                         "</a>",
                                 HtmlCompat.FROM_HTML_MODE_LEGACY));
-
                     }
                     else
                     {
                         Access_log.log_it("i","shahin","No update..");
                         // No update
                         textview_about_update.setText(HtmlCompat.fromHtml(
-                                tallybox_about_version + ": " + MainActivity.app_version +
+                                 tallybox_about_version + ": *" +
+                                        finalResult +
                                         " / " + tallybox_about_result,
                                 HtmlCompat.FROM_HTML_MODE_LEGACY));
                     }

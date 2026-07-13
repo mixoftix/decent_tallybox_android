@@ -17,7 +17,7 @@
 
     <!-- Manifest -->
     <string name="app_name">TallyBox</string>
-    <string name="title_archive">Raw Transaction Archive</string>
+    <string name="title_archive">Raw Transactions</string>
     <string name="title_followup">Transaction Process</string>
     <string name="title_about">About</string>
     <string name="title_history">Transactions History</string>
@@ -79,15 +79,16 @@
         Raw transactions remain in your wallet and
         require processing and then follow‑up, unless you choose to ignore them.
         \n\n
-        Archived raw transactions will be ignored automatically after 7 days.
+        Archived raw transactions will be removed automatically after 7 days.
     </string>
     <string name="archive_empty">No archived transaction found.</string>
 
     <!-- MainActivity / Followup -->
     <string name="follow_offline_sign">Offline</string>
     <string name="follow_online_sign">Online</string>
+    <string name="follow_up_sign">Follow</string>
     <string name="follow_ods_pending">The raw transaction depended in queue</string>
-    <string name="follow_ledger_exists">This transaction has registered in ledger</string>
+    <string name="follow_ledger_exists">This transaction has registered and finalized in ledger</string>
     <string name="follow_note">
         Your raw transaction has been signed, is ready to upload and then follow up online.
         Just select your proper method.

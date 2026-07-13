@@ -344,7 +344,7 @@ public class MainActivity_Send extends BaseActivity {
 
                 // BGN: write followup here
                 String the_key_follow = Access_file.followup_keys_write(getApplicationContext(), "followup", str_order_utc_unix, result);
-                String the_key_archive = Access_file.followup_keys_write(getApplicationContext(), "archive", str_order_utc_unix, str_order_utc_unix);
+                String the_key_archive = Access_file.followup_keys_write(getApplicationContext(), "archive", str_order_utc_unix, "process");
                 // END: write followup here
 
                 Intent i = new Intent(getApplicationContext(),MainActivity.class);

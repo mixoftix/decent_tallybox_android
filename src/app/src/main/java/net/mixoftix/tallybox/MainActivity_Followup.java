@@ -86,6 +86,13 @@ public class MainActivity_Followup extends BaseActivity {
 
         String followup_raw_tx = Access_file.followup_keys_read(getApplicationContext(), followup_key);
         Access_log.log_it("i","shahin","followup_raw_tx: " + followup_raw_tx);
+        String followup_stage = Access_file.followup_keys_read(getApplicationContext(), followup_key.replace("followup_","archive_"));
+        Access_log.log_it("i","shahin","followup_stage: " + followup_stage);
+
+        if (followup_stage.equals("followup"))
+        {
+            button_broadcast_Sign.setText(getString(R.string.follow_up_sign));
+        }
 
         /*
         "tallybox~parcel_of_transaction~" +
@@ -247,6 +254,13 @@ public class MainActivity_Followup extends BaseActivity {
                     button_broadcast_Sign.setEnabled(true);
 
                     if (finalResult.startsWith("pending~200~")) {
+                        Access_file.followup_keys_write(getApplicationContext(),
+                                            "archive",
+                                                        followup_key.replace("followup_",""),
+                                            "followup"
+                                                        );
+                        button_broadcast_Sign.setText(getString(R.string.follow_up_sign));
+
                         textview_broadcast_report.setText(HtmlCompat.fromHtml(
                                 "<font color='#32CD32'>" + finalResult + "</font><br>" +
                                         "<font color='cyan'>" + getString(R.string.follow_ods_pending) + "</font>",
@@ -255,6 +269,9 @@ public class MainActivity_Followup extends BaseActivity {
                     } else if (finalResult.equals("error~207~double spending error~the_sign_md5")) {
                         Access_file.followup_keys_remove(getApplicationContext(), followup_key);
                         Access_file.followup_keys_remove(getApplicationContext(), followup_key.replace("followup_","archive_"));
+
+                        button_broadcast_Sign.setEnabled(false);
+                        button_offline_Sign.setEnabled(false);
 
                         textview_broadcast_report.setText(HtmlCompat.fromHtml(
                                 "<font color='#FF4500'>" + finalResult + "</font><br>" +

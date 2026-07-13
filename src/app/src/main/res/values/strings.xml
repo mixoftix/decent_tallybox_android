@@ -28,17 +28,18 @@
     <string name="title_receive_qr">Receive by QR</string>
     <string name="title_send">Pay</string>
     <string name="title_send_scanner">Pay by Scanner</string>
-    <string name="title_settings">Setting</string>
+    <string name="title_settings">Settings</string>
     <string name="title_terms">Terms</string>
     <string name="title_wallet_config">Config Wallet</string>
 
     <!-- MainActivity / Menu -->
-    <string name="select_language">Select Language</string>
     <string name="action_refresh">Refresh</string>
+    <string name="action_archive">Archive</string>
+    <string name="select_language">Select Language</string>
     <string name="action_private_key">Private Key</string>
     <string name="action_language">Language</string>
     <string name="action_kyc">KYC</string>
-    <string name="action_setting">Setting</string>
+    <string name="action_setting">Settings</string>
     <string name="action_terms">Terms</string>
     <string name="action_about">About</string>
 
@@ -151,14 +152,14 @@
     <string name="history_detail_me">Me!</string>
 
     <!-- MainActivity / Settings-->
-    <string name="settings_zone">zone filter:</string>
-    <string name="settings_serial">serial</string>
+    <string name="settings_zone">Zone filter:</string>
+    <string name="settings_serial">Serial</string>
     <string name="settings_network">net</string>
     <string name="settings_uptodate">valid</string>
     <string name="settings_updated">updated</string>
     <string name="settings_checksum">checksum failed!</string>
 
-    <string name="network_protocol_label">Network Protocol:</string>
+    <string name="network_protocol_label">Network protocol:</string>
     <string name="connection_http">http</string>
     <string name="connection_https">https</string>
     <string name="pqc_label">Safeguard by PQC:</string>

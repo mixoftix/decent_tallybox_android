@@ -115,7 +115,7 @@ public class MainActivity_About extends BaseActivity {
                 String result = "error";
 
                 try {
-                    String server_url_wallet = "https://wallet.mixoftix.net/VersionString.asp";
+                    String server_url_wallet = "http://wallet.mixoftix.net/VersionString.asp";
                     result = MainActivity.browse_url(server_url_wallet);
 
                     Access_log.log_it("i", "shahin", server_url_wallet + " - result: " + result);

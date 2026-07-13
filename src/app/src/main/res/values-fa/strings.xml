@@ -31,8 +31,9 @@
     <string name="title_wallet_config">پیکربندی</string>
 
     <!-- MainActivity / Menu -->
-    <string name="select_language">انتخاب زبان</string>
     <string name="action_refresh">به روز رسانی</string>
+    <string name="action_archive">آرشیو</string>
+    <string name="select_language">انتخاب زبان</string>
     <string name="action_private_key">کلید خصوصی</string>
     <string name="action_language">انتخاب زبان</string>
     <string name="action_kyc">احراز هویت</string>
